@@ -56,7 +56,6 @@ namespace Game.Helps.UI
                 elements[i].anchorMax = elementsAnchor;
                 if (expanded || i == 0 || (ignoreLastElement && i == elements.Count - 1))
                 {
-                    elements[i].gameObject.SetActive(true);
                     lastPosX = CalcElementPosX(elements[i], lastPosX);
                     elements[i].anchoredPosition = new Vector2(lastPosX, 0);
                     lastPosX += elements[i].sizeDelta.x / 2;

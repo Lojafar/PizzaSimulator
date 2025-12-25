@@ -54,6 +54,7 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             if (Input.GetKeyDown(KeyCode.G))
             {
                 ExpandContainer();
+
             }
             else if (Input.GetKeyUp(KeyCode.F))
             {
@@ -63,12 +64,14 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         void ExpandContainer()
         {
             expandIndicatorVisual.eulerAngles = new Vector3(expandIndicatorVisual.eulerAngles.x, expandIndicatorVisual.eulerAngles.y, expIndicatExpandedRotZ);
-            orderBarsContainer.Expand();
+            orderBarsContainer.Expand(); 
+            expandIndicator.SetActive(orderBars.Count >= minOrdersForExpIndic);
         }
         void CompressContainer()
         {
             expandIndicatorVisual.eulerAngles = new Vector3(expandIndicatorVisual.eulerAngles.x, expandIndicatorVisual.eulerAngles.y, expIndicatNormalRotZ);
             orderBarsContainer.Compress();
+            expandIndicator.SetActive(orderBars.Count >= minOrdersForExpIndic);
         }
         void SpawnNewOrderBar(OrderVisualData orderVisualData)
         {
@@ -147,7 +150,7 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
                 AudioPlayer.PlaySFX(bellClip);
                 Destroy(bar.gameObject);
                 orderBars.Remove(barIndex);
-                if(orderBars.Count < minOrdersForExpIndic) expandIndicator.SetActive(false);
+                expandIndicator.SetActive(orderBars.Count >= minOrdersForExpIndic);
             }
         }
         void OnBellCancelled(string message)
