@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Game.PizzeriaSimulator.PizzaCreation;
+﻿using Game.PizzeriaSimulator.PizzaCreation;
 using Game.PizzeriaSimulator.PizzaCreation.Config;
 using Game.Root.ServicesInterfaces;
+using Game.Root.User.Environment;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.OrdersHandle.Visual
 {
+    using DeviceType = Game.Root.User.Environment.DeviceType;
     public class OrderVisualData
     {
         public readonly int OrderId;
@@ -60,13 +62,15 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         public event Action<string> OnBellCancelled;
         readonly int pizzaBaseIngredientAmount;
         int handledOrdersAmount;
+        public readonly DeviceType DeviceType;
        
         readonly Dictionary<int, List<OrderVMData>> OrderIDToData;
-        public PizzeriaOrderHandlVM(PizzeriaOrdersHandler _ordersHandler, PizzaCreator _pizzaCreator)
+        public PizzeriaOrderHandlVM(PizzeriaOrdersHandler _ordersHandler, PizzaCreator _pizzaCreator, DeviceType _deviceType)
         {
             OrderIDToData = new Dictionary<int, List<OrderVMData>>();
             ordersHandler = _ordersHandler;
             pizzaCreator = _pizzaCreator;
+            DeviceType = _deviceType;
             pizzaCreatorConfig = pizzaCreator.GetPizzaCreatorConfig();
             pizzaBaseIngredientAmount = pizzaCreatorConfig.IngredientsForBase.Length;
         }

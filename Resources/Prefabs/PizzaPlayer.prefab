@@ -47,10 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <EyesTransform>k__BackingField: {fileID: 5067289022063138240}
-  <Speed>k__BackingField: 2500
+  <Speed>k__BackingField: 15
   <PlayerCharController>k__BackingField: {fileID: 4856084300538700904}
-  cents: 42
-  dollars: 12
 --- !u!143 &4856084300538700904
 CharacterController:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ using Game.PizzeriaSimulator.Player.Input.Factory;
 using Game.PizzeriaSimulator.PlayerSpawner;
 using Game.Root.AssetsManagment;
 using Game.Root.ServicesInterfaces;
+using Game.Root.User.Environment;
 using Cysharp.Threading.Tasks;
 using Zenject;
 
@@ -26,6 +27,7 @@ namespace Game.PizzeriaSimulator.Entry
     {
         readonly PizzeriaSceneReferences sceneReferences;
         readonly IAssetsProvider assetsProvider;
+        readonly DeviceType deviceType;
         readonly DiContainer diContainer;
         PaymentReceiver paymentReceiver;
         PizzaHolder pizzaHolder;
@@ -35,6 +37,7 @@ namespace Game.PizzeriaSimulator.Entry
         {
             sceneReferences = _sceneReferences;
             assetsProvider = _diContainer.Resolve<IAssetsProvider>();
+            deviceType = _diContainer.Resolve<IEnvironmentHandler>().DeviceType;
             diContainer = _diContainer;
         }
         public void Initialize()
@@ -83,7 +86,7 @@ namespace Game.PizzeriaSimulator.Entry
             await UniTask.Yield();
             new PizzaHolderBinder(pizzaHolder, sceneReferences, diContainer).Bind();
             new PizzaCreatorBinder(sceneReferences, pizzaCreator, diContainer).Bind();
-            await (new PizzeriaOrderHandlBinder(ordersHandler, pizzaCreator, assetsProvider, sceneReferences.SceneCanvas.transform, diContainer)).Bind();
+            await (new PizzeriaOrderHandlBinder(ordersHandler, pizzaCreator, assetsProvider, sceneReferences.SceneCanvas.transform, deviceType, diContainer)).Bind();
             new PaymentReceiveBinder(sceneReferences, paymentReceiver, diContainer).Bind();
             if(paymentReceiver.GetPaymentProccesorByType(PaymentType.Cash) is CashPaymentProccesor cashPaymentProccesor)
             {
@@ -96,7 +99,19 @@ namespace Game.PizzeriaSimulator.Entry
         }
         public async UniTask<IPlayerInputFactory> GetInputFactory()
         {
-            IPlayerInputFactory inputFactory = new PCPlayerInputFactory(assetsProvider, sceneReferences.SceneCanvas.transform);
+            IPlayerInputFactory inputFactory = null;
+            switch (deviceType)
+            {
+                case DeviceType.PC:
+                    inputFactory = new PCPlayerInputFactory(assetsProvider, sceneReferences.SceneCanvas.transform);
+                    break;
+                case DeviceType.Mobile:
+                    inputFactory = new MobilePlayerInputFactory(assetsProvider, sceneReferences.SceneCanvas.transform);
+                    break;
+                default:
+                    UnityEngine.Debug.LogError("Devive type not implemented for input");
+                    break;
+            }
             await inputFactory.Prewarm();
             return inputFactory;
         }

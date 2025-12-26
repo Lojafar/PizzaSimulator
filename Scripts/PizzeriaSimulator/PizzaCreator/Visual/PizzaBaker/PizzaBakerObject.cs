@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using Game.Root.Utils.Audio;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.PizzaCreation.Visual.Baker

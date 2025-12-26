@@ -14,9 +14,12 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         [SerializeField] GameObject expandIndicator;
         [SerializeField] Transform expandIndicatorVisual;
         [SerializeField] CollapsibleHorizontalGroup orderBarsContainer;
+        [SerializeField] OrderHandlSubViewBase pcSubView;
+        [SerializeField] OrderHandlSubViewBase mobileSubView;
         [SerializeField] float expIndicatNormalRotZ;
         [SerializeField] float expIndicatExpandedRotZ;
         Dictionary<int, OrderBar> orderBars;
+        OrderHandlSubViewBase subView;
         const int minOrdersForExpIndic = 2;
         public override void Bind(PizzeriaOrderHandlVM _viewModel)
         {
@@ -31,6 +34,9 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             viewModel.SetOrderCompleted += SetBarAsCompleted;
             viewModel.CompleteOrder += CompleteOrder;
             viewModel.OnBellCancelled += OnBellCancelled;
+            subView = viewModel.DeviceType == Root.User.Environment.DeviceType.PC ? pcSubView : mobileSubView;
+            subView.OnExpandInput += ExpandContainer;
+            subView.OnCompressInput += CompressContainer;
             expandIndicator.SetActive(false);
             CompressContainer();
         }
@@ -47,18 +53,8 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
                 viewModel.SetOrderCompleted -= SetBarAsCompleted;
                 viewModel.CompleteOrder -= CompleteOrder;
                 viewModel.OnBellCancelled -= OnBellCancelled;
-            }
-        }
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                ExpandContainer();
-
-            }
-            else if (Input.GetKeyUp(KeyCode.F))
-            {
-                CompressContainer();
+                subView.OnExpandInput -= ExpandContainer;
+                subView.OnCompressInput -= CompressContainer;
             }
         }
         void ExpandContainer()
@@ -66,12 +62,14 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             expandIndicatorVisual.eulerAngles = new Vector3(expandIndicatorVisual.eulerAngles.x, expandIndicatorVisual.eulerAngles.y, expIndicatExpandedRotZ);
             orderBarsContainer.Expand(); 
             expandIndicator.SetActive(orderBars.Count >= minOrdersForExpIndic);
+            subView.OnExpanded();
         }
         void CompressContainer()
         {
             expandIndicatorVisual.eulerAngles = new Vector3(expandIndicatorVisual.eulerAngles.x, expandIndicatorVisual.eulerAngles.y, expIndicatNormalRotZ);
             orderBarsContainer.Compress();
             expandIndicator.SetActive(orderBars.Count >= minOrdersForExpIndic);
+            subView.OnCompressed();
         }
         void SpawnNewOrderBar(OrderVisualData orderVisualData)
         {

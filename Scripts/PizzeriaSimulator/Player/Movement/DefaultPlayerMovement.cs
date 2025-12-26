@@ -16,8 +16,8 @@ namespace Game.PizzeriaSimulator.Player.Movement
             {
                 direction.Normalize();
             }
-            Vector3 moveVector = player.transform.TransformDirection( new Vector3(direction.x * player.Speed, 0, direction.y * player.Speed ));
-            characterController.SimpleMove(moveVector * Time.deltaTime);
+            Vector3 moveVector = player.transform.TransformDirection( new Vector3(direction.x * player.Speed, 0, direction.y * player.Speed));
+            characterController.SimpleMove(moveVector );
         }
     }
 }

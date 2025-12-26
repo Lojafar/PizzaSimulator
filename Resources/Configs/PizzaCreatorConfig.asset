@@ -67,28 +67,32 @@ MonoBehaviour:
     - <ID>k__BackingField: 1
       <Name>k__BackingField: Pepperoni
       <Ingredients>k__BackingField: 0203
-      <BakedPizzaPrefab>k__BackingField: {fileID: 3371488254583047175, guid: 933d8da49d07fcb40af5270f46758066,
+      <BakedPizzaPrefab>k__BackingField: {fileID: 1243156592599556173, guid: 933d8da49d07fcb40af5270f46758066,
         type: 3}
       <PizzaIcon>k__BackingField: {fileID: 21300086, guid: 37607ec1aab56e349af84a980f685a4b,
         type: 3}
     - <ID>k__BackingField: 2
       <Name>k__BackingField: Tomato Pepperoni
       <Ingredients>k__BackingField: 020403
-      <BakedPizzaPrefab>k__BackingField: {fileID: 0}
+      <BakedPizzaPrefab>k__BackingField: {fileID: 4150878556562491466, guid: 373fe5bc71db99841b1a3e846d7d707b,
+        type: 3}
       <PizzaIcon>k__BackingField: {fileID: 0}
     - <ID>k__BackingField: 3
       <Name>k__BackingField: Shrimps Pizza
       <Ingredients>k__BackingField: 020405
-      <BakedPizzaPrefab>k__BackingField: {fileID: 0}
+      <BakedPizzaPrefab>k__BackingField: {fileID: 8691847711897383783, guid: 8d9e9b0dbe90138489da3e79770246c6,
+        type: 3}
       <PizzaIcon>k__BackingField: {fileID: 0}
     - <ID>k__BackingField: 4
       <Name>k__BackingField: Village Pizza
       <Ingredients>k__BackingField: 04060302
-      <BakedPizzaPrefab>k__BackingField: {fileID: 0}
+      <BakedPizzaPrefab>k__BackingField: {fileID: 6332950288930802966, guid: ba9869093b7aec545aaa02bd22e6e205,
+        type: 3}
       <PizzaIcon>k__BackingField: {fileID: 0}
     - <ID>k__BackingField: 5
       <Name>k__BackingField: Vegeterian Pizza
       <Ingredients>k__BackingField: 0406
-      <BakedPizzaPrefab>k__BackingField: {fileID: 0}
+      <BakedPizzaPrefab>k__BackingField: {fileID: 9010391871277521966, guid: f9664759c41a6294ca7f079fb9ec2e67,
+        type: 3}
       <PizzaIcon>k__BackingField: {fileID: 0}
     <IngredientsForBase>k__BackingField: 0001

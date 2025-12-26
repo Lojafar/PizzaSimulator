@@ -11,8 +11,8 @@ namespace Game.PizzeriaSimulator.Player.Input
         [SerializeField] Color normalCrosshairColor = Color.white;
         [SerializeField] Color selectedCrosshairColor = Color.white;
         public event Action OnInteractInput;
-        Vector2 currentMoveDir;
-        Vector2 currentRotDir;
+        Vector2 movementDir;
+        Vector2 rotDir;
         private void Awake()
         {
             DeselectInteractInput();
@@ -27,22 +27,27 @@ namespace Game.PizzeriaSimulator.Player.Input
         }
         public void Activate(bool active)
         {
-            currentMoveDir = Vector2.zero;
-            currentRotDir = Vector2.zero;
+            Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !active;
             gameObject.SetActive(active);
+            if (!active)
+            {
+                movementDir = Vector2.zero;
+                rotDir = Vector2.zero;
+            }
         }
         public Vector2 GetMoveDir()
         {
-            return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            return movementDir; 
         }
         public Vector2 GetRotationDir()
         {
-            return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            return rotDir; 
         }
         private void Update()
         {
-            currentMoveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            currentRotDir = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            movementDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            rotDir = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
             if (Input.GetKeyDown(KeyCode.E))
             {
                 OnInteractInput?.Invoke();

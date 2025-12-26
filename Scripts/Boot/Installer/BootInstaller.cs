@@ -15,6 +15,7 @@ namespace Game.Boot.Installer
         void BindLoadingStates()
         {
             Container.BindInterfacesAndSelfTo<LoadingBootState>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<ServicesPrepareLoadState>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<GameLoadingState>().AsSingle().NonLazy();
         }
     }

@@ -33,8 +33,6 @@ namespace Game.PizzeriaSimulator.Player.CameraController
         {
             isLocked = true;
             RaiseLockEvent(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
             if (currentMoveTween.IsActive()) currentMoveTween.Pause();
             if (currentRotTween.IsActive()) currentRotTween.Pause();
             currentMoveTween = transform.DOMove(position, setLookPosDuration).Play();
@@ -42,8 +40,6 @@ namespace Game.PizzeriaSimulator.Player.CameraController
         }
         public override void ResetLook()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
             if (currentMoveTween.IsActive()) currentMoveTween.Pause();
             if (currentRotTween.IsActive()) currentRotTween.Pause();
             currentMoveTween = transform.DOLocalMove(savedLocalPos, setLookPosDuration).OnComplete(OnReseted).Play();

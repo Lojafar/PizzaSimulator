@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Boot.LoadingSM.States
 {
@@ -12,9 +11,9 @@ namespace Game.Boot.LoadingSM.States
         }
         public void Enter()
         {
-            Application.targetFrameRate = 90;
+            Application.targetFrameRate = 60;
            
-            loadingStateMachine.EnterState<GameLoadingState>();
+            loadingStateMachine.EnterState<ServicesPrepareLoadState>();
         }
     }
 }

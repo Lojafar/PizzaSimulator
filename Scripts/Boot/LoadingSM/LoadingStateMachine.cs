@@ -16,6 +16,7 @@ namespace Game.Boot.LoadingSM
         public void Initialize()
         {
             statesMap.Add(typeof(LoadingBootState), loadingStatesFactory.CreateState<LoadingBootState>());
+            statesMap.Add(typeof(ServicesPrepareLoadState), loadingStatesFactory.CreateState<ServicesPrepareLoadState>());
             statesMap.Add(typeof(GameLoadingState), loadingStatesFactory.CreateState<GameLoadingState>());
             UnityEngine.Debug.Log("LOADING STATE MACHINE");
             EnterState<LoadingBootState>();
