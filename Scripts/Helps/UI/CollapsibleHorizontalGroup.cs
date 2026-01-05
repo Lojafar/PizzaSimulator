@@ -28,6 +28,7 @@ namespace Game.Helps.UI
                 childChangeIgnors--;
                 return;
             }
+            UnityEngine.Debug.Log("Childs changed");
             elements.Clear();
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -56,6 +57,10 @@ namespace Game.Helps.UI
                 elements[i].anchorMax = elementsAnchor;
                 if (expanded || i == 0 || (ignoreLastElement && i == elements.Count - 1))
                 {
+                    if (!ignoreLastElement || i != elements.Count - 1)
+                    {
+                        elements[i].gameObject.SetActive(true);
+                    }
                     lastPosX = CalcElementPosX(elements[i], lastPosX);
                     elements[i].anchoredPosition = new Vector2(lastPosX, 0);
                     lastPosX += elements[i].sizeDelta.x / 2;

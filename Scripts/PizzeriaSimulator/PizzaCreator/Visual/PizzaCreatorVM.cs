@@ -1,4 +1,5 @@
-﻿using Game.PizzeriaSimulator.PizzaCreation.Config;
+﻿using Game.PizzeriaSimulator.PizzasConfig;
+using Game.PizzeriaSimulator.PizzaCreation.Config;
 using Game.PizzeriaSimulator.PizzaCreation.Visual.IngredientOnPizza;
 using Game.Root.ServicesInterfaces;
 using System;

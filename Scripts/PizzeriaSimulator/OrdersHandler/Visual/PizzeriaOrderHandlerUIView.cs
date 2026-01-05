@@ -27,7 +27,6 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             base.Bind(_viewModel);
             viewModel.OnNewOrder += SpawnNewOrderBar;
             viewModel.ComleteIngredientInOrder += CompleteIngredientOnBar;
-            viewModel.ClearAllCompletedInBar += ClearAllCompletesInBar;
             viewModel.ClearAllCompletedInBars += ClearCompletesInAllBars;
             viewModel.SetOrderBakeState += SetBarBakeState;
             viewModel.SetOrderCutState += SetBarCutState;
@@ -46,7 +45,6 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             { 
                 viewModel.OnNewOrder -= SpawnNewOrderBar;
                 viewModel.ComleteIngredientInOrder -= CompleteIngredientOnBar;
-                viewModel.ClearAllCompletedInBar -= ClearAllCompletesInBar;
                 viewModel.ClearAllCompletedInBars -= ClearCompletesInAllBars;
                 viewModel.SetOrderBakeState -= SetBarBakeState;
                 viewModel.SetOrderCutState -= SetBarCutState;
@@ -106,13 +104,6 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
                 bar.SetCompletedIngredient(ingredientIndex, true);
             }
         }
-        void ClearAllCompletesInBar(int barIndex)
-        {
-            if (orderBars.TryGetValue(barIndex, out OrderBar bar))
-            {
-                bar.DecompleteAllIngredient();
-            }
-        }
         void ClearCompletesInAllBars()
         {
             foreach(OrderBar bar in orderBars.Values)
@@ -145,6 +136,7 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         {
             if (orderBars.TryGetValue(barIndex, out OrderBar bar))
             {
+           //     expandIndicatorVisual.SetAsLastSibling();
                 AudioPlayer.PlaySFX(bellClip);
                 Destroy(bar.gameObject);
                 orderBars.Remove(barIndex);

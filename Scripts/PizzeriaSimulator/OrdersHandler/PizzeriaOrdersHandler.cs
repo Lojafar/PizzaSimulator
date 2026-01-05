@@ -21,12 +21,15 @@ namespace Game.PizzeriaSimulator.OrdersHandle
         public event Action<int> OnNewPizzaOrder;
         public event Action<int> OnPizzaOrderReady;
         public event Action<int> OnPizzaOrderCompleted;
+        public event Action<int> OnOrderTaked;
         public event Action OnBellCallCanceled;
         readonly List<OrderData> activeOrders;
+        readonly List<OrderData> completedOrders;
         public PizzeriaOrdersHandler(PizzaHolder _pizzaHolder) 
         {
             pizzaHolder = _pizzaHolder;
             activeOrders = new List<OrderData>();
+            completedOrders = new List<OrderData>();
         }
         public void Init()
         {
@@ -43,7 +46,7 @@ namespace Game.PizzeriaSimulator.OrdersHandle
                 activeOrders[orderIndex] = new OrderData(pizzaID, true);
                 OrderReady(orderIndex);
             }
-        }
+        }   
         void OrderReady(int orderIndex)
         {
             OnPizzaOrderReady?.Invoke(activeOrders[orderIndex].PizzaID);
@@ -59,19 +62,32 @@ namespace Game.PizzeriaSimulator.OrdersHandle
             }
             activeOrders.Add(new OrderData(pizzaID));
         }
+
         public void CallBell()
         {
             for (int i = 0; i < activeOrders.Count; i++) 
             {
                 if (activeOrders[i].OrderReady)
                 {
-                    pizzaHolder.RemoveReservedPizza(activeOrders[i].PizzaID);
                     OnPizzaOrderCompleted?.Invoke(activeOrders[i].PizzaID);
+                    completedOrders.Add(activeOrders[i]);
                     activeOrders.RemoveAt(i);
                     return;
                 }
             }
             OnBellCallCanceled?.Invoke();
+        }
+        public void TakeOrder(int orderID)
+        {
+            for (int i = 0; i < completedOrders.Count; i++)
+            {
+                if (completedOrders[i].PizzaID == orderID)
+                {
+                    pizzaHolder.RemoveReservedPizza(completedOrders[i].PizzaID);
+                    completedOrders.RemoveAt(i);
+                    OnOrderTaked?.Invoke(completedOrders[i].PizzaID);
+                }
+            }
         }
         bool TryGetOrderIndexOfPizza(int pizzaID, out int index, bool searchForReady = false)
         {

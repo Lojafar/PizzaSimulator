@@ -1,5 +1,6 @@
 ﻿using Game.PizzeriaSimulator.PizzaCreation.Config;
 using Game.PizzeriaSimulator.PizzaHold;
+using Game.PizzeriaSimulator.PizzasConfig;
 using System;
 using System.Collections.Generic;
 
@@ -21,6 +22,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         public event Action<IEnumerable<PizzaIngredientType>> OnNewPossibleIngredients;
 
         readonly PizzaHolder pizzaHolder;
+        readonly AllPizzaConfig allPizzaConfig;
         readonly PizzaCreatorConfig pizzaCreatorConfig;
         readonly Stack<PizzaIngredientType> placedIngredients;
         readonly HashSet<PizzaIngredientType> possibleIngredients;
@@ -32,13 +34,14 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         int readyPizza = -1;
         bool isBaseCreated;
         const int maxPizzasInBake = 4;
-        public PizzaCreator(PizzaHolder _pizzaHolder, PizzaCreatorConfig _pizzaCreatorConfig)
+        public PizzaCreator(PizzaHolder _pizzaHolder, AllPizzaConfig _allPizzaConfig, PizzaCreatorConfig _pizzaCreatorConfig)
         {
             pizzaHolder = _pizzaHolder;
+            allPizzaConfig = _allPizzaConfig;
             pizzaCreatorConfig = _pizzaCreatorConfig;
             placedIngredients = new Stack<PizzaIngredientType>();
             possibleIngredients = new HashSet<PizzaIngredientType>(5);
-            possiblePizzas = new List<int>(pizzaCreatorConfig.Pizzas.Length);
+            possiblePizzas = new List<int>(allPizzaConfig.Pizzas.Length);
             pizzasInBake = new List<int>(maxPizzasInBake);
             baseIngredientsAmount = pizzaCreatorConfig.IngredientsForBase.Length;
         }
@@ -111,7 +114,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
             if (!isBaseCreated && pizzaCreatorConfig.IngredientsForBase.Length <= placedIngredients.Count)
             {
                 isBaseCreated = true;
-                for (int i = 0; i < pizzaCreatorConfig.Pizzas.Length; i++) { possiblePizzas.Add(i); }
+                for (int i = 0; i < allPizzaConfig.Pizzas.Length; i++) { possiblePizzas.Add(i); }
             }
             UpdatePossibleIngredients();
             CheckPizzaComplete();
@@ -123,7 +126,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
             if (!isBaseCreated) return;
             foreach (int pizzaID in possiblePizzas)
             {
-                if (pizzaCreatorConfig.Pizzas[pizzaID].Ingredients.Count == placedIngredients.Count - baseIngredientsAmount)
+                if (allPizzaConfig.Pizzas[pizzaID].Ingredients.Count == placedIngredients.Count - baseIngredientsAmount)
                 {
                     readyPizza = pizzaID;
                     OnPizzaReadyForBake?.Invoke(pizzaID);
@@ -137,7 +140,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
             PizzaIngredientType lastPlacedIngredient = placedIngredients.Peek();
             for (int i = 0; i < possiblePizzas.Count; i++)
             {
-                if (!pizzaCreatorConfig.GetPizzaByID(possiblePizzas[i]).Ingredients.Contains(lastPlacedIngredient))
+                if (!allPizzaConfig.GetPizzaByID(possiblePizzas[i]).Ingredients.Contains(lastPlacedIngredient))
                 {
                     possiblePizzas.RemoveAt(i);
                     i--;
@@ -163,7 +166,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
             {
                 foreach (int possiblePizzaID in possiblePizzas)
                 {
-                    foreach (PizzaIngredientType ingredient in pizzaCreatorConfig.GetPizzaByID(possiblePizzaID).Ingredients)
+                    foreach (PizzaIngredientType ingredient in allPizzaConfig.GetPizzaByID(possiblePizzaID).Ingredients)
                     {
                         if(!possibleIngredients.Contains(ingredient) && !placedIngredients.Contains(ingredient)) possibleIngredients.Add(ingredient);
                     }
@@ -204,7 +207,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         }
         public PizzaConfig GetPizzaConfigById(int id) 
         {
-            return pizzaCreatorConfig.GetPizzaByID(id);
+            return allPizzaConfig.GetPizzaByID(id);
         }
         public PizzaCreatorConfig GetPizzaCreatorConfig()
         {

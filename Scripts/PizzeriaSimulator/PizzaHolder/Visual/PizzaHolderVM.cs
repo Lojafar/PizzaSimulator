@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Game.Root.ServicesInterfaces;
+using System;
 using System.Collections.Generic;
-using Game.Root.ServicesInterfaces;
 
 namespace Game.PizzeriaSimulator.PizzaHold.Visual
 {
@@ -30,7 +30,7 @@ namespace Game.PizzeriaSimulator.PizzaHold.Visual
             pizzas.Add(pizzaID);
             AddPizza?.Invoke();
         }
-        void HandlePizzaRemove(int pizzaID) 
+        void HandlePizzaRemove(int pizzaID)
         {
             for (int i = 0; i < pizzas.Count; i++) 
             {

@@ -8,7 +8,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Config
     public class PizzaCreatorConfig
     {
         [field: SerializeField] public IngredientConfig[] Ingredients { get; private set; }
-        [field: SerializeField] public PizzaConfig[] Pizzas { get; private set; }
         [field: SerializeField] public PizzaIngredientType[] IngredientsForBase { get; private set; }
         Dictionary<PizzaIngredientType, int> indexByIngredientType;
         public void Init()
@@ -50,10 +49,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Config
                 return Ingredients[index];
             }
             return null;
-        }
-        public PizzaConfig GetPizzaByID(int id)
-        {
-            return Pizzas[id];
         }
     }
 }

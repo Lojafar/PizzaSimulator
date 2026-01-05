@@ -8,7 +8,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual.IngredientOnPizza
         [SerializeField] float fallDuration;
         [SerializeField] GameObject firstObj;
         [SerializeField] GameObject secondObj;
-        [SerializeField] GameObject bakedObj;
         public override void DoPlaceAnim(Vector3 placePosition)
         {
             transform.DOMove(placePosition, fallDuration).OnComplete(OnObjFalled).Play();

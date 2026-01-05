@@ -1,15 +1,21 @@
-﻿using Game.PizzeriaSimulator.Interactions.Interactor;
+﻿using Cysharp.Threading.Tasks;
+using Game.PizzeriaSimulator.Customers.Manager;
+using Game.PizzeriaSimulator.Customers.OrdersProcces;
+using Game.PizzeriaSimulator.Customers.SettingsConfig;
+using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.OrdersHandle;
 using Game.PizzeriaSimulator.OrdersHandle.Visual;
 using Game.PizzeriaSimulator.PaymentReceive;
 using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor;
 using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual;
 using Game.PizzeriaSimulator.PaymentReceive.Visual;
+using Game.PizzeriaSimulator.PaymentReceive.Visual.Config;
 using Game.PizzeriaSimulator.PizzaCreation;
 using Game.PizzeriaSimulator.PizzaCreation.Config;
 using Game.PizzeriaSimulator.PizzaCreation.Visual;
 using Game.PizzeriaSimulator.PizzaHold;
 using Game.PizzeriaSimulator.PizzaHold.Visual;
+using Game.PizzeriaSimulator.PizzasConfig;
 using Game.PizzeriaSimulator.Player.CameraController;
 using Game.PizzeriaSimulator.Player.Handler;
 using Game.PizzeriaSimulator.Player.Input;
@@ -18,7 +24,6 @@ using Game.PizzeriaSimulator.PlayerSpawner;
 using Game.Root.AssetsManagment;
 using Game.Root.ServicesInterfaces;
 using Game.Root.User.Environment;
-using Cysharp.Threading.Tasks;
 using Zenject;
 
 namespace Game.PizzeriaSimulator.Entry
@@ -49,8 +54,7 @@ namespace Game.PizzeriaSimulator.Entry
             IPlayerInput playerInput = (await GetInputFactory()).CreateInput();
             diContainer.Bind<IPlayerInput>().FromInstance(playerInput).AsSingle();
 
-
-            PizzeriaPlayerSpawner playerSpawner = new(playerInput, sceneReferences, diContainer.Resolve<IAssetsProvider>(), diContainer);
+            PizzeriaPlayerSpawner playerSpawner = new(playerInput, sceneReferences, assetsProvider, diContainer);
             await playerSpawner.SpawnPlayer();
 
             PlayerCameraControllerBase cameraController = diContainer.Resolve<PlayerCameraControllerBase>();
@@ -63,21 +67,33 @@ namespace Game.PizzeriaSimulator.Entry
             diContainer.Bind<PaymentReceiver>().FromInstance(paymentReceiver).AsSingle();
             paymentReceiver.Init();
 
+            AllPizzaConfig allPizzaConfig = (await assetsProvider.LoadAsset<AllPizzaConfigSO>(AssetsKeys.AllPizzaConfig)).AllPizzaConfig;
             PizzaCreatorConfig pizzaCreatorConfig = (await assetsProvider.LoadAsset<PizzaCreatorConfigSO>(AssetsKeys.PizzaCreatorConfig)).PizzaCreatorConfig;
+            PaymentVisualConfig paymentVisualConfig = (await assetsProvider.LoadAsset<PaymentVisualConfigSO>(AssetsKeys.PaymentVisualConfig)).PaymentVisualConfig;
 
-            pizzaHolder = new PizzaHolder(pizzaCreatorConfig);
+            pizzaHolder = new PizzaHolder();
 
-            pizzaCreator = new PizzaCreator(pizzaHolder, pizzaCreatorConfig);
+            pizzaCreator = new PizzaCreator(pizzaHolder, allPizzaConfig, pizzaCreatorConfig);
 
             ordersHandler = new PizzeriaOrdersHandler(pizzaHolder);
             ordersHandler.Init();
             diContainer.Bind<ISceneDisposable>().FromInstance(ordersHandler);
 
-            sceneReferences.OrderGIver.Init(ordersHandler);
 
             Interactor interactor = new(playerInput, cameraController,  paymentReceiver, pizzaCreator, ordersHandler);
             interactor.Init();
             diContainer.Bind<ISceneDisposable>().FromInstance(interactor);
+
+            CustomersSettingsConfig customersSettingsConfig = (await assetsProvider.LoadAsset<CustomersSettingsConfigSO>(AssetsKeys.CustomersSettingsConfig)).CustomersSettingsConfig;
+
+            CustomersOrdersProccesor customersOrdersProccesor = new(paymentReceiver, ordersHandler, allPizzaConfig, customersSettingsConfig);
+            CustomersManager customersManager = new(customersOrdersProccesor, ordersHandler, sceneReferences, assetsProvider, customersSettingsConfig);
+            await customersManager.Init();
+            diContainer.Bind<ISceneDisposable>().FromInstance(customersManager);
+
+            CustomerVisualManager customerVisualManager = new(customersManager, customersOrdersProccesor, sceneReferences, paymentVisualConfig);
+            customerVisualManager.Init();
+            diContainer.Bind<ISceneDisposable>().FromInstance(customerVisualManager);
 
             await CreateVisual();
         }

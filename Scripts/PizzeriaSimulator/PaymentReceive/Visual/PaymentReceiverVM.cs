@@ -12,16 +12,19 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         public event Action OnReceived;
 
         public Subject<Unit> LeaveInput;
+        public Subject<Unit> PaymentReceiveInput;
 
         readonly PaymentReceiver paymentReceiver;
         public PaymentReceiverVM(PaymentReceiver _paymentReceiver)
         {
             paymentReceiver = _paymentReceiver;
             LeaveInput = new Subject<Unit>();
+            PaymentReceiveInput = new Subject<Unit>();
         }
         public void Init()
         {
-            LeaveInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ =>paymentReceiver.LeavePaymentReceive());
+            LeaveInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ =>paymentReceiver.LeavePaymentInput());
+            PaymentReceiveInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ =>paymentReceiver.PaymentReceiveInput());
             paymentReceiver.OnPaymentReceiveEntered += OnEnterPaymentReceive;
             paymentReceiver.OnPaymentReceiveLeaved += OnLeavePaymentReceive;
             paymentReceiver.OnStartReceiving += OnReceiveStart;
@@ -30,6 +33,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         public void Dispose()
         {
             LeaveInput.Dispose();
+            PaymentReceiveInput.Dispose();
             paymentReceiver.OnPaymentReceiveEntered -= OnEnterPaymentReceive;
             paymentReceiver.OnPaymentReceiveLeaved -= OnLeavePaymentReceive;
             paymentReceiver.OnStartReceiving -= OnReceiveStart;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.PizzeriaSimulator.PizzaCreation.Config;
 
 namespace Game.PizzeriaSimulator.PizzaHold
 {
@@ -8,12 +7,10 @@ namespace Game.PizzeriaSimulator.PizzaHold
     {
         public event Action<int> OnPizzaAdded;
         public event Action<int> OnPizzaRemoved;
-        readonly PizzaCreatorConfig pizzaCreatorConfig;
         readonly Dictionary<int, int> pizzas;
         readonly Dictionary<int, int> reservedPizzas;
-        public PizzaHolder(PizzaCreatorConfig _pizzaCreatorConfig)
+        public PizzaHolder()
         {
-            pizzaCreatorConfig = _pizzaCreatorConfig;
             pizzas = new Dictionary<int, int>();
             reservedPizzas = new Dictionary<int, int>();
         }
@@ -29,9 +26,19 @@ namespace Game.PizzeriaSimulator.PizzaHold
             }
             OnPizzaAdded?.Invoke(pizzaID);
         }
+        public bool TryRemovePizza(int pizzaID)
+        {
+            if (HasPizza(pizzaID))
+            {
+                pizzas[pizzaID]--;
+                OnPizzaRemoved?.Invoke(pizzaID);
+                return true;
+            }
+            return false;
+        }
         public bool TryReservePizza(int pizzaID)
         {
-            if (pizzas.TryGetValue(pizzaID, out int amount) && amount > 0)
+            if (HasPizza(pizzaID))
             {
                 pizzas[pizzaID]--;
                 if (!reservedPizzas.ContainsKey(pizzaID))
@@ -54,28 +61,9 @@ namespace Game.PizzeriaSimulator.PizzaHold
                 OnPizzaRemoved?.Invoke(pizzaID);
             }
         }
-        public bool TryRemovePizza(int pizzaID)
-        {
-            if (pizzas.TryGetValue(pizzaID, out int amount) && amount > 0)
-            {
-                pizzas[pizzaID]--;
-                OnPizzaRemoved?.Invoke(pizzaID);
-                return true;
-            }
-            return false;
-        }
-        public int GetPizzasAmount(int pizzaID)
-        {
-            if (pizzas.TryGetValue(pizzaID, out int amount)) return amount;
-            return 0;
-        }
         public bool HasPizza(int pizzaID)
         {
             return pizzas.TryGetValue(pizzaID, out int amount) && amount > 0;
-        }
-        public PizzaConfig GetPizzaConfig(int pizzaID)
-        {
-            return pizzaCreatorConfig.GetPizzaByID(pizzaID);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using Game.Root.ServicesInterfaces;
+﻿using Game.Root.ServicesInterfaces;
+using System;
 using R3;
 
 namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
@@ -7,9 +7,10 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
     public class CardPaymentProccesorVM : ISceneDisposable
     {
         public event Action OnStartProcces;
-        public event Action OnCompleteProcces;
+        public event Action<Action> OnCompleteProcces;
         public event Action<string> UpdatePriceText;
         public event Action<string> UpdateEnterText;
+        public event Action<string> ShowErrorMessage;
 
         public Subject<Unit> ConfirmInput;
         public Subject<Unit> BackInput;
@@ -24,7 +25,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
 
         readonly CardPaymentProccesor cardPaymentProccesor;
         const string moneyValuePattern = "{0}.{1:D2}";
-        const int maxEnteredDigits = 10;
+        const int maxEnteredDigits = 7;
         public CardPaymentProccesorVM(CardPaymentProccesor _cardPaymentProccesor)
         {
             cardPaymentProccesor = _cardPaymentProccesor;
@@ -42,6 +43,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             cardPaymentProccesor.OnStartProccesing += OnStartProccesing;
             cardPaymentProccesor.OnCompleteProccesing += OnCompleteProccesing;
             cardPaymentProccesor.OnNewPrice += HandleNewPrice;
+            cardPaymentProccesor.OnFailToComplete += HandleFailComplete;
         }
         public void Dispose()
         {
@@ -52,9 +54,11 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             cardPaymentProccesor.OnStartProccesing -= OnStartProccesing;
             cardPaymentProccesor.OnCompleteProccesing -= OnCompleteProccesing;
             cardPaymentProccesor.OnNewPrice -= HandleNewPrice;
+            cardPaymentProccesor.OnFailToComplete -= HandleFailComplete;
         }
         void HandleBackInput()
         {
+            if (enteredDollars < 1 && !isDotEntered) return;
             if (isDotEntered)
             {
                 if(enteredCentsDigits > 0)
@@ -70,7 +74,6 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             else
             {
                 enteredDollarsDigits--;
-                if (enteredDollarsDigits < 0) enteredDollars = 0;
                 enteredDollars /= 10;
             }
 
@@ -89,7 +92,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         {
             if (IsEnterFull())
             {
-                // more that ten digits
+                // input field is full
                 return;
             }
             isDotEntered = true;
@@ -100,14 +103,14 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             if (digit < 0 || digit > 9) return;
             if(IsEnterFull())
             {
-                // more that ten digits
+                // input field is full
                 return;
             }
             if (isDotEntered)
             {
                 if (enteredCentsDigits > 1)
                 {
-                    // more than two cents
+                    // more than two cents digits
                     return;
                 }
                 enteredCentsDigits++;
@@ -116,6 +119,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             }
             else
             {
+                if (enteredDollarsDigits == 0 && digit == 0) return;
                 enteredDollarsDigits++;
                 enteredDollars = enteredDollars * 10 + digit;
                 UpdateEnterText?.Invoke($"{enteredDollars}");
@@ -124,7 +128,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         }
         bool IsEnterFull()
         {
-            return (enteredDollarsDigits + enteredCentsDigits + (isDotEntered ? 1 : 0)) > maxEnteredDigits;
+            return (enteredDollarsDigits + enteredCentsDigits + (isDotEntered ? 1 : 0)) >= maxEnteredDigits;
         }
         void OnStartProccesing()
         {
@@ -138,15 +142,19 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             enteredCentsDigits = 0;
             enteredDollarsDigits = 0;
             isDotEntered = false;
-            HandleDigitInput(0);
+            UpdateEnterText?.Invoke("0");
         }
         void OnCompleteProccesing()
         {
-            OnCompleteProcces?.Invoke();
+            OnCompleteProcces?.Invoke(cardPaymentProccesor.OnCompleteShowEnded);
         }
         void HandleNewPrice(int dollars, int cents)
         {
             UpdatePriceText?.Invoke(string.Format(moneyValuePattern, dollars, cents));
+        }
+        void HandleFailComplete()
+        {
+            ShowErrorMessage?.Invoke("Wrong Input!");
         }
     }
 }

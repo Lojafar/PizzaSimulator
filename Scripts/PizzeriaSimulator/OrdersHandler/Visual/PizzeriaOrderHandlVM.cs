@@ -1,7 +1,7 @@
 ﻿using Game.PizzeriaSimulator.PizzaCreation;
 using Game.PizzeriaSimulator.PizzaCreation.Config;
+using Game.PizzeriaSimulator.PizzasConfig;
 using Game.Root.ServicesInterfaces;
-using Game.Root.User.Environment;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,7 +57,6 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         public event Action<int> SetOrderBakeState;
         public event Action<int> SetOrderCutState;
         public event Action<int> SetOrderCompleted;
-        public event Action<int> ClearAllCompletedInBar;
         public event Action ClearAllCompletedInBars;
         public event Action<string> OnBellCancelled;
         readonly int pizzaBaseIngredientAmount;
@@ -221,8 +220,8 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
                     SetOrderBakeState?.Invoke(orders[orderIndex].OrderIndex);
                     orders[orderIndex] = new(orders[orderIndex].OrderIndex, VMOrderState.Baking);
                 }
-                ClearAllCompletedInBars?.Invoke();
             }
+            ClearAllCompletedInBars?.Invoke();
         }
         void HandlePizzaCut(int pizzaID)
         {

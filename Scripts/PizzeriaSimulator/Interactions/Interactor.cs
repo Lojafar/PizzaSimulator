@@ -75,7 +75,7 @@ namespace Game.PizzeriaSimulator.Interactions.Interactor
             switch (lastInteractable.InteractableType)
             {
                 case InteractableType.PaymentStand:
-                    paymentReceiver.EnterPaymentReceive();
+                    paymentReceiver.EnterPaymentWait();
                     break;
                 case InteractableType.PizzaCreateTable:
                     pizzaCreator.EnterPizzaCreate();

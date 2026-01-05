@@ -1,4 +1,5 @@
-﻿using Game.PizzeriaSimulator.Player.CameraController;
+﻿using Game.Helps;
+using Game.PizzeriaSimulator.Player.CameraController;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,11 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         [SerializeField] Button leaveButton;
         DiContainer diContainer;
         PlayerCameraControllerBase playerCamController;
+        Camera mainCam;
+        RaycastHit rayHit;
+        int paymentObjectLayer;
+        bool opened;
+        const float maxrayHitDist = 3f;
 
         [Inject]
         public void Construct(DiContainer _diContainer)
@@ -20,6 +26,8 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         }
         public override void Bind(PaymentReceiverVM _viewModel)
         {
+            paymentObjectLayer = LayerMask.GetMask(Layers.DefaultLayerName);
+            mainCam = Camera.main;
             playerCamController = diContainer.Resolve<PlayerCameraControllerBase>();
             base.Bind(_viewModel);
             leaveButton.onClick.AddListener(OnLeaveBtn);
@@ -45,13 +53,14 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         }
         void OnEnterToReceive()
         {
+            opened = true;
             playerCamController.SetLook(playerCamLookTransform.position, playerCamLookTransform.eulerAngles);
         }
         void OnExitFromReceive()
         {
+            opened = false;
             playerCamController.ResetLook();
         }
-
         void OnStartReceiving()
         {
             receiveWaitPanel.SetActive(false);
@@ -61,6 +70,15 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         {
             receiveWaitPanel.SetActive(true);
             playerCamController.SetLook(playerCamLookTransform.position, playerCamLookTransform.eulerAngles);
+        }
+        private void Update()
+        {
+            if (!opened) return;
+            if (Input.GetMouseButtonUp(0) && Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out rayHit, maxrayHitDist, paymentObjectLayer)
+               && rayHit.collider.TryGetComponent<PaymentObject>(out PaymentObject paymentObject))
+            {
+                viewModel.PaymentReceiveInput.OnNext(Unit.Default);
+            }
         }
     }
 }

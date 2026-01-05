@@ -6,6 +6,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
     {
         [field: SerializeField] public int Amount { get; private set; }
         [field: SerializeField] public GameObject SinglePrefab { get; private set; }
+        [field: SerializeField] public bool IsBanknote { get; private set; }
         [SerializeField] Outline selectionOutline;
         private void Awake()
         {

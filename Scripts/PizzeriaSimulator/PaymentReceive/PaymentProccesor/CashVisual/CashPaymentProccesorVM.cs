@@ -9,7 +9,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
     public class CashPaymentProccesorVM : ISceneDisposable
     {
         public event Action OnStartProcces;
-        public event Action OnCompleteProcces;
+        public event Action<Action> OnCompleteProcces;
         public event Action OnConfirmedActiveCash;
         public event Action OnCancelledLastCash;
         public event Action OnClearedAllCash;
@@ -17,6 +17,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         public event Action<string> UpdateGiveText;
         public event Action<string> UpdateChangeText;
         public event Action<string> UpdateGivedChangeText;
+        public event Action<string> ShowErrorMessage;
         public event Action<bool> SetGivedChangeIsTarget;
 
         public Subject<Unit> ConfirmInput;
@@ -49,6 +50,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             cashPaymentProccesor.OnNewGive += HandleNewGiving;
             cashPaymentProccesor.OnNewChange += HandleNewChange;
             cashPaymentProccesor.OnNewChangeGived += HandleGivedChange;
+            cashPaymentProccesor.OnFailToComplete += HandleFailComplete;
         }
         public void Dispose()
         {
@@ -63,6 +65,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             cashPaymentProccesor.OnNewGive -= HandleNewGiving;
             cashPaymentProccesor.OnNewChange -= HandleNewChange;
             cashPaymentProccesor.OnNewChangeGived -= HandleGivedChange;
+            cashPaymentProccesor.OnFailToComplete -= HandleFailComplete;
         }
         void HandleChangeInput(int amount)
         {
@@ -97,7 +100,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         }  
         void OnCompleteProccesing()
         {
-            OnCompleteProcces?.Invoke();
+            OnCompleteProcces?.Invoke(cashPaymentProccesor.Confirm);
         }
         void HandleNewPrice(int dollars, int cents)
         {
@@ -115,6 +118,10 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         {
             UpdateGivedChangeText?.Invoke(string.Format(moneyValuePattern, dollars, cents));
             SetGivedChangeIsTarget?.Invoke(isTargetChange);
+        }
+        void HandleFailComplete()
+        {
+            ShowErrorMessage?.Invoke("Wrong Change!");
         }
     }
 }

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Helps;
 using Game.PizzeriaSimulator.Player.CameraController;
 using Game.Root.Utils;
+using Game.Root.Utils.Audio;
 using R3;
 using TMPro;
 using UnityEngine;
@@ -12,8 +14,14 @@ using Zenject;
 
 namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
 {
+    using Random = UnityEngine.Random;
     class CashPaymentProccesorView : CashPaymentProccesorViewBase
     {
+        [SerializeField] AudioClip openSFX;
+        [SerializeField] AudioClip closeSFX;
+        [SerializeField] AudioClip banknoteSFX;
+        [SerializeField] AudioClip coinSFX;
+        [SerializeField] AudioClip errorSFX;
         [SerializeField] Transform shelveTransform;
         [SerializeField] Transform playerCamLookTransform;
         [SerializeField] GameObject cashPaymentPanel;
@@ -39,7 +47,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         PlayerCameraControllerBase playerCamController;
         Camera mainCam;
         CashChangeObject lastSelectedCash;
-        RaycastHit[] raycastHits;
+        RaycastHit raycastHit;
         Stack<GameObject> spawnedChangeObjs;
         int raycastLayerMask;
 
@@ -53,7 +61,6 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         public override void Bind(CashPaymentProccesorVM _viewModel)
         {
             spawnedChangeObjs = new Stack<GameObject>();
-            raycastHits = new RaycastHit[1];
             raycastLayerMask = LayerMask.GetMask(Layers.DefaultLayerName);
             playerCamController = diContainer.Resolve<PlayerCameraControllerBase>();
             mainCam = Camera.main;
@@ -71,6 +78,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             viewModel.OnConfirmedActiveCash += SpawnActiveCashObj;
             viewModel.OnCancelledLastCash += DestroyLastCashObj;
             viewModel.OnClearedAllCash += DestroyAllCashObjs;
+            viewModel.ShowErrorMessage += ShowErrorMessage;
 
             shelveOpenTween = shelveTransform.DOLocalMove(openedShelvePos, shelveMoveDuration).SetAutoKill(false);
         }
@@ -91,6 +99,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
                 viewModel.OnConfirmedActiveCash -= SpawnActiveCashObj;
                 viewModel.OnCancelledLastCash -= DestroyLastCashObj;
                 viewModel.OnClearedAllCash -= DestroyAllCashObjs;
+                viewModel.ShowErrorMessage -= ShowErrorMessage;
             }
             Ticks.Instance.OnFixedTick -= OnFixedUpdateWhenProcces;
             Ticks.Instance.OnTick -= OnUpdateWhenProcces;
@@ -115,6 +124,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             playerCamController.SetLook(playerCamLookTransform.position, playerCamLookTransform.eulerAngles);
             Ticks.Instance.OnFixedTick += OnFixedUpdateWhenProcces;
             Ticks.Instance.OnTick += OnUpdateWhenProcces;
+            AudioPlayer.PlaySFX(openSFX);
         }
         void OnUpdateWhenProcces()
         {
@@ -126,8 +136,8 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         }
         void OnFixedUpdateWhenProcces()
         {
-            if (Physics.RaycastNonAlloc(mainCam.ScreenPointToRay(Input.mousePosition), raycastHits, maxCashSelectRayDis, raycastLayerMask) > 0
-                && raycastHits[0].collider.TryGetComponent<CashChangeObject>(out CashChangeObject cashChangeObject))
+            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out raycastHit, maxCashSelectRayDis, raycastLayerMask)
+                && raycastHit.collider.TryGetComponent<CashChangeObject>(out CashChangeObject cashChangeObject))
             {
                 if (lastSelectedCash != cashChangeObject)
                 {
@@ -143,17 +153,19 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
                 lastSelectedCash = null;
             }
         }
-        async void OnCompleteProcces()
+        async void OnCompleteProcces(Action onAnimShowed)
         {
             DestroyAllCashObjs();
             cashPaymentPanel.SetActive(false);
             completePaymentPanel.SetActive(true);
             Ticks.Instance.OnFixedTick -= OnFixedUpdateWhenProcces;
             Ticks.Instance.OnTick -= OnUpdateWhenProcces;
+            AudioPlayer.PlaySFX(closeSFX);
             await UniTask.WaitForSeconds(completeShowDelay);
             shelveOpenTween.PlayBackwards();
             completePaymentPanel.SetActive(false);
             playerCamController.ResetLook();
+            onAnimShowed?.Invoke();
         }
         void UpdatePriceText(string newText)
         {
@@ -183,6 +195,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
                 .Append(spawnedChangeObj.transform.DOMove(firstPosOfChangeMove, changeMoveDuration / 2))
                 .Append(spawnedChangeObj.transform.DOMove(new Vector3(Random.Range(minChangePos.x, maxChangePos.x), minChangePos.y + 0.0001f * spawnedChangeObjs.Count, Random.Range(minChangePos.z, maxChangePos.z)), changeMoveDuration / 2)).Play();
             spawnedChangeObjs.Push(spawnedChangeObj);
+            AudioPlayer.PlaySFX(lastSelectedCash.IsBanknote ? banknoteSFX : coinSFX);
         }
         void DestroyLastCashObj()
         {
@@ -195,6 +208,11 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             {
                 Destroy(spawnedChangeObjs.Pop());
             }
+        }
+        void ShowErrorMessage(string message)
+        {
+            Toasts.ShowToast(message);
+            AudioPlayer.PlaySFX(errorSFX);
         }
 
     }

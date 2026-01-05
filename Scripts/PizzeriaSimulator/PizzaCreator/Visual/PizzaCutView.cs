@@ -142,7 +142,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             }
             else if (Input.GetMouseButtonUp(0))
             {
-                if (isDraggingCutter && currentPizzaToCut != null
+                if (isDraggingCutter && currentPizzaToCut != null && currentCutState < maxCutState
                     && Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out rayHit, maxrayHitDist, rayLayerMask) && rayHit.collider.gameObject == currentPizzaToCut.gameObject)
                 {
                     CutPizza();

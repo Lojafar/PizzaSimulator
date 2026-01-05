@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f2b061d25f6c0459c84a9c8f5e536a, type: 3}
+  m_Name: PaymentVisualConfig
+  m_EditorClassIdentifier: 
+  <PaymentVisualConfig>k__BackingField:
+    <InHandOffset>k__BackingField: {x: -0.1205, y: 0.0342, z: 0.014}
+    <InHandLocalRot>k__BackingField: {x: 2.3287826, y: 338.95932, z: 10.413074}
+    paymentObjectWithTypes:
+    - <PaymentObjectType>k__BackingField: 0
+      <PaymentObject>k__BackingField: {fileID: -1338565927388175495, guid: 3c933b2d8bc2c0b4d9a5ec2a816dc052,
+        type: 3}
+    - <PaymentObjectType>k__BackingField: 1
+      <PaymentObject>k__BackingField: {fileID: 4051482901857844584, guid: 5594cc7154ce4dd4fb8438cea44ae365,
+        type: 3}
+    - <PaymentObjectType>k__BackingField: 2
+      <PaymentObject>k__BackingField: {fileID: -6951095143011766925, guid: e0cb24329f8256b499c76c2a6d9be9a5,
+        type: 3}
+    - <PaymentObjectType>k__BackingField: 3
+      <PaymentObject>k__BackingField: {fileID: 6254863170435628596, guid: ad8638d57ea4451449b5eb0fbc283c14,
+        type: 3}
+    - <PaymentObjectType>k__BackingField: 4
+      <PaymentObject>k__BackingField: {fileID: -5192845320076087069, guid: 64a27a368b0f2424b87f9c7511ae2b45,
+        type: 3}
+    - <PaymentObjectType>k__BackingField: 5
+      <PaymentObject>k__BackingField: {fileID: -1338565927388175495, guid: f51634a56efcff946852a615fc3378a1,
+        type: 3}

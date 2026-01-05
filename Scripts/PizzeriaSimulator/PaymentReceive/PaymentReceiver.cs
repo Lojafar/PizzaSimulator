@@ -12,8 +12,13 @@ namespace Game.PizzeriaSimulator.PaymentReceive
         public event Action OnStartReceiving;
         public event Action OnReceived;
         readonly Dictionary<PaymentType, IPaymentProccesor> paymentProccesors;
-
+        public Action currentCallBack;
+        bool isReceiving;
         const int maxCentsValue = 99;
+
+        PaymentType targetPaymentType;
+        int targetDollars;
+        int targetCents;
         public PaymentReceiver() 
         {
             paymentProccesors = new Dictionary<PaymentType, IPaymentProccesor>();
@@ -31,33 +36,51 @@ namespace Game.PizzeriaSimulator.PaymentReceive
             }
             return null;
         }
-        public void EnterPaymentReceive()
+        public void EnterPaymentWait()
         {
             OnPaymentReceiveEntered?.Invoke();
         }
-        public void LeavePaymentReceive()
+        public void LeavePaymentInput()
         {
             OnPaymentReceiveLeaved?.Invoke();
         }
-        public void ReceivePayment(PaymentType paymentType, int dollars, int cents)
+      
+        public void ProccesPayment(PaymentType paymentType, PaymentPrice paymentPrice, Action callBack)
         {
+            ProccesPayment(paymentType, paymentPrice.Dollars, paymentPrice.Cents, callBack);
+        }
+        public void ProccesPayment(PaymentType paymentType, int dollars, int cents, Action callBack)
+        {
+            if (isReceiving)
+            {
+                callBack?.Invoke();
+                return;
+            }
             cents = Mathf.Clamp(cents, 0, maxCentsValue);
             if (dollars < 0) dollars = 0;
-
-            if (paymentProccesors.TryGetValue(paymentType, out IPaymentProccesor paymentProccesor))
+            targetPaymentType = paymentType;
+            targetDollars = dollars;
+            targetCents = cents;
+            currentCallBack = callBack;
+        }
+        public void PaymentReceiveInput()
+        {
+            if (paymentProccesors.TryGetValue(targetPaymentType, out IPaymentProccesor paymentProccesor))
             {
+                isReceiving = true;
                 OnStartReceiving?.Invoke();
-                paymentProccesor.ProccesPayment(dollars, cents, OnPaymentReceived);
+                paymentProccesor.ProccesPayment(targetDollars, targetCents, OnPaymentReceived);
             }
             else
             {
-                UnityEngine.Debug.LogError($"Payment proccesor of type: {paymentType} isn't setted");
+                UnityEngine.Debug.LogError($"Payment proccesor of type: {targetPaymentType} isn't setted");
             }
-
         }
         void OnPaymentReceived()
         {
+            isReceiving = false;
             OnReceived?.Invoke();
+            currentCallBack?.Invoke();
         }
     }
 }

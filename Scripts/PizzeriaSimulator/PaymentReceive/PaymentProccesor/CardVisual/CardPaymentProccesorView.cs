@@ -5,12 +5,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using System;
+using Game.Root.Utils.Audio;
+using Game.Root.Utils;
 
 namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
 {
     class CardPaymentProccesorView : CardPaymentProccesorViewBase
     {
-        [SerializeField] Transform playerCamLookTransform;
+        [SerializeField] AudioClip btnClickSFX;
+        [SerializeField] AudioClip paySuccesSFX;
+        [SerializeField] AudioClip errorSFX;
+        [SerializeField] Transform inputCamLookTransform;
+        [SerializeField] Transform completedCamLookTransform;
         [SerializeField] GameObject cardPaymentPanel;
         [SerializeField] GameObject completePaymentPanel;
         [SerializeField] TMP_Text totalPriceTMP;
@@ -49,6 +56,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
             viewModel.OnCompleteProcces += OnCompleteProcces;
             viewModel.UpdatePriceText += UpdatePriceText;
             viewModel.UpdateEnterText += UpdateEnterText;
+            viewModel.ShowErrorMessage += ShowErrorMessage;
         }
         private void OnDestroy()
         {
@@ -71,6 +79,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
                 viewModel.OnCompleteProcces -= OnCompleteProcces;
                 viewModel.UpdatePriceText -= UpdatePriceText;
                 viewModel.UpdateEnterText -= UpdateEnterText;
+                viewModel.ShowErrorMessage -= ShowErrorMessage;
             }
         }
         void OnConfirmBtn()
@@ -79,34 +88,43 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         }
         void OnBackBtn()
         {
+            OnInputBtn();
             viewModel.BackInput.OnNext(Unit.Default);
         }
-        void OnDigit1Btn() { viewModel.DigitInput.OnNext(1); }
-        void OnDigit2Btn() { viewModel.DigitInput.OnNext(2); }
-        void OnDigit3Btn() { viewModel.DigitInput.OnNext(3); }
-        void OnDigit4Btn() { viewModel.DigitInput.OnNext(4); }
-        void OnDigit5Btn() { viewModel.DigitInput.OnNext(5); }
-        void OnDigit6Btn() { viewModel.DigitInput.OnNext(6); }
-        void OnDigit7Btn() { viewModel.DigitInput.OnNext(7); }
-        void OnDigit8Btn() { viewModel.DigitInput.OnNext(8); }
-        void OnDigit9Btn() { viewModel.DigitInput.OnNext(9); }
-        void OnDigit0Btn() { viewModel.DigitInput.OnNext(0); }
+        void OnDigit1Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(1); }
+        void OnDigit2Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(2); }
+        void OnDigit3Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(3); }
+        void OnDigit4Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(4); }
+        void OnDigit5Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(5); }
+        void OnDigit6Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(6); }
+        void OnDigit7Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(7); }
+        void OnDigit8Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(8); }
+        void OnDigit9Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(9); }
+        void OnDigit0Btn() { OnInputBtn(); viewModel.DigitInput.OnNext(0); }
         void OnDotBtn()
         {
+            OnInputBtn();
             viewModel.DotInput.OnNext(Unit.Default);
+        }
+        void OnInputBtn()
+        {
+            AudioPlayer.PlaySFX(btnClickSFX);
         }
         void StartProcces()
         {
             cardPaymentPanel.SetActive(true);
-            playerCamController.SetLook(playerCamLookTransform.position, playerCamLookTransform.eulerAngles);
+            playerCamController.SetLook(inputCamLookTransform.position, inputCamLookTransform.eulerAngles);
         }
-        async void OnCompleteProcces()
+        async void OnCompleteProcces(Action onShowed)
         {
             cardPaymentPanel.SetActive(false);
             completePaymentPanel.SetActive(true);
-            playerCamController.ResetLook();
+            playerCamController.SetLook(completedCamLookTransform.position, completedCamLookTransform.eulerAngles);
+            AudioPlayer.PlaySFX(paySuccesSFX);
             await UniTask.WaitForSeconds(completeShowDelay);
             completePaymentPanel.SetActive(false);
+            playerCamController.ResetLook();
+            onShowed?.Invoke();
         }
         void UpdatePriceText(string text)
         {
@@ -115,6 +133,11 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         void UpdateEnterText(string text)
         {
             enterAmountTMP.text = text;
+        }
+        void ShowErrorMessage(string text) 
+        {
+            Toasts.ShowToast(text);
+            AudioPlayer.PlaySFX(errorSFX);
         }
     }
 }

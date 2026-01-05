@@ -20,7 +20,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor
 
         int targetChangeDollars;
         int targetChangeCents;
-
+        bool confirmed;
         const int maxCentsAmount = 99;
         const int centsInDollar = 100;
         const int rndDollarsDivisFactor = 3;
@@ -75,12 +75,19 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor
         }
         public void OnConfirmInput()
         {
-            if(!(currentChangedDollars == targetChangeDollars && currentChangedCents == targetChangeCents)) 
+            if (confirmed) return;
+            if (currentChangedDollars != targetChangeDollars || currentChangedCents != targetChangeCents) 
             {
                 OnFailToComplete?.Invoke();
                 return;
             }
             OnCompleteProccesing?.Invoke();
+            confirmed = true;
+        }
+        public void Confirm()
+        {
+            if (!confirmed) return;
+            confirmed = false;
             currentCallback?.Invoke();
         }
     }
