@@ -28,7 +28,6 @@ namespace Game.Helps.UI
                 childChangeIgnors--;
                 return;
             }
-            UnityEngine.Debug.Log("Childs changed");
             elements.Clear();
             for (int i = 0; i < transform.childCount; i++)
             {

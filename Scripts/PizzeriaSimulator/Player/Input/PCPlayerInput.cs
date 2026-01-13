@@ -7,10 +7,12 @@ namespace Game.PizzeriaSimulator.Player.Input
     using Input = UnityEngine.Input;
     class PCPlayerInput : MonoBehaviour, IPlayerInput
     {
+        public event Action OnInteractInput;
+        public event Action OnThrowInput;
+        public event Action OnOpenInput;
         [SerializeField] Image crosshairImage;
         [SerializeField] Color normalCrosshairColor = Color.white;
         [SerializeField] Color selectedCrosshairColor = Color.white;
-        public event Action OnInteractInput;
         Vector2 movementDir;
         Vector2 rotDir;
         private void Awake()
@@ -51,6 +53,14 @@ namespace Game.PizzeriaSimulator.Player.Input
             if (Input.GetKeyDown(KeyCode.E))
             {
                 OnInteractInput?.Invoke();
+            }
+            else if (Input.GetKeyDown(KeyCode.G)) 
+            {
+                OnThrowInput?.Invoke();
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
+            {
+                OnOpenInput?.Invoke();
             }
         }
     }

@@ -8,10 +8,10 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         readonly PizzeriaSceneReferences sceneReferences;
         readonly PizzaCreator pizzaCreator;
         readonly DiContainer diContainer;
-        public PizzaCreatorBinder(PizzeriaSceneReferences _sceneReferences, PizzaCreator _pizzaCreator, DiContainer _diContainer)
+        public PizzaCreatorBinder(PizzaCreator _pizzaCreator, PizzeriaSceneReferences _sceneReferences,DiContainer _diContainer)
         {
-            sceneReferences = _sceneReferences;
             pizzaCreator = _pizzaCreator;
+            sceneReferences = _sceneReferences;
             diContainer = _diContainer;
         }
         public void Bind()

@@ -1,16 +1,21 @@
-﻿using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor;
+﻿using Game.PizzeriaSimulator.Currency;
+using Game.PizzeriaSimulator.Interactions;
+using Game.PizzeriaSimulator.Interactions.Interactor;
+using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor;
+using Game.Root.ServicesInterfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.PaymentReceive
 {
-    public class PaymentReceiver
+    public class PaymentReceiver : IInittable, ISceneDisposable
     {
         public event Action OnPaymentReceiveEntered;
         public event Action OnPaymentReceiveLeaved;
         public event Action OnStartReceiving;
         public event Action OnReceived;
+        readonly Interactor interactor;
         readonly Dictionary<PaymentType, IPaymentProccesor> paymentProccesors;
         public Action currentCallBack;
         bool isReceiving;
@@ -19,14 +24,31 @@ namespace Game.PizzeriaSimulator.PaymentReceive
         PaymentType targetPaymentType;
         int targetDollars;
         int targetCents;
-        public PaymentReceiver() 
+        public PaymentReceiver(Interactor _interactor) 
         {
-            paymentProccesors = new Dictionary<PaymentType, IPaymentProccesor>();
+            interactor = _interactor;
+            paymentProccesors = new Dictionary<PaymentType, IPaymentProccesor>()
+            {
+                { PaymentType.Cash, new CashPaymentProccesor() },
+                { PaymentType.Card, new CardPaymentProccesor() }
+            };
         }
         public void Init()
         {
-            paymentProccesors.Add(PaymentType.Cash, new CashPaymentProccesor());
-            paymentProccesors.Add(PaymentType.Card, new CardPaymentProccesor());
+            interactor.OnInteract += HandleInteractor;
+        }
+        public void Dispose()
+        {
+            interactor.OnInteract -= HandleInteractor;
+            paymentProccesors.Clear();
+
+        }
+        void HandleInteractor(InteractableType interactableType)
+        {
+            if(interactableType == InteractableType.PaymentStand)
+            {
+                EnterPaymentWait();
+            }
         }
         public IPaymentProccesor GetPaymentProccesorByType(PaymentType paymentType)
         {
@@ -45,7 +67,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive
             OnPaymentReceiveLeaved?.Invoke();
         }
       
-        public void ProccesPayment(PaymentType paymentType, PaymentPrice paymentPrice, Action callBack)
+        public void ProccesPayment(PaymentType paymentType, MoneyQuantity paymentPrice, Action callBack)
         {
             ProccesPayment(paymentType, paymentPrice.Dollars, paymentPrice.Cents, callBack);
         }

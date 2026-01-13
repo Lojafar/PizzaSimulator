@@ -4,7 +4,7 @@ using Game.Root.ServicesInterfaces;
 
 namespace Game.PizzeriaSimulator.Player.Handler
 {
-    class PizzaPlayerHandler : ISceneDisposable
+    class PizzaPlayerHandler : IInittable, ISceneDisposable
     {
         readonly IPlayerInput playerInput;
         readonly PlayerCameraControllerBase cameraController;

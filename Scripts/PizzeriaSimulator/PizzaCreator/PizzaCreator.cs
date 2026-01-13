@@ -1,12 +1,17 @@
-﻿using Game.PizzeriaSimulator.PizzaCreation.Config;
+﻿using Game.PizzeriaSimulator.BoxCarry.Carrier;
+using Game.PizzeriaSimulator.Interactions;
+using Game.PizzeriaSimulator.Interactions.Interactor;
+using Game.PizzeriaSimulator.PizzaCreation.Config;
+using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold;
 using Game.PizzeriaSimulator.PizzaHold;
 using Game.PizzeriaSimulator.PizzasConfig;
+using Game.Root.ServicesInterfaces;
 using System;
 using System.Collections.Generic;
 
 namespace Game.PizzeriaSimulator.PizzaCreation
 {
-    public class PizzaCreator
+    public class PizzaCreator : IInittable, ISceneDisposable
     {
         public event Action OnEnterCreate;
         public event Action OnLeaveCreate;
@@ -22,6 +27,9 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         public event Action<IEnumerable<PizzaIngredientType>> OnNewPossibleIngredients;
 
         readonly PizzaHolder pizzaHolder;
+        readonly PizzaIngredientsHolder ingredientsHolder;
+        readonly BoxesCarrier boxesCarrier;
+        readonly Interactor interactor;
         readonly AllPizzaConfig allPizzaConfig;
         readonly PizzaCreatorConfig pizzaCreatorConfig;
         readonly Stack<PizzaIngredientType> placedIngredients;
@@ -34,9 +42,12 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         int readyPizza = -1;
         bool isBaseCreated;
         const int maxPizzasInBake = 4;
-        public PizzaCreator(PizzaHolder _pizzaHolder, AllPizzaConfig _allPizzaConfig, PizzaCreatorConfig _pizzaCreatorConfig)
+        public PizzaCreator(PizzaIngredientsHolder _ingredientsHolder, PizzaHolder _pizzaHolder, BoxesCarrier _boxesCarrier, Interactor _interactor, AllPizzaConfig _allPizzaConfig, PizzaCreatorConfig _pizzaCreatorConfig)
         {
+            ingredientsHolder = _ingredientsHolder;
             pizzaHolder = _pizzaHolder;
+            boxesCarrier = _boxesCarrier;
+            interactor = _interactor;
             allPizzaConfig = _allPizzaConfig;
             pizzaCreatorConfig = _pizzaCreatorConfig;
             placedIngredients = new Stack<PizzaIngredientType>();
@@ -44,6 +55,26 @@ namespace Game.PizzeriaSimulator.PizzaCreation
             possiblePizzas = new List<int>(allPizzaConfig.Pizzas.Length);
             pizzasInBake = new List<int>(maxPizzasInBake);
             baseIngredientsAmount = pizzaCreatorConfig.IngredientsForBase.Length;
+        }
+        public void Init()
+        {
+            interactor.OnInteract += HandleInteractor;
+        }
+        public void Dispose()
+        {
+            interactor.OnInteract -= HandleInteractor;
+        }
+        void HandleInteractor(InteractableType interactableType)
+        {
+            if (boxesCarrier.IsCarryingBox) return;
+            if (interactableType == InteractableType.PizzaCreateTable)
+            {
+                EnterPizzaCreate();
+            }
+            else if(interactableType == InteractableType.PizzaCutTable)
+            {
+                EnterPizzaCut();
+            }
         }
         public void EnterPizzaCreate()
         {
@@ -78,6 +109,10 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         public void ClearPizzaInput()
         {
             if (placedIngredients.Count < 1) return;
+            foreach(PizzaIngredientType ingredient in placedIngredients)
+            {
+                ingredientsHolder.TryAddIngredient(ingredient);
+            }
             ClearAllPizzaValues();
             OnPizzaCleared?.Invoke();
             UpdatePossibleIngredients();
@@ -104,7 +139,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         }
         public void PlaceIngredient(PizzaIngredientType ingredientType)
         {
-            if (!possibleIngredients.Contains(ingredientType))
+            if (!possibleIngredients.Contains(ingredientType) || !ingredientsHolder.TryRemoveIngredient(ingredientType))
             {
                 OnIngredientCancelled?.Invoke(ingredientType, 0);
                 return;
@@ -184,6 +219,10 @@ namespace Game.PizzeriaSimulator.PizzaCreation
                 if (pizzaInBake == pizzaID) result++;
             }
             return result;
+        }
+        public bool IsIngredientAvailable(PizzaIngredientType ingredientType)
+        {
+            return ingredientsHolder.HasIngredient(ingredientType);
         }
         public bool CanCurrentPizzaBeBaked()
         {

@@ -65,6 +65,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         }
         public override void Bind(PizzaCutVM _viewModel)
         {
+            objectWhenCutOpen.SetActive(false);
             maxCutState = pizzaCutSettings.Length;
             rayLayerMask = LayerMask.GetMask(Layers.DefaultLayerName);
             pizzaCutterNormalPos = pizzaCutterTransform.position;

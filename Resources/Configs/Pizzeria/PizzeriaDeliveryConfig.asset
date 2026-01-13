@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a57953810398c479317adbd49ec04b, type: 3}
+  m_Name: PizzeriaDeliveryConfig
+  m_EditorClassIdentifier: 
+  <DeliveryConfig>k__BackingField:
+    itemsConfigs:
+    - <Name>k__BackingField: Dough
+      <ID>k__BackingField: 0
+      <QuantityByOrder>k__BackingField: 4
+      <Price>k__BackingField:
+        Dollars: 0
+        Cents: 45
+      <ItemIcon>k__BackingField: {fileID: 1817793653, guid: 643c10bcb5326434f84992d30cf62027,
+        type: 3}
+      <ItemPrefab>k__BackingField: {fileID: 6689176643304373509, guid: fcab60f188b7dff4397ce35651b9834d,
+        type: 3}
+    - <Name>k__BackingField: Ketchup
+      <ID>k__BackingField: 1
+      <QuantityByOrder>k__BackingField: 4
+      <Price>k__BackingField:
+        Dollars: 1
+        Cents: 32
+      <ItemIcon>k__BackingField: {fileID: -1670427107, guid: 643c10bcb5326434f84992d30cf62027,
+        type: 3}
+      <ItemPrefab>k__BackingField: {fileID: 4259022128903085726, guid: b290f1482e718f643b8891a55f3ee83c,
+        type: 3}
+    - <Name>k__BackingField: Cheese
+      <ID>k__BackingField: 2
+      <QuantityByOrder>k__BackingField: 9
+      <Price>k__BackingField:
+        Dollars: 12
+        Cents: 32
+      <ItemIcon>k__BackingField: {fileID: 2007241015, guid: 643c10bcb5326434f84992d30cf62027,
+        type: 3}
+      <ItemPrefab>k__BackingField: {fileID: 0}

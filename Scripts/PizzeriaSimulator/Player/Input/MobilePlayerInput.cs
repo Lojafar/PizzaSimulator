@@ -7,6 +7,9 @@ namespace Game.PizzeriaSimulator.Player.Input
     using Input = UnityEngine.Input;
     class MobilePlayerInput : MonoBehaviour, IPlayerInput
     {
+        public event Action OnInteractInput;
+        public event Action OnThrowInput;
+        public event Action OnOpenInput;
         [SerializeField] Image crosshairImage;
         [SerializeField] RectTransform rotTouchArea;
         [SerializeField] Button interactButtton;
@@ -14,7 +17,6 @@ namespace Game.PizzeriaSimulator.Player.Input
         [SerializeField] Color normalCrosshairColor = Color.white;
         [SerializeField] Color selectedCrosshairColor = Color.white;
         [SerializeField] float rotDeltaDivisor = 1;
-        public event Action OnInteractInput;
         Vector2 currentMoveDir;
         Vector2 currentRotDir;
 

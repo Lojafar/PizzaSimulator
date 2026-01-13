@@ -16,7 +16,7 @@ namespace Game.PizzeriaSimulator.Customers.Manager
 {
     using Object = UnityEngine.Object;
     using Random = UnityEngine.Random;
-    public class CustomersManager : ISceneDisposable
+    public class CustomersManager : ITaskInittable, ISceneDisposable
     {
         public event Action<Customer, int> OnCustomerStartOrder;
         public event Action<Customer, int> OnCustomerMadeOrder;

@@ -15,6 +15,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         public event Action OnPizzaStarted;
         public event Action RemovePizza;
         public event Action DehighlightContainers;
+        public event Action ConfirmIngredientInput;
         public event Action<BakedPizzaObject, Action> BakePizza;
         public event Action<PizzaIngredientType> HighlightContainer;
         public event Action<IngredientOnPizzaObjectBase> ConfirmIngredientPlace;
@@ -25,6 +26,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         public Subject<Unit> LeaveInput;
         public Subject<Unit> ClearPizzaInput;
         public Subject<Unit> BakeInput;
+        public Subject<PizzaIngredientType> IngredientInput;
         public Subject<PizzaIngredientType> IngredientPlaceInput;
         readonly PizzaCreator pizzaCreator;
         public PizzaCreatorVM(PizzaCreator _pizzaCreator)
@@ -33,11 +35,13 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             LeaveInput = new Subject<Unit>();
             ClearPizzaInput = new Subject<Unit>();
             BakeInput = new Subject<Unit>();
+            IngredientInput = new Subject<PizzaIngredientType>();
             IngredientPlaceInput = new Subject<PizzaIngredientType>();
         }
         public void Init()
         {
             LeaveInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ => pizzaCreator.LeavePizzaCreate());
+            IngredientInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(OnIngredientInput);
             IngredientPlaceInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(pizzaCreator.PlaceIngredient);
             ClearPizzaInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ => pizzaCreator.ClearPizzaInput());
             BakeInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ => pizzaCreator.BakePizzaInput());
@@ -54,6 +58,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         public void Dispose()
         {
             LeaveInput.Dispose();
+            IngredientInput.Dispose();
             IngredientPlaceInput.Dispose();
             ClearPizzaInput.Dispose();
             pizzaCreator.OnEnterCreate -= OnEnterPizzaCreate;
@@ -65,6 +70,10 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             pizzaCreator.OnPizzaCleared -= HandlePizzaClear;
             pizzaCreator.OnPizzaBake -= HandlePizzaBake;
             pizzaCreator.OnPizzaBakeCancelled -= HandlePizzaBakeCancell;
+        }
+        void OnIngredientInput(PizzaIngredientType pizzaIngredientType)
+        {
+            if (pizzaCreator.IsIngredientAvailable(pizzaIngredientType)) ConfirmIngredientInput?.Invoke();
         }
         void OnEnterPizzaCreate()
         {

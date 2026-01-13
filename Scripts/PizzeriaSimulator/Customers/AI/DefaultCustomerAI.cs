@@ -45,30 +45,36 @@ namespace Game.PizzeriaSimulator.Customers.AI
         }
         public void Update()
         {
-            if (targetTransform != null)
+            if (targetTransform == null) return;
+            if (!targetPosReached)
             {
-                if (!targetPosReached)
-                {
-                    toTargetDir = new Vector3(targetTransform.position.x - customerTransform.position.x, 0, targetTransform.position.z - customerTransform.position.z);
-                    if (Mathf.Abs(toTargetDir.x) < targetPosThreshold && Mathf.Abs(toTargetDir.z) < targetPosThreshold)
-                    {
-                        targetPosReached = true;
-                        targetReached = false;
-                        toTargetDir = Vector3.zero;
-                        targetRot = targetTransform.rotation;
-                        return;
-                    }
-                    targetRot = Quaternion.LookRotation(toTargetDir);
-                }
-                else if(!targetReached)
-                {
-                    if (Quaternion.Angle(targetRot, customerTransform.rotation) < targetRotThreshold)
-                    {
-                        targetReached = true;
-                        OnTargetPointReached?.Invoke(id);
-                    }
-                }
-              
+                MoveToTarget();
+            }
+            else if (!targetReached)
+            {
+                CheckRotateToTarget();
+            }
+
+        }
+        void MoveToTarget()
+        {
+            toTargetDir = new Vector3(targetTransform.position.x - customerTransform.position.x, 0, targetTransform.position.z - customerTransform.position.z);
+            if (Mathf.Abs(toTargetDir.x) < targetPosThreshold && Mathf.Abs(toTargetDir.z) < targetPosThreshold)
+            {
+                targetPosReached = true;
+                targetReached = false;
+                toTargetDir = Vector3.zero;
+                targetRot = targetTransform.rotation;
+                return;
+            }
+            targetRot = Quaternion.LookRotation(toTargetDir);
+        }
+        void CheckRotateToTarget()
+        {
+            if (Quaternion.Angle(targetRot, customerTransform.rotation) < targetRotThreshold)
+            {
+                targetReached = true;
+                OnTargetPointReached?.Invoke(id);
             }
         }
 

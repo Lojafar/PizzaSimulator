@@ -1,4 +1,4 @@
-﻿using Game.PizzeriaSimulator.PaymentReceive;
+﻿using Game.PizzeriaSimulator.Currency;
 using Game.PizzeriaSimulator.PizzaCreation;
 using Game.PizzeriaSimulator.PizzaCreation.Visual;
 using System;
@@ -11,7 +11,7 @@ namespace Game.PizzeriaSimulator.PizzasConfig
     {
         [field: SerializeField] public int ID { get; private set; }
         [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public PaymentPrice Price { get; private set; }
+        [field: SerializeField] public MoneyQuantity Price { get; private set; }
         [field: SerializeField] public List<PizzaIngredientType>  Ingredients { get; private set; }
         [field: SerializeField] public BakedPizzaObject BakedPizzaPrefab { get; private set; }
         [field: SerializeField] public Sprite PizzaIcon { get; private set; }

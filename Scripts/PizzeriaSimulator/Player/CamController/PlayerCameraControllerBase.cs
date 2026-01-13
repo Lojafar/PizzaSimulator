@@ -5,6 +5,7 @@ namespace Game.PizzeriaSimulator.Player.CameraController
 {
     public abstract class PlayerCameraControllerBase : MonoBehaviour
     {
+        [field: SerializeField] public Transform InHandsTransform { get; private set; }
         public event Action<bool> OnCameraLocked;
         protected PizzaPlayer player;
         public virtual void Construct(PizzaPlayer _player)

@@ -1914,6 +1914,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shrimp (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1000012389451028, guid: 819bc2dc8cc285d4db64ae40568e2150, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4000012150083244, guid: 819bc2dc8cc285d4db64ae40568e2150, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.79999995
@@ -2508,6 +2512,10 @@ PrefabInstance:
     - target: {fileID: 1000012389451028, guid: 819bc2dc8cc285d4db64ae40568e2150, type: 3}
       propertyPath: m_Name
       value: Shrimp (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012389451028, guid: 819bc2dc8cc285d4db64ae40568e2150, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4000012150083244, guid: 819bc2dc8cc285d4db64ae40568e2150, type: 3}
       propertyPath: m_LocalScale.x
@@ -3359,6 +3367,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shrimp (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 1000012389451028, guid: 819bc2dc8cc285d4db64ae40568e2150, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4000012150083244, guid: 819bc2dc8cc285d4db64ae40568e2150, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.8
@@ -3440,6 +3452,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 209027675899927299, guid: 52713d8d0565951479c09b0dc23f55bf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 720144120087211665, guid: 52713d8d0565951479c09b0dc23f55bf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2281262797268384097, guid: 52713d8d0565951479c09b0dc23f55bf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3490,12 +3512,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5347835125134054966, guid: 52713d8d0565951479c09b0dc23f55bf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554464638667400106, guid: 52713d8d0565951479c09b0dc23f55bf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6111068955404606058, guid: 52713d8d0565951479c09b0dc23f55bf,
         type: 3}
       propertyPath: m_Name
       value: BakedShrimpPizza Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6111068955404606058, guid: 52713d8d0565951479c09b0dc23f55bf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6807169936921910983, guid: 52713d8d0565951479c09b0dc23f55bf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7492836875225861312, guid: 52713d8d0565951479c09b0dc23f55bf,
         type: 3}
       propertyPath: m_IsActive
       value: 1

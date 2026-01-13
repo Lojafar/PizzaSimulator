@@ -1,4 +1,6 @@
-﻿using Game.PizzeriaSimulator.PizzaHold;
+﻿using Game.PizzeriaSimulator.Interactions;
+using Game.PizzeriaSimulator.Interactions.Interactor;
+using Game.PizzeriaSimulator.PizzaHold;
 using Game.Root.ServicesInterfaces;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,10 @@ namespace Game.PizzeriaSimulator.OrdersHandle
             OrderReady = _orderReady;
         }
     }
-    public class PizzeriaOrdersHandler : ISceneDisposable
+    public class PizzeriaOrdersHandler : IInittable, ISceneDisposable
     {
         readonly PizzaHolder pizzaHolder;
+        readonly Interactor interactor;
         public event Action<int> OnNewPizzaOrder;
         public event Action<int> OnPizzaOrderReady;
         public event Action<int> OnPizzaOrderCompleted;
@@ -25,19 +28,29 @@ namespace Game.PizzeriaSimulator.OrdersHandle
         public event Action OnBellCallCanceled;
         readonly List<OrderData> activeOrders;
         readonly List<OrderData> completedOrders;
-        public PizzeriaOrdersHandler(PizzaHolder _pizzaHolder) 
+        public PizzeriaOrdersHandler(PizzaHolder _pizzaHolder, Interactor _interactor) 
         {
             pizzaHolder = _pizzaHolder;
+            interactor = _interactor;
             activeOrders = new List<OrderData>();
             completedOrders = new List<OrderData>();
         }
         public void Init()
         {
+            interactor.OnInteract += HandleInteractor;
             pizzaHolder.OnPizzaAdded += HandleNewPizzaInHold;
         }
         public void Dispose()
         {
+            interactor.OnInteract -= HandleInteractor;
             pizzaHolder.OnPizzaAdded -= HandleNewPizzaInHold;
+        }
+        void HandleInteractor(InteractableType interactableType)
+        {
+            if (interactableType == InteractableType.OrderBell)
+            {
+                CallBell();
+            }
         }
         void HandleNewPizzaInHold(int pizzaID)
         {

@@ -1,5 +1,6 @@
 ﻿using Game.PizzeriaSimulator.PizzaCreation.Visual.Baker;
 using Game.PizzeriaSimulator.PizzaCreation.Visual.IngredientOnPizza;
+using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold.Visual;
 using Game.PizzeriaSimulator.Player.CameraController;
 using Game.Root.Utils;
 using Game.Helps;
@@ -39,6 +40,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         PizzaObject currentPizza;
         RaycastHit containersHit;
         int containersRayLayerMask;
+        Vector3 dragPosBeforeEnd;
         const float maxContainersRayDist = 3f;
         [Inject]
         public void Construct(DiContainer _diContainer)
@@ -60,6 +62,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             viewModel.RemovePizza += RemovePizza;
             viewModel.ConfirmIngredientPlace += ConfirmPlaceDragged;
             viewModel.CancelIngredientPlace += CancellPlaceDragged;
+            viewModel.ConfirmIngredientInput += ConfirmIngredientDrag;
             viewModel.DehighlightContainers += DehiglightAllContainers;
             viewModel.HighlightContainer += HiglightContainer;
             viewModel.ActivateBakeInput += SwitchInteractableBake;
@@ -80,6 +83,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
                 viewModel.RemovePizza -= RemovePizza;
                 viewModel.ConfirmIngredientPlace -= ConfirmPlaceDragged;
                 viewModel.CancelIngredientPlace -= CancellPlaceDragged;
+                viewModel.ConfirmIngredientInput -= ConfirmIngredientDrag;
                 viewModel.DehighlightContainers -= DehiglightAllContainers;
                 viewModel.HighlightContainer -= HiglightContainer;
                 viewModel.ActivateBakeInput -= SwitchInteractableBake;
@@ -139,22 +143,20 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             UpdateDragObject();
             if (Input.GetMouseButtonDown(0))
             {
-                currentDragTransform = currentContainer.GetObjectForDrag().transform;
+                viewModel.IngredientInput.OnNext(currentContainer.IngredientType);
             }
             else if (Input.GetMouseButtonUp(0))
             {
                 if (currentDragTransform != null)
                 {
-                    if(Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out containersHit, maxContainersRayDist, containersRayLayerMask)
+                    dragPosBeforeEnd = currentContainer.GetDragIngredientPos();
+                    currentContainer.EndDragObject();
+                    currentDragTransform = null;
+                    if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out containersHit, maxContainersRayDist, containersRayLayerMask)
                       && containersHit.collider.gameObject == pizzaHolder.gameObject)
                     {
                         viewModel.IngredientPlaceInput.OnNext(currentContainer.IngredientType);
                     }
-                    else
-                    {
-                        currentContainer.CancelDragObject();
-                    }
-                    currentDragTransform = null;
                 }
             }
         }
@@ -176,28 +178,27 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         }
         void ConfirmPlaceDragged(IngredientOnPizzaObjectBase onPizzaPrefab)
         {
-            if (currentContainer != null && currentDragTransform != null && currentPizza != null)
+            if (currentContainer != null && currentPizza != null)
             {
-                pizzaHolder.SpawnAndAddIngredient(onPizzaPrefab, currentContainer.GetDragIngridientPos(), currentPizza);
-                currentContainer.RemoveDraggedObject();
-                currentDragTransform = null;
+                pizzaHolder.SpawnAndAddIngredient(onPizzaPrefab, dragPosBeforeEnd, currentPizza);
                 AudioPlayer.PlaySFX(placeIngredientSFX);
             }
         }
-       
         void CancellPlaceDragged(string message)
         {
             ShowMessage(message);
             AudioPlayer.PlaySFX(cancelSFX);
-            if (currentContainer != null && currentDragTransform != null)
-            {
-                currentContainer.CancelDragObject();
-                currentDragTransform = null;
-            }
         }
         void ShowMessage(string message)
         {
             Toasts.ShowToast(message);
+        }
+        void ConfirmIngredientDrag()
+        {
+            if(currentContainer != null)
+            {
+                currentDragTransform = currentContainer.GetObjectForDrag().transform;
+            }
         }
         void DehiglightAllContainers()
         {

@@ -6,6 +6,8 @@ namespace Game.PizzeriaSimulator.Player.Input
     public interface IPlayerInput 
     {
         public event Action OnInteractInput;
+        public event Action OnThrowInput;
+        public event Action OnOpenInput;
         public void SelectInteractInput();
         public void DeselectInteractInput();
         public void Activate(bool active);

@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eb8ccf23b6cd9b459941549d130f177, type: 3}
+  m_Name: PizzaCreatorConfig
+  m_EditorClassIdentifier: 
+  <PizzaCreatorConfig>k__BackingField:
+    <Ingredients>k__BackingField:
+    - <IngredientType>k__BackingField: 0
+      <MaxAmountInHolder>k__BackingField: 8
+      <InContainerPrefab>k__BackingField: {fileID: 0}
+      <IngredientIcon>k__BackingField: {fileID: -1265772025, guid: 76d725b80da96484aa7bb7f404b87b89,
+        type: 3}
+      <OnPizzaPrefab>k__BackingField: {fileID: 1317260002053847704, guid: 21725001606f1324c86f4feef96ffb53,
+        type: 3}
+    - <IngredientType>k__BackingField: 1
+      <MaxAmountInHolder>k__BackingField: 8
+      <InContainerPrefab>k__BackingField: {fileID: 0}
+      <IngredientIcon>k__BackingField: {fileID: -899942757, guid: 76d725b80da96484aa7bb7f404b87b89,
+        type: 3}
+      <OnPizzaPrefab>k__BackingField: {fileID: 6472699622113495438, guid: 19548a9f58a9c1f4e86cb6dbf5c96d86,
+        type: 3}
+    - <IngredientType>k__BackingField: 2
+      <MaxAmountInHolder>k__BackingField: 9
+      <InContainerPrefab>k__BackingField: {fileID: 0}
+      <IngredientIcon>k__BackingField: {fileID: -570124187, guid: 76d725b80da96484aa7bb7f404b87b89,
+        type: 3}
+      <OnPizzaPrefab>k__BackingField: {fileID: 1767776090963718014, guid: fc53ca4de22027c4b8cc61443c2f9019,
+        type: 3}
+    - <IngredientType>k__BackingField: 3
+      <MaxAmountInHolder>k__BackingField: 12
+      <InContainerPrefab>k__BackingField: {fileID: 0}
+      <IngredientIcon>k__BackingField: {fileID: -553119770, guid: 76d725b80da96484aa7bb7f404b87b89,
+        type: 3}
+      <OnPizzaPrefab>k__BackingField: {fileID: 1501838599741546029, guid: 77bbd204042f64b4fb11d8fd3eaf8878,
+        type: 3}
+    - <IngredientType>k__BackingField: 4
+      <MaxAmountInHolder>k__BackingField: 12
+      <InContainerPrefab>k__BackingField: {fileID: 0}
+      <IngredientIcon>k__BackingField: {fileID: 390551360, guid: 76d725b80da96484aa7bb7f404b87b89,
+        type: 3}
+      <OnPizzaPrefab>k__BackingField: {fileID: 1806197506031007857, guid: b82cbb48c2247d445b6670e6f52a353a,
+        type: 3}
+    - <IngredientType>k__BackingField: 5
+      <MaxAmountInHolder>k__BackingField: 12
+      <InContainerPrefab>k__BackingField: {fileID: 0}
+      <IngredientIcon>k__BackingField: {fileID: 512644161, guid: 76d725b80da96484aa7bb7f404b87b89,
+        type: 3}
+      <OnPizzaPrefab>k__BackingField: {fileID: 2369409433612433989, guid: 3982ec91aa56097418c15195d6407ea1,
+        type: 3}
+    - <IngredientType>k__BackingField: 6
+      <MaxAmountInHolder>k__BackingField: 12
+      <InContainerPrefab>k__BackingField: {fileID: 0}
+      <IngredientIcon>k__BackingField: {fileID: 58352530, guid: 76d725b80da96484aa7bb7f404b87b89,
+        type: 3}
+      <OnPizzaPrefab>k__BackingField: {fileID: 5702451515933286450, guid: 9a91f87a937b6914abf5f05b1fc619fd,
+        type: 3}
+    <IngredientsForBase>k__BackingField: 0001

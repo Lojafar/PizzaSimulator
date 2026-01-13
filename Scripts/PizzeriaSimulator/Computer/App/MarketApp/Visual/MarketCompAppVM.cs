@@ -1,0 +1,143 @@
+﻿using Game.PizzeriaSimulator.Currency;
+using Game.PizzeriaSimulator.Delivery.Config;
+using Game.Root.ServicesInterfaces;
+using System;
+using UnityEngine;
+
+namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
+{
+    public class MarketItemViewData
+    {
+        public readonly int Id;
+        public readonly string Name;
+        public readonly string PriceText;
+        public readonly string AmountText;
+        public readonly Sprite ItemIcon;
+        public MarketItemViewData(int _id, string _name, string _priceText, string _amountText, Sprite _icon)
+        {
+            Id = _id;
+            Name = _name;
+            PriceText = _priceText;
+            AmountText = _amountText;
+            ItemIcon = _icon;
+        }
+    }
+
+    public class MarketCompAppVM : ISceneDisposable
+    {
+        public event Action Open;
+        public event Action Close;
+        public event Action RemoveAllCartItems;
+        public event Action<MarketItemViewData> OnNewItem;
+        public event Action<int, string> OnNewCartItem;
+        public event Action<int, string> UpdateCartItemAmount;
+        public event Action<int, string> UpdateCartItemPrice;
+        public event Action<int> RemoveCartItem;
+        public event Action<string> UpdateTotalPriceText;
+        readonly MarketCompApp marketCompApp;
+        int lastCartItemId;
+        const string pricePattern = "${0}.{1:D2}";
+        const string amountPatter = "{0}";
+        public MarketCompAppVM(MarketCompApp _marketCompApp)
+        {
+            marketCompApp = _marketCompApp;
+        }
+        public void Init()
+        {
+            marketCompApp.OnOpen += HandleOpen;
+            marketCompApp.OnClose += HandleClose;
+            marketCompApp.OnNewItemInAssortment += HandleNewItem;
+            marketCompApp.OnNewItemInCart += HandleNewCartItem;
+            marketCompApp.OnAmountInCartUpdated += HandleCartItemAmount;
+            marketCompApp.OnPriceInCartUpdated += HandleCartItemPrice;
+            marketCompApp.OnItemRemovedFromCart += HandleCartItemRemove;
+            marketCompApp.OnCartCleared += HandleCartClear;
+            marketCompApp.OnTotalPriceChanged += HandleNewTotalPrice;
+        }
+        public void Dispose()
+        {
+            marketCompApp.OnOpen -= HandleOpen;
+            marketCompApp.OnClose -= HandleClose;
+            marketCompApp.OnNewItemInAssortment -= HandleNewItem;
+            marketCompApp.OnNewItemInCart -= HandleNewCartItem;
+            marketCompApp.OnAmountInCartUpdated -= HandleCartItemAmount;
+            marketCompApp.OnPriceInCartUpdated -= HandleCartItemPrice;
+            marketCompApp.OnItemRemovedFromCart -= HandleCartItemRemove;
+            marketCompApp.OnCartCleared -= HandleCartClear;
+            marketCompApp.OnTotalPriceChanged -= HandleNewTotalPrice;
+        }
+        public void CloseInput()
+        {
+            marketCompApp.Close();
+        }
+        public void CartClearInput()
+        {
+            marketCompApp.ClearCartInput();
+        }
+        public void CartBuyInput()
+        {
+            marketCompApp.CartBuyInput();
+        }
+        public void PlusItemInCart(int itemId)
+        {
+            marketCompApp.AddToCartInput(itemId, 1);
+        }
+        public void MinusItemInCart(int itemId)
+        {
+            marketCompApp.RemoveFromCartInput(itemId, 1);
+        }
+        void HandleOpen()
+        {
+            Open?.Invoke();
+        }
+        void HandleClose()
+        {
+            Close?.Invoke();
+        }
+        void HandleNewItem(int itemID)
+        {
+            if (marketCompApp.GetItemConfig(itemID) is DeliveryItemConfig itemConfig)
+            {
+                OnNewItem?.Invoke(new MarketItemViewData(itemConfig.ID, itemConfig.Name,
+                    GetPriceText(itemConfig.Price), GetItemAmountText(itemConfig.QuantityByOrder), itemConfig.ItemIcon));
+            }
+        }
+        string GetPriceText(MoneyQuantity moneyQuantity)
+        {
+            return string.Format(pricePattern, moneyQuantity.Dollars, moneyQuantity.Cents);
+        }
+        string GetItemAmountText(int amount)
+        {
+            return string.Format(amountPatter, amount);
+        }
+        void HandleNewCartItem(int itemID)
+        {
+            if (marketCompApp.GetItemConfig(itemID) is DeliveryItemConfig itemConfig)
+            {
+                OnNewCartItem?.Invoke(itemID, itemConfig.Name);
+                lastCartItemId++;
+            }
+        }
+        void HandleCartItemAmount(int itemID, int amount)
+        {
+            UpdateCartItemAmount?.Invoke(itemID, GetItemAmountText(amount));
+        }
+        void HandleCartItemPrice(int itemID, MoneyQuantity price)
+        {
+            UpdateCartItemPrice?.Invoke(itemID, GetPriceText(price));
+        }
+        void HandleCartItemRemove(int itemID)
+        {
+            RemoveCartItem?.Invoke(itemID);
+        }
+        void HandleCartClear()
+        {
+            lastCartItemId = 0;
+            RemoveAllCartItems?.Invoke();
+        }
+        void HandleNewTotalPrice(MoneyQuantity newTotal)
+        {
+            UpdateTotalPriceText?.Invoke(GetPriceText(newTotal));
+        }
+    }
+}
