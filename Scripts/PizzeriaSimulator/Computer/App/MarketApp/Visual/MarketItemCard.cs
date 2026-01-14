@@ -44,6 +44,5 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             amountTMP.text = amountText;
         }
-
     }
 }

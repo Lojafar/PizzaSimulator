@@ -43,3 +43,4 @@ MonoBehaviour:
       <ItemIcon>k__BackingField: {fileID: 2007241015, guid: 643c10bcb5326434f84992d30cf62027,
         type: 3}
       <ItemPrefab>k__BackingField: {fileID: 0}
+    <DeliveryDuration>k__BackingField: 10

@@ -2,6 +2,7 @@
 using Game.PizzeriaSimulator.Interactions;
 using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor;
+using Game.PizzeriaSimulator.Wallet;
 using Game.Root.ServicesInterfaces;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive
         public event Action OnStartReceiving;
         public event Action OnReceived;
         readonly Interactor interactor;
+        readonly PlayerWallet playerWallet;
         readonly Dictionary<PaymentType, IPaymentProccesor> paymentProccesors;
         public Action currentCallBack;
         bool isReceiving;
@@ -24,9 +26,10 @@ namespace Game.PizzeriaSimulator.PaymentReceive
         PaymentType targetPaymentType;
         int targetDollars;
         int targetCents;
-        public PaymentReceiver(Interactor _interactor) 
+        public PaymentReceiver(Interactor _interactor, PlayerWallet _playerWallet) 
         {
             interactor = _interactor;
+            playerWallet = _playerWallet;
             paymentProccesors = new Dictionary<PaymentType, IPaymentProccesor>()
             {
                 { PaymentType.Cash, new CashPaymentProccesor() },
@@ -85,7 +88,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive
             targetCents = cents;
             currentCallBack = callBack;
         }
-        public void PaymentReceiveInput()
+        public void StartReceiveInput()
         {
             if (paymentProccesors.TryGetValue(targetPaymentType, out IPaymentProccesor paymentProccesor))
             {
@@ -100,6 +103,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive
         }
         void OnPaymentReceived()
         {
+            playerWallet.AddMoney(new MoneyQuantity(targetDollars, targetCents));
             isReceiving = false;
             OnReceived?.Invoke();
             currentCallBack?.Invoke();

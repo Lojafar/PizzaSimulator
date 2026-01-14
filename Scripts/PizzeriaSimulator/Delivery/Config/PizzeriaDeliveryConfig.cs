@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.Delivery.Config
@@ -7,6 +8,7 @@ namespace Game.PizzeriaSimulator.Delivery.Config
     public class PizzeriaDeliveryConfig
     {
         [SerializeField] DeliveryItemConfig[] itemsConfigs;
+        [field: SerializeField] public int DeliveryDuration { get; private set; }
         public int ItemsAmount => itemsConfigs.Length;
         public DeliveryItemConfig GetDeliveryItemConfig(int id)
         {

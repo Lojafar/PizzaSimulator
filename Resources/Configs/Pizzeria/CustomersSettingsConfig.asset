@@ -16,4 +16,4 @@ MonoBehaviour:
     <MinSpawnDelay>k__BackingField: 1
     <MaxSpawnDelay>k__BackingField: 3
     <MaxActiveCustomers>k__BackingField: 5
-    <CardPaymentPercent>k__BackingField: 74
+    <CardPaymentPercent>k__BackingField: 35

@@ -9,7 +9,7 @@ namespace Game.PizzeriaSimulator.PizzasConfig
         [field: SerializeField] public PizzaConfig[] Pizzas { get; private set; }
         public PizzaConfig GetPizzaByID(int id)
         {
-            if(id < 0  || id >= Pizzas.Length) return null;
+            if(id < 0 || id >= Pizzas.Length) return null;
             return Pizzas[id];
         }
     }

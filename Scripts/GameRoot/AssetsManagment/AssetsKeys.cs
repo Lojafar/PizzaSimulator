@@ -9,6 +9,8 @@
         public const string MobilePlayerInputPrefab = "Prefabs/MobilePlayerInput";
         public const string CustomerDreamBubble = "Prefabs/CustomerDreamBubble";
         public const string PizzeriaOrdersUIView = "Prefabs/PizzeriaUIOrdersPanel";
+        public const string StatusPanelView = "Prefabs/StatusPanel";
+        public const string PizzeriaDeliveryView = "Prefabs/DeliveryPanel";
 
         public const string EditorEnvironmentConfig = "Configs/Root/EditorEnvironmentConfig";
         public const string AudioConfig = "Configs/UtilsConfigs/AudioConfig";

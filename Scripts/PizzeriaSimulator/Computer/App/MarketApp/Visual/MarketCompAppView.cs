@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Game.Root.Utils;
 
 namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
 {
@@ -32,6 +33,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
             viewModel.RemoveCartItem += RemoveCartBar;
             viewModel.RemoveAllCartItems += DestroyAllBars;
             viewModel.UpdateTotalPriceText += UpdateTotalPriceText;
+            viewModel.ShowPurchaseFail += ShowPurchaseFail;
         }
         private void OnDestroy()
         {
@@ -49,6 +51,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
                 viewModel.RemoveCartItem -= RemoveCartBar;
                 viewModel.RemoveAllCartItems -= DestroyAllBars;
                 viewModel.UpdateTotalPriceText -= UpdateTotalPriceText;
+                viewModel.ShowPurchaseFail -= ShowPurchaseFail;
             }
         }
         void OnCloseBtn()
@@ -133,6 +136,10 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         void UpdateTotalPriceText(string priceText)
         {
             totalPriceTMP.text = priceText;
+        }
+        void ShowPurchaseFail(string message) 
+        {
+            Toasts.ShowToast(message);
         }
     }
 }

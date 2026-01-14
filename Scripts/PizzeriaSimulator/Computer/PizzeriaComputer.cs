@@ -4,6 +4,7 @@ using Game.PizzeriaSimulator.Delivery;
 using Game.PizzeriaSimulator.Delivery.Config;
 using Game.PizzeriaSimulator.Interactions;
 using Game.PizzeriaSimulator.Interactions.Interactor;
+using Game.PizzeriaSimulator.Wallet;
 using Game.Root.ServicesInterfaces;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,8 @@ namespace Game.PizzeriaSimulator.Computer
             diContainer = _diContainer;
             appsByTypes = new Dictionary<ComputerAppType, ComputerAppBase>()
             {
-                { ComputerAppType.Market, new MarketCompApp(diContainer.Resolve<PizzeriaDelivery>(), diContainer.Resolve<PizzeriaDeliveryConfig>()) }
+                { ComputerAppType.Market, new MarketCompApp(diContainer.Resolve<PlayerWallet>(),
+                diContainer.Resolve<PizzeriaDelivery>(), diContainer.Resolve<PizzeriaDeliveryConfig>()) }
             };
         }
         public ComputerAppBase GetAppByType(ComputerAppType type)
@@ -42,6 +44,7 @@ namespace Game.PizzeriaSimulator.Computer
                 {
                     inittableApp.Init();
                 }
+                app.Close();
             }
         }
         public void Dispose()

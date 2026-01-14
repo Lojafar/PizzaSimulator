@@ -34,8 +34,8 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         public event Action<int, string> UpdateCartItemPrice;
         public event Action<int> RemoveCartItem;
         public event Action<string> UpdateTotalPriceText;
+        public event Action<string> ShowPurchaseFail;
         readonly MarketCompApp marketCompApp;
-        int lastCartItemId;
         const string pricePattern = "${0}.{1:D2}";
         const string amountPatter = "{0}";
         public MarketCompAppVM(MarketCompApp _marketCompApp)
@@ -53,6 +53,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
             marketCompApp.OnItemRemovedFromCart += HandleCartItemRemove;
             marketCompApp.OnCartCleared += HandleCartClear;
             marketCompApp.OnTotalPriceChanged += HandleNewTotalPrice;
+            marketCompApp.OnPurchaseFailed += HandlePurchaseFail;
         }
         public void Dispose()
         {
@@ -65,6 +66,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
             marketCompApp.OnItemRemovedFromCart -= HandleCartItemRemove;
             marketCompApp.OnCartCleared -= HandleCartClear;
             marketCompApp.OnTotalPriceChanged -= HandleNewTotalPrice;
+            marketCompApp.OnPurchaseFailed -= HandlePurchaseFail;
         }
         public void CloseInput()
         {
@@ -115,7 +117,6 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
             if (marketCompApp.GetItemConfig(itemID) is DeliveryItemConfig itemConfig)
             {
                 OnNewCartItem?.Invoke(itemID, itemConfig.Name);
-                lastCartItemId++;
             }
         }
         void HandleCartItemAmount(int itemID, int amount)
@@ -132,12 +133,15 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         }
         void HandleCartClear()
         {
-            lastCartItemId = 0;
             RemoveAllCartItems?.Invoke();
         }
         void HandleNewTotalPrice(MoneyQuantity newTotal)
         {
             UpdateTotalPriceText?.Invoke(GetPriceText(newTotal));
+        }
+        void HandlePurchaseFail()
+        {
+            ShowPurchaseFail?.Invoke("Not enough money");
         }
     }
 }

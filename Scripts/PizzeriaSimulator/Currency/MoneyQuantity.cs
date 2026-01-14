@@ -8,6 +8,7 @@ namespace Game.PizzeriaSimulator.Currency
     {
         public int Dollars;
         public int Cents;
+        public readonly int AllCents => Dollars * CentsInDollar + Cents;
         public const int CentsInDollar = 100;
         public MoneyQuantity(int _dollars, int _cents)
         {
@@ -20,7 +21,7 @@ namespace Game.PizzeriaSimulator.Currency
         }
         public static MoneyQuantity operator *(MoneyQuantity quantity, int amount)
         {
-            int allCents = (quantity.Dollars * CentsInDollar + quantity.Cents) * amount;
+            int allCents = quantity.AllCents * amount;
             int dollars = Mathf.FloorToInt((float)allCents / CentsInDollar);
             return new MoneyQuantity(dollars, allCents - dollars * CentsInDollar);
         }

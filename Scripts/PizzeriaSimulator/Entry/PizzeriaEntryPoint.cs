@@ -1,9 +1,15 @@
-﻿using Game.PizzeriaSimulator.BoxCarry.Carrier;
+﻿using Cysharp.Threading.Tasks;
+using Game.PizzeriaSimulator.BoxCarry.Carrier;
 using Game.PizzeriaSimulator.Computer;
+using Game.PizzeriaSimulator.Computer.App.Market;
+using Game.PizzeriaSimulator.Computer.App.Market.Visual;
 using Game.PizzeriaSimulator.Computer.Visual;
 using Game.PizzeriaSimulator.Customers.Manager;
 using Game.PizzeriaSimulator.Customers.OrdersProcces;
 using Game.PizzeriaSimulator.Customers.SettingsConfig;
+using Game.PizzeriaSimulator.Delivery;
+using Game.PizzeriaSimulator.Delivery.Config;
+using Game.PizzeriaSimulator.Delivery.Visual;
 using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.OrdersHandle;
 using Game.PizzeriaSimulator.OrdersHandle.Visual;
@@ -25,15 +31,13 @@ using Game.PizzeriaSimulator.Player.Handler;
 using Game.PizzeriaSimulator.Player.Input;
 using Game.PizzeriaSimulator.Player.Input.Factory;
 using Game.PizzeriaSimulator.PlayerSpawner;
-using Game.PizzeriaSimulator.Computer.App.Market;
-using Game.PizzeriaSimulator.Computer.App.Market.Visual;
-using Game.PizzeriaSimulator.Delivery;
-using Game.PizzeriaSimulator.Delivery.Config;
+using Game.PizzeriaSimulator.SaveLoadHelp;
+using Game.PizzeriaSimulator.UI.StatusPanel;
+using Game.PizzeriaSimulator.Wallet;
 using Game.Root.AssetsManagment;
 using Game.Root.ServicesInterfaces;
 using Game.Root.User.Environment;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Zenject;
 
 namespace Game.PizzeriaSimulator.Entry
@@ -41,6 +45,7 @@ namespace Game.PizzeriaSimulator.Entry
     class PizzeriaEntryPoint : IInitializable
     {
         readonly PizzeriaSceneReferences sceneReferences;
+        readonly PizzeriaSaveLoadHelper saveLoadHelper;
         readonly IAssetsProvider assetsProvider;
         readonly DeviceType deviceType;
         readonly DiContainer diContainer;
@@ -55,9 +60,10 @@ namespace Game.PizzeriaSimulator.Entry
         PizzeriaComputer pizzeriaComputer;
         const int approxServicCount = 10;
         const int approxTaskServicCount = 3;
-        public PizzeriaEntryPoint(PizzeriaSceneReferences _sceneReferences, DiContainer _diContainer) 
+        public PizzeriaEntryPoint(PizzeriaSceneReferences _sceneReferences, PizzeriaSaveLoadHelper _saveLoadHelper, DiContainer _diContainer) 
         {
             sceneReferences = _sceneReferences;
+            saveLoadHelper = _saveLoadHelper;
             assetsProvider = _diContainer.Resolve<IAssetsProvider>();
             deviceType = _diContainer.Resolve<IEnvironmentHandler>().DeviceType;
             diContainer = _diContainer;
@@ -70,6 +76,8 @@ namespace Game.PizzeriaSimulator.Entry
         }
         public async UniTaskVoid Entry()
         {
+            await saveLoadHelper.LoadAndBindSaves();
+
             IPlayerInput playerInput = (await GetInputFactory()).CreateInput();
             diContainer.Bind<IPlayerInput>().FromInstance(playerInput).AsSingle();
 
@@ -108,10 +116,10 @@ namespace Game.PizzeriaSimulator.Entry
             PizzeriaDeliveryConfig deliveryConfig = (await assetsProvider.LoadAsset<PizzeriaDeliveryConfigSO>(AssetsKeys.PizzeriaDeliveryConfig)).DeliveryConfig;
             diContainer.Bind<PizzeriaDeliveryConfig>().FromInstance(deliveryConfig).AsSingle();
             pizzeriaDelivery = new PizzeriaDelivery(deliveryConfig, sceneReferences);
-            diContainer.Bind<PizzeriaDelivery>().FromInstance(pizzeriaDelivery).AsSingle();
+            diContainer.BindInterfacesAndSelfTo<PizzeriaDelivery>().FromInstance(pizzeriaDelivery).AsSingle();
 
 
-            paymentReceiver = new(interactor);
+            paymentReceiver = new(interactor, saveLoadHelper.PlayerWallet);
             diContainer.Bind<PaymentReceiver>().FromInstance(paymentReceiver).AsSingle();
             inittableServices.Add(paymentReceiver);
 
@@ -153,6 +161,12 @@ namespace Game.PizzeriaSimulator.Entry
             {
                 new MarketCompAppBinder(marketApp, sceneReferences, diContainer).Bind();
             }
+
+            StatusPanelModel statusPanelModel = new(saveLoadHelper.PlayerWallet);
+            inittableServices.Add(statusPanelModel);
+            await new StatusPanelBinder(statusPanelModel, assetsProvider, sceneReferences.SceneCanvas.transform, diContainer).Bind();
+
+            await (new PizzeriaDeliveryBinder(pizzeriaDelivery, assetsProvider, sceneReferences.SceneCanvas.transform, diContainer)).Bind();
         }
         public async UniTask<IPlayerInputFactory> GetInputFactory()
         {

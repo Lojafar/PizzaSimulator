@@ -1,6 +1,7 @@
 ﻿using Game.PizzeriaSimulator.Currency;
 using Game.PizzeriaSimulator.Delivery;
 using Game.PizzeriaSimulator.Delivery.Config;
+using Game.PizzeriaSimulator.Wallet;
 using Game.Root.ServicesInterfaces;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,15 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
         public event Action<int, MoneyQuantity> OnPriceInCartUpdated;
         public event Action<MoneyQuantity> OnTotalPriceChanged;
         public event Action OnCartCleared;
+        public event Action OnPurchaseFailed;
+        readonly PlayerWallet playerWallet;
         readonly PizzeriaDelivery pizzeriaDelivery;
         readonly PizzeriaDeliveryConfig deliveryConfig;
         readonly Dictionary<int, int> itemsInCart;
         MoneyQuantity totalPrice;
-        public MarketCompApp(PizzeriaDelivery _pizzeriaDelivery, PizzeriaDeliveryConfig _deliveryConfig)
+        public MarketCompApp(PlayerWallet _playerWallet, PizzeriaDelivery _pizzeriaDelivery, PizzeriaDeliveryConfig _deliveryConfig)
         {
+            playerWallet = _playerWallet;
             pizzeriaDelivery = _pizzeriaDelivery;
             deliveryConfig = _deliveryConfig;
             itemsInCart = new Dictionary<int, int>();
@@ -96,11 +100,18 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
         }
         public void CartBuyInput()
         {
-            foreach(KeyValuePair<int, int> itemInCart in itemsInCart)
+            if (playerWallet.TryTakeMoney(totalPrice))
             {
-                pizzeriaDelivery.Order(itemInCart.Key, itemInCart.Value);
+                foreach (KeyValuePair<int, int> itemInCart in itemsInCart)
+                {
+                    pizzeriaDelivery.Order(itemInCart.Key, itemInCart.Value);
+                }
+                ClearCart();
             }
-            ClearCart();
+            else
+            {
+                OnPurchaseFailed?.Invoke();
+            }
         }
         public void ClearCartInput()
         {
