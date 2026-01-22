@@ -1,6 +1,7 @@
 ﻿using Game.PizzeriaSimulator.OrdersHandle;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
 {
@@ -9,7 +10,7 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
         readonly CustomersManager customersManager;
         readonly PizzeriaOrdersHandler ordersHandler;
         readonly PizzeriaSceneReferences sceneReferences;
-        List<Customer> customersWaitesOrder;
+        readonly List<Customer> customersWaitesOrder;
         public WaitOrderCustStateManager(CustomersManager _customersManager, PizzeriaOrdersHandler _ordersHandler, PizzeriaSceneReferences _sceneReferences)
         {
             customersManager = _customersManager;
@@ -39,6 +40,14 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
         {
             customer.CustomerAI.SetState(CustomerState.WaitesOrder);
             customer.CustomerAI.SetTargetPoint(sceneReferences.CustomerWaitOrderField.GetWayPoint());
+            customersWaitesOrder.Add(customer);
+        }
+        public void ForceCustomer(Customer customer)
+        {
+            customer.CustomerAI.SetState(CustomerState.WaitesOrder);
+            Transform wayPoint = sceneReferences.CustomerWaitOrderField.GetWayPoint();
+            customer.transform.SetPositionAndRotation(wayPoint.position, wayPoint.rotation);
+            customer.CustomerAI.SetTargetPoint(wayPoint);
             customersWaitesOrder.Add(customer);
         }
     }

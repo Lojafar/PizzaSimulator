@@ -12,12 +12,17 @@ namespace Game.PizzeriaSimulator.PizzasConfig
         [field: SerializeField] public int ID { get; private set; }
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public MoneyQuantity Price { get; private set; }
-        [field: SerializeField] public List<PizzaIngredientType>  Ingredients { get; private set; }
+        [SerializeField] List<PizzaIngredientType> ingredients;
         [field: SerializeField] public BakedPizzaObject BakedPizzaPrefab { get; private set; }
         [field: SerializeField] public Sprite PizzaIcon { get; private set; }
+        public IReadOnlyList<PizzaIngredientType> Ingredients => ingredients;
+        public bool ContainsIngredient(PizzaIngredientType ingredientType)
+        {
+            return ingredients.Contains(ingredientType);
+        }
         public int GetIndexOfIngredient(PizzaIngredientType ingredientType)
         {
-            for(int i = 0; i < Ingredients.Count; i++) if (Ingredients[i] == ingredientType) return i;
+            for(int i = 0; i < ingredients.Count; i++) if (ingredients[i] == ingredientType) return i;
             return -1;
         }
     }

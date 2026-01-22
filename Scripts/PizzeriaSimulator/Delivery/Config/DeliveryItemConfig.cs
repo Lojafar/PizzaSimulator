@@ -1,4 +1,5 @@
-﻿using Game.PizzeriaSimulator.Currency;
+﻿using Game.PizzeriaSimulator.Boxes;
+using Game.PizzeriaSimulator.Currency;
 using System;
 using UnityEngine;
 
@@ -12,6 +13,6 @@ namespace Game.PizzeriaSimulator.Delivery.Config
         [field: SerializeField] public int QuantityByOrder { get; private set; }
         [field: SerializeField] public MoneyQuantity Price { get; private set; }
         [field: SerializeField] public Sprite ItemIcon { get; private set; }
-        [field: SerializeField] public GameObject ItemPrefab { get; private set; }
+        [field: SerializeField] public CarriableBoxBase BoxPrefab { get; private set; }
     }
 }

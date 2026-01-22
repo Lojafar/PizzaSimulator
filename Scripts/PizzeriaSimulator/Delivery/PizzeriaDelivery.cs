@@ -1,4 +1,5 @@
-﻿using Game.PizzeriaSimulator.Delivery.Config;
+﻿using Game.PizzeriaSimulator.Boxes.Manager;
+using Game.PizzeriaSimulator.Delivery.Config;
 using Game.Root.ServicesInterfaces;
 using Game.Root.Utils;
 using System;
@@ -13,13 +14,15 @@ namespace Game.PizzeriaSimulator.Delivery
         public event Action OnDeliveryEnded;
         public event Action<float> OnDeliveryTimeChanged;
         readonly PizzeriaDeliveryConfig deliveryConfig;
+        readonly BoxesManager boxesManager;
         readonly PizzeriaSceneReferences sceneReferences;
         readonly Dictionary<int, int> activeOrdersDict;
         float remainedDeliveryTime = -1;
         const int averageOrdersCount = 5;
-        public PizzeriaDelivery(PizzeriaDeliveryConfig _deliveryConfig, PizzeriaSceneReferences _sceneReferences)
+        public PizzeriaDelivery(PizzeriaDeliveryConfig _deliveryConfig, BoxesManager _boxesManager, PizzeriaSceneReferences _sceneReferences)
         {
             deliveryConfig = _deliveryConfig;
+            boxesManager = _boxesManager;
             sceneReferences = _sceneReferences;
             activeOrdersDict = new Dictionary<int, int>(averageOrdersCount);
         }
@@ -63,10 +66,11 @@ namespace Game.PizzeriaSimulator.Delivery
                 {
                     for (i = 0; i < orderData.Value; i++)
                     {
-                        Object.Instantiate(order.ItemPrefab, sceneReferences.DeliveryPoint.position, order.ItemPrefab.transform.rotation);
+                        boxesManager.AddNewBox(Object.Instantiate(order.BoxPrefab, sceneReferences.DeliveryPoint.position, order.BoxPrefab.transform.rotation));
                     }
                 }
             }
+            boxesManager.FinishAddBoxes();
             activeOrdersDict.Clear();
             OnDeliveryEnded?.Invoke();
         }

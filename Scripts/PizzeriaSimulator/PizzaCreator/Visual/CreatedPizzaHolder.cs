@@ -11,11 +11,11 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         {
             return Instantiate(pizzaObjPrefab, pizzaPositionTransform.position, pizzaObjPrefab.transform.rotation);
         }
-        public void SpawnAndAddIngredient(IngredientOnPizzaObjectBase ingredientPrefab, Vector3 startPosition, PizzaObject pizzaParent)
+        public void SpawnAndAddIngredient(IngredientOnPizzaObjectBase ingredientPrefab, Vector3 startPosition, PizzaObject pizzaParent, bool forced = false)
         {
             IngredientOnPizzaObjectBase spawnedIngredient = Instantiate(ingredientPrefab, startPosition, ingredientPrefab.transform.rotation);
             spawnedIngredient.transform.parent = pizzaParent.transform;
-            spawnedIngredient.DoPlaceAnim(pizzaPositionTransform.position);
+            spawnedIngredient.Place(pizzaPositionTransform.position, !forced);
         }
     }
 }

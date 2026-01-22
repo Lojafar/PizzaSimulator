@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
-using Game.PizzeriaSimulator.BoxCarry.Carrier;
+using Game.PizzeriaSimulator.Boxes.Carry;
+using Game.PizzeriaSimulator.Boxes.Manager;
 using Game.PizzeriaSimulator.Computer;
 using Game.PizzeriaSimulator.Computer.App.Market;
 using Game.PizzeriaSimulator.Computer.App.Market.Visual;
@@ -33,7 +34,6 @@ using Game.PizzeriaSimulator.Player.Input.Factory;
 using Game.PizzeriaSimulator.PlayerSpawner;
 using Game.PizzeriaSimulator.SaveLoadHelp;
 using Game.PizzeriaSimulator.UI.StatusPanel;
-using Game.PizzeriaSimulator.Wallet;
 using Game.Root.AssetsManagment;
 using Game.Root.ServicesInterfaces;
 using Game.Root.User.Environment;
@@ -102,20 +102,30 @@ namespace Game.PizzeriaSimulator.Entry
             diContainer.Bind<PizzaCreatorConfig>().FromInstance(pizzaCreatorConfig).AsSingle();
             diContainer.Bind<PaymentVisualConfig>().FromInstance(paymentVisualConfig).AsSingle();
 
-            pizzaHolder = new PizzaHolder();
-            pizzaIngredientsHolder = new PizzaIngredientsHolder(pizzaCreatorConfig);
+            PizzaHolderData pizzaHolderData = await saveLoadHelper.LoadData<PizzaHolderData>();
+            pizzaHolder = new PizzaHolder(pizzaHolderData);
+            diContainer.Bind<PizzaHolder>().FromInstance(pizzaHolder).AsSingle();
+            inittableServices.Add(pizzaHolder);
+            IngredientsHolderData ingredientsHolderData = await saveLoadHelper.LoadData<IngredientsHolderData>();
+            pizzaIngredientsHolder = new PizzaIngredientsHolder(pizzaCreatorConfig, ingredientsHolderData);
             diContainer.Bind<PizzaIngredientsHolder>().FromInstance(pizzaIngredientsHolder).AsSingle();
             inittableServices.Add(pizzaIngredientsHolder);
 
-            pizzaCreator = new PizzaCreator(pizzaIngredientsHolder, pizzaHolder, boxesCarrier, interactor, allPizzaConfig, pizzaCreatorConfig);
+            PizzaCreatorData pizzaCreatorData = await saveLoadHelper.LoadData<PizzaCreatorData>();
+            pizzaCreator = new PizzaCreator(pizzaCreatorData, pizzaIngredientsHolder, pizzaHolder, boxesCarrier, interactor, allPizzaConfig, pizzaCreatorConfig);
             inittableServices.Add(pizzaCreator);
+            diContainer.Bind<PizzaCreator>().FromInstance(pizzaCreator).AsSingle();
 
             ordersHandler = new PizzeriaOrdersHandler(pizzaHolder, interactor);
             inittableServices.Add(ordersHandler);
 
             PizzeriaDeliveryConfig deliveryConfig = (await assetsProvider.LoadAsset<PizzeriaDeliveryConfigSO>(AssetsKeys.PizzeriaDeliveryConfig)).DeliveryConfig;
+
+            BoxesManager boxesManager = new (saveLoadHelper, boxesCarrier, deliveryConfig);
+            taskInittableServices.Add(boxesManager);
+
             diContainer.Bind<PizzeriaDeliveryConfig>().FromInstance(deliveryConfig).AsSingle();
-            pizzeriaDelivery = new PizzeriaDelivery(deliveryConfig, sceneReferences);
+            pizzeriaDelivery = new PizzeriaDelivery(deliveryConfig, boxesManager, sceneReferences);
             diContainer.BindInterfacesAndSelfTo<PizzeriaDelivery>().FromInstance(pizzeriaDelivery).AsSingle();
 
 
@@ -131,26 +141,29 @@ namespace Game.PizzeriaSimulator.Entry
 
             CustomersOrdersProccesor customersOrdersProccesor = new(paymentReceiver, ordersHandler, allPizzaConfig, customersSettingsConfig);
 
-            CustomersManager customersManager = new(customersOrdersProccesor, ordersHandler, sceneReferences, assetsProvider, customersSettingsConfig);
-            taskInittableServices.Add(customersManager);
-
+            CustomersManagerData customersManagerData = await saveLoadHelper.LoadData<CustomersManagerData>();
+            CustomersManager customersManager = new(customersManagerData, customersOrdersProccesor, ordersHandler, sceneReferences, assetsProvider, customersSettingsConfig);
             CustomerVisualManager customerVisualManager = new(assetsProvider, customersManager, customersOrdersProccesor, sceneReferences, paymentVisualConfig);
+            diContainer.Bind<CustomersManager>().FromInstance(customersManager).AsSingle();
             taskInittableServices.Add(customerVisualManager);
+            taskInittableServices.Add(customersManager);
 
 
             await CreateVisual();
             await HandleInittableServices();
+
+            saveLoadHelper.StartFollowSaves();
         }
         public async UniTask CreateVisual()
         {
-            new PizzaHolderBinder(pizzaHolder, sceneReferences, diContainer).Bind();
+            new PizzaHolderBinder(pizzaHolder, sceneReferences, diContainer.Resolve<AllPizzaConfig>(), diContainer).Bind();
             new PizzaIngredientsHolderBinder(pizzaIngredientsHolder, sceneReferences, diContainer).Bind();
             new PizzaCreatorBinder(pizzaCreator, sceneReferences, diContainer).Bind();
             await (new PizzeriaOrderHandlBinder(ordersHandler, pizzaCreator, assetsProvider, sceneReferences.SceneCanvas.transform, deviceType, diContainer)).Bind();
             new PaymentReceiveBinder(sceneReferences, paymentReceiver, diContainer).Bind();
             if(paymentReceiver.GetPaymentProccesorByType(PaymentType.Cash) is CashPaymentProccesor cashPaymentProccesor)
             {
-                new CashPaymentProccesorBinder(sceneReferences, cashPaymentProccesor, diContainer).Bind();
+                new CashPaymentProccesorBinder(sceneReferences, cashPaymentProccesor, deviceType, diContainer).Bind();
             }
             if (paymentReceiver.GetPaymentProccesorByType(PaymentType.Card) is CardPaymentProccesor cardPaymentProccesor)
             {

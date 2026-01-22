@@ -36,8 +36,9 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             subView = viewModel.DeviceType == Root.User.Environment.DeviceType.PC ? pcSubView : mobileSubView;
             subView.OnExpandInput += ExpandContainer;
             subView.OnCompressInput += CompressContainer;
+            orderBarsContainer.Compress();
+            orderBarsContainer.AddChildChangeIgnors(1);
             expandIndicator.SetActive(false);
-            CompressContainer();
         }
         private void OnDestroy()
         {
@@ -71,8 +72,14 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         }
         void SpawnNewOrderBar(OrderVisualData orderVisualData)
         {
-            if(orderBars.Count + 1 >= minOrdersForExpIndic)
+            if( orderBars.Count + 1 >= minOrdersForExpIndic)
             {
+                if (!expandIndicator.activeInHierarchy)
+                {
+                    subView.UpdateCompress(orderBarsContainer.Expanded);
+                    expandIndicatorVisual.eulerAngles = new Vector3(expandIndicatorVisual.eulerAngles.x, expandIndicatorVisual.eulerAngles.y,
+                        orderBarsContainer.Expanded ? expIndicatExpandedRotZ : expIndicatNormalRotZ);
+                }
                 orderBarsContainer.AddChildChangeIgnors(1);
                 expandIndicator.SetActive(true);
             }
@@ -136,7 +143,6 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         {
             if (orderBars.TryGetValue(barIndex, out OrderBar bar))
             {
-           //     expandIndicatorVisual.SetAsLastSibling();
                 AudioPlayer.PlaySFX(bellClip);
                 Destroy(bar.gameObject);
                 orderBars.Remove(barIndex);

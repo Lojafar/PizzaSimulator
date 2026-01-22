@@ -4,6 +4,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual.IngredientOnPizza
 {
     public abstract class IngredientOnPizzaObjectBase : MonoBehaviour
     {
-        public abstract void DoPlaceAnim(Vector3 placePosition);
+        public abstract void Place(Vector3 placePosition, bool withAnim = true);
     }
 }

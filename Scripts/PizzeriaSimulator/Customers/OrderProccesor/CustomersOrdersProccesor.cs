@@ -30,9 +30,13 @@ namespace Game.PizzeriaSimulator.Customers.OrdersProcces
             OnCustomerStartPaying?.Invoke(customer, paymentType, price);
             return allPizzaConfig.GetPizzaByID(orderID).Price;
         }
-        void OnPaymentProccesed(int pizzaID, Action onOrdered)
+        public void ForceCustomerOrder(int orderID)
         {
-            ordersHandler.Order(pizzaID);
+            ordersHandler.Order(orderID);
+        }
+        void OnPaymentProccesed(int orderID, Action onOrdered)
+        {
+            ordersHandler.Order(orderID);
             onOrdered?.Invoke();
         }
         public PizzaConfig GetOrderConfig(int orderID)

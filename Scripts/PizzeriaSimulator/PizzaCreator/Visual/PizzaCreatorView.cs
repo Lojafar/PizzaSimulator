@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using Zenject;
 using DG.Tweening;
 using Game.Root.Utils.Audio;
+using Cysharp.Threading.Tasks;
 
 namespace Game.PizzeriaSimulator.PizzaCreation.Visual
 {
@@ -31,6 +32,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         [SerializeField] GameObject objectWhenCreateOpen;
         [SerializeField] float dragPosY;
         [SerializeField] float pizzaMovePrebakeDur;
+        [SerializeField] float pizzaPrebakeJumpForce;
         DiContainer diContainer;
         Camera mainCam;
         PlayerCameraControllerBase playerCamController;
@@ -38,7 +40,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         Transform currentDragTransform;
         PizzaIngredientContainerBase currentContainer;
         PizzaObject currentPizza;
-        RaycastHit containersHit;
+        RaycastHit containerHit;
         int containersRayLayerMask;
         Vector3 dragPosBeforeEnd;
         const float maxContainersRayDist = 3f;
@@ -60,6 +62,8 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             viewModel.LeaveConstruction += OnLeaveConstructor;
             viewModel.OnPizzaStarted += CreatePizzaObject;
             viewModel.RemovePizza += RemovePizza;
+            viewModel.ForceCurrentPizzaToBake += ForceCurrentPizzaInBake;
+            viewModel.ForceIngredientPlace += ForceIngredientPlace;
             viewModel.ConfirmIngredientPlace += ConfirmPlaceDragged;
             viewModel.CancelIngredientPlace += CancellPlaceDragged;
             viewModel.ConfirmIngredientInput += ConfirmIngredientDrag;
@@ -69,6 +73,13 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             viewModel.BakePizza += BakePizza;
             viewModel.CancellPizzaBake += CancellPizzaBake;
             viewModel.PizzaAssembled += OnPizzaAssembled;
+            HideOpenVisuals().Forget();
+        }
+        async UniTaskVoid HideOpenVisuals()
+        {
+            await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
+            await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
+            objectWhenCreateOpen.SetActive(false);
         }
         private void OnDestroy()
         {
@@ -81,6 +92,8 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
                 viewModel.LeaveConstruction -= OnLeaveConstructor;
                 viewModel.OnPizzaStarted -= CreatePizzaObject;
                 viewModel.RemovePizza -= RemovePizza;
+                viewModel.ForceCurrentPizzaToBake -= ForceCurrentPizzaInBake;
+                viewModel.ForceIngredientPlace -= ForceIngredientPlace;
                 viewModel.ConfirmIngredientPlace -= ConfirmPlaceDragged;
                 viewModel.CancelIngredientPlace -= CancellPlaceDragged;
                 viewModel.ConfirmIngredientInput -= ConfirmIngredientDrag;
@@ -91,7 +104,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
                 viewModel.CancellPizzaBake -= CancellPizzaBake;
                 viewModel.PizzaAssembled -= OnPizzaAssembled;
             }
-            Ticks.Instance.OnFixedTick -= OnFixedUpdateWhenOpen;
             Ticks.Instance.OnTick -= OnUpdateWhenOpen;
         }
         void OnLeaveBtn()
@@ -110,40 +122,28 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         {
             playerCamController.SetLook(playerCamLookTransform.position, playerCamLookTransform.eulerAngles);
             objectWhenCreateOpen.SetActive(true);
-            Ticks.Instance.OnFixedTick += OnFixedUpdateWhenOpen;
             Ticks.Instance.OnTick += OnUpdateWhenOpen;
         }
         void OnLeaveConstructor()
         {
             playerCamController.ResetLook(); 
             objectWhenCreateOpen.SetActive(false);
-            Ticks.Instance.OnFixedTick -= OnFixedUpdateWhenOpen;
             Ticks.Instance.OnTick -= OnUpdateWhenOpen;
         }
-        void OnFixedUpdateWhenOpen()
-        {
-            if (currentDragTransform != null) return;
-            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out containersHit, maxContainersRayDist, containersRayLayerMask))
-            {
-                if (currentContainer != null && currentContainer.gameObject == containersHit.collider.gameObject) return;
-                if (containersHit.collider.TryGetComponent<PizzaIngredientContainerBase>(out PizzaIngredientContainerBase container))
-                {
-                    currentContainer = container;
-                    return;
-                }
-            }
-            else
-            {
-                currentContainer = null;
-            }
-        }  
         void OnUpdateWhenOpen()
         {
-            if (currentContainer == null) return;
             UpdateDragObject();
             if (Input.GetMouseButtonDown(0))
             {
-                viewModel.IngredientInput.OnNext(currentContainer.IngredientType);
+                if (CheckRayForContainer() && containerHit.collider.TryGetComponent<PizzaIngredientContainerBase>(out PizzaIngredientContainerBase container))
+                {
+                    currentContainer = container;
+                    viewModel.IngredientInput.OnNext(currentContainer.IngredientType);
+                }
+                else
+                {
+                    currentContainer = null;
+                }
             }
             else if (Input.GetMouseButtonUp(0))
             {
@@ -152,13 +152,17 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
                     dragPosBeforeEnd = currentContainer.GetDragIngredientPos();
                     currentContainer.EndDragObject();
                     currentDragTransform = null;
-                    if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out containersHit, maxContainersRayDist, containersRayLayerMask)
-                      && containersHit.collider.gameObject == pizzaHolder.gameObject)
+                    if (CheckRayForContainer() && containerHit.collider.gameObject == pizzaHolder.gameObject)
                     {
                         viewModel.IngredientPlaceInput.OnNext(currentContainer.IngredientType);
                     }
+                    currentContainer = null;
                 }
             }
+        }
+        bool CheckRayForContainer()
+        {
+            return Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out containerHit, maxContainersRayDist, containersRayLayerMask);
         }
         void UpdateDragObject()
         {
@@ -175,6 +179,16 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             AudioPlayer.PlaySFX(clearPizzaSFX);
             Destroy(currentPizza.gameObject);
             currentPizza = null;
+        }
+        void ForceCurrentPizzaInBake(BakedPizzaObject bakedPizzaPrefab, Action onBaked)
+        {
+            if (currentPizza == null) return;
+            pizzaBaker.ForcePizzaBake(currentPizza, bakedPizzaPrefab, onBaked);
+        }
+        void ForceIngredientPlace(IngredientOnPizzaObjectBase onPizzaPrefab)
+        {
+            if (currentPizza == null) return;
+            pizzaHolder.SpawnAndAddIngredient(onPizzaPrefab, dragPosBeforeEnd, currentPizza, true);
         }
         void ConfirmPlaceDragged(IngredientOnPizzaObjectBase onPizzaPrefab)
         {
@@ -215,10 +229,8 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         }
         void BakePizza(BakedPizzaObject bakedPizzaPrefab, Action onBaked)
         {
-            AudioPlayer.PlaySFX(confirmPizzaSFX);
-           DOTween.Sequence()
-                .Append(currentPizza.transform.DOMove(pizzaPreBakePoint.position, pizzaMovePrebakeDur).SetEase(Ease.Linear))
-                .Append(currentPizza.transform.DOMove(pizzaBaker.StartPizzaPosition, pizzaMovePrebakeDur).SetEase(Ease.Linear))
+            AudioPlayer.PlaySFX(confirmPizzaSFX); 
+            currentPizza.transform.DOJump(pizzaBaker.StartPizzaPosition, pizzaPrebakeJumpForce, 1, pizzaMovePrebakeDur).SetEase(Ease.Linear)
                 .OnComplete(() => pizzaBaker.StartBaking(currentPizza, bakedPizzaPrefab, onBaked)).Play();
         }
         void CancellPizzaBake(string message)

@@ -1,4 +1,5 @@
 ﻿using Game.Root.AssetsManagment;
+using Game.Root.SaveLoad;
 using Game.Root.SceneManagment;
 using Game.Root.Utils;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace Game.Root.Installer
         }
         void BindServices()
         {
+            Container.BindInterfacesAndSelfTo<PrefsSaverLoader>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<ResourcesAssetsProvider>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<AsyncScenesLoader>().AsSingle().NonLazy();
         }

@@ -13,7 +13,7 @@ namespace Game.Helps.UI
         [SerializeField] bool ignoreLastElement;
         readonly List<RectTransform> elements = new();
         readonly Vector2 elementsAnchor = new(0, 0.5f);
-        bool expanded = true;
+        public bool Expanded {get; private set;} = true;
         int childChangeIgnors;
         Sequence currentAnim;
         float StartPosOffset => leftOffset - spacing;
@@ -54,7 +54,7 @@ namespace Game.Helps.UI
             {
                 elements[i].anchorMin = elementsAnchor;
                 elements[i].anchorMax = elementsAnchor;
-                if (expanded || i == 0 || (ignoreLastElement && i == elements.Count - 1))
+                if (Expanded || i == 0 || (ignoreLastElement && i == elements.Count - 1))
                 {
                     if (!ignoreLastElement || i != elements.Count - 1)
                     {
@@ -72,13 +72,13 @@ namespace Game.Helps.UI
         }
         public void Compress()
         {
-            if (!expanded) return;
+            if (!Expanded) return;
             currentAnim = null;
             if (currentAnim.IsActive())
             {
                 currentAnim.Kill();
             }
-            expanded = false;
+            Expanded = false;
             currentAnim = DOTween.Sequence();
             for (int i = 1; i < elements.Count; i++)
             {
@@ -99,12 +99,12 @@ namespace Game.Helps.UI
         }
         public void Expand()
         {
-            if(expanded) return;
+            if(Expanded) return;
             if (currentAnim.IsActive())
             {
                 currentAnim.Kill();
             }
-            expanded = true;
+            Expanded = true;
             float lastPosX = StartPosOffset;
             currentAnim = DOTween.Sequence();
             for (int i = 0; i < elements.Count; i++)

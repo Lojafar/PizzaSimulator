@@ -9,5 +9,6 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         public abstract event Action OnCompressInput;
         public virtual void OnExpanded() { }
         public virtual void OnCompressed() { }
+        public virtual void UpdateCompress(bool compressed) { }
     }
 }

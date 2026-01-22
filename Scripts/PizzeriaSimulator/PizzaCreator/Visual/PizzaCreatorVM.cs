@@ -16,9 +16,11 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         public event Action RemovePizza;
         public event Action DehighlightContainers;
         public event Action ConfirmIngredientInput;
+        public event Action<BakedPizzaObject, Action> ForceCurrentPizzaToBake;
         public event Action<BakedPizzaObject, Action> BakePizza;
         public event Action<PizzaIngredientType> HighlightContainer;
         public event Action<IngredientOnPizzaObjectBase> ConfirmIngredientPlace;
+        public event Action<IngredientOnPizzaObjectBase> ForceIngredientPlace;
         public event Action<string> CancelIngredientPlace;
         public event Action<string> CancellPizzaBake;
         public event Action<string> PizzaAssembled;
@@ -47,6 +49,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             BakeInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ => pizzaCreator.BakePizzaInput());
             pizzaCreator.OnEnterCreate += OnEnterPizzaCreate;
             pizzaCreator.OnLeaveCreate += OnLeavePizzaCreate;
+            pizzaCreator.ForcePizzaCreate += HandlePizzaForceCreate;
             pizzaCreator.OnPizzaReadyForBake += OnPizzaReadyForBake;
             pizzaCreator.OnIngredientSetted += HandleIngredientPlace;
             pizzaCreator.OnIngredientCancelled += HandleIngredientPlaceCancel;
@@ -63,6 +66,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             ClearPizzaInput.Dispose();
             pizzaCreator.OnEnterCreate -= OnEnterPizzaCreate;
             pizzaCreator.OnLeaveCreate -= OnLeavePizzaCreate;
+            pizzaCreator.ForcePizzaCreate -= HandlePizzaForceCreate;
             pizzaCreator.OnPizzaReadyForBake -= OnPizzaReadyForBake;
             pizzaCreator.OnIngredientSetted -= HandleIngredientPlace;
             pizzaCreator.OnIngredientCancelled -= HandleIngredientPlaceCancel;
@@ -84,6 +88,18 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         {
             DehighlightContainers?.Invoke();
             LeaveConstruction?.Invoke();
+        }
+        void HandlePizzaForceCreate(int pizzaId, IEnumerable<PizzaIngredientType> ingredients, bool pizzaInCut)
+        {
+            OnPizzaStarted?.Invoke();
+            IngredientConfig ingredientConfig;
+            foreach (PizzaIngredientType ingredientType in ingredients)
+            {
+                ingredientConfig = pizzaCreator.GetIngredientConfigByType(ingredientType);
+                if (ingredientConfig == null) continue;
+                ForceIngredientPlace?.Invoke(ingredientConfig.OnPizzaPrefab);
+            }
+            ForceCurrentPizzaToBake?.Invoke(pizzaCreator.GetPizzaConfigById(pizzaId).BakedPizzaPrefab, () => pizzaCreator.PizzaBakedInput(pizzaId));
         }
         void OnPizzaReadyForBake(int pizzaId)
         {

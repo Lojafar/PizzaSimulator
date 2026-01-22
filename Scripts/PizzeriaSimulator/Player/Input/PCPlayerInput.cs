@@ -10,22 +10,43 @@ namespace Game.PizzeriaSimulator.Player.Input
         public event Action OnInteractInput;
         public event Action OnThrowInput;
         public event Action OnOpenInput;
+        [SerializeField] GameObject useHint;
+        [SerializeField] GameObject throwHint;
+        [SerializeField] GameObject openHint;
+        [SerializeField] GameObject closeHint;
         [SerializeField] Image crosshairImage;
         [SerializeField] Color normalCrosshairColor = Color.white;
         [SerializeField] Color selectedCrosshairColor = Color.white;
         Vector2 movementDir;
-        Vector2 rotDir;
+        Vector2 rotDir; 
         private void Awake()
         {
             DeselectInteractInput();
+            throwHint.SetActive(false);
+            openHint.SetActive(false);
+            closeHint.SetActive(false);
         }
         public void SelectInteractInput()
         {
             crosshairImage.color = selectedCrosshairColor;
+            useHint.SetActive(true);
         }
         public void DeselectInteractInput()
         {
             crosshairImage.color = normalCrosshairColor;
+            useHint.SetActive(false);
+        }
+        public void ShowThrowInput(bool show)
+        {
+            throwHint.SetActive(show);
+        }
+        public void ShowOpenInput(bool show)
+        {
+            openHint.SetActive(show);
+        }
+        public void ShowCloseInput(bool show)
+        {
+            closeHint.SetActive(show);
         }
         public void Activate(bool active)
         {
@@ -54,11 +75,11 @@ namespace Game.PizzeriaSimulator.Player.Input
             {
                 OnInteractInput?.Invoke();
             }
-            else if (Input.GetKeyDown(KeyCode.G)) 
+            else if (Input.GetKeyDown(KeyCode.Q)) 
             {
                 OnThrowInput?.Invoke();
             }
-            else if (Input.GetKeyDown(KeyCode.L))
+            else if (Input.GetKeyDown(KeyCode.R))
             {
                 OnOpenInput?.Invoke();
             }

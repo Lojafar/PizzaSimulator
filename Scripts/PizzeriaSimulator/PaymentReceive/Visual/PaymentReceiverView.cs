@@ -17,7 +17,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         RaycastHit rayHit;
         int paymentObjectLayer;
         bool opened;
-        const float maxrayHitDist = 3f;
+        const float maxRayHitDist = 3f;
 
         [Inject]
         public void Construct(DiContainer _diContainer)
@@ -74,7 +74,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.Visual
         private void Update()
         {
             if (!opened) return;
-            if (Input.GetMouseButtonUp(0) && Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out rayHit, maxrayHitDist, paymentObjectLayer)
+            if (Input.GetMouseButtonUp(0) && Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out rayHit, maxRayHitDist, paymentObjectLayer)
                && rayHit.collider.TryGetComponent<PaymentObject>(out PaymentObject paymentObject))
             {
                 viewModel.PaymentReceiveInput.OnNext(Unit.Default);

@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: AllPizzaConfig
   m_EditorClassIdentifier: 
   <AllPizzaConfig>k__BackingField:
-    <Pizzas>k__BackingField:
+    Pizzas:
     - <ID>k__BackingField: 0
       <Name>k__BackingField: Cheese Pizza
       <Price>k__BackingField:
         Dollars: 0
         Cents: 50
-      <Ingredients>k__BackingField: 02
+      ingredients: 02
       <BakedPizzaPrefab>k__BackingField: {fileID: 437861745100745728, guid: 52713d8d0565951479c09b0dc23f55bf,
         type: 3}
       <PizzaIcon>k__BackingField: {fileID: -1840562029, guid: da40eea0fa019ec428bb061056eeefd8,
@@ -29,7 +29,7 @@ MonoBehaviour:
       <Price>k__BackingField:
         Dollars: 5
         Cents: 50
-      <Ingredients>k__BackingField: 0203
+      ingredients: 0203
       <BakedPizzaPrefab>k__BackingField: {fileID: 1243156592599556173, guid: 933d8da49d07fcb40af5270f46758066,
         type: 3}
       <PizzaIcon>k__BackingField: {fileID: -726219127, guid: da40eea0fa019ec428bb061056eeefd8,
@@ -39,7 +39,7 @@ MonoBehaviour:
       <Price>k__BackingField:
         Dollars: 11
         Cents: 0
-      <Ingredients>k__BackingField: 020304
+      ingredients: 020304
       <BakedPizzaPrefab>k__BackingField: {fileID: 4150878556562491466, guid: 373fe5bc71db99841b1a3e846d7d707b,
         type: 3}
       <PizzaIcon>k__BackingField: {fileID: 900562921, guid: da40eea0fa019ec428bb061056eeefd8,
@@ -49,7 +49,7 @@ MonoBehaviour:
       <Price>k__BackingField:
         Dollars: 20
         Cents: 0
-      <Ingredients>k__BackingField: 020504
+      ingredients: 020504
       <BakedPizzaPrefab>k__BackingField: {fileID: 8691847711897383783, guid: 8d9e9b0dbe90138489da3e79770246c6,
         type: 3}
       <PizzaIcon>k__BackingField: {fileID: 609120039, guid: da40eea0fa019ec428bb061056eeefd8,
@@ -59,7 +59,7 @@ MonoBehaviour:
       <Price>k__BackingField:
         Dollars: 21
         Cents: 0
-      <Ingredients>k__BackingField: 02030406
+      ingredients: 02030406
       <BakedPizzaPrefab>k__BackingField: {fileID: 6332950288930802966, guid: ba9869093b7aec545aaa02bd22e6e205,
         type: 3}
       <PizzaIcon>k__BackingField: {fileID: -2101160860, guid: da40eea0fa019ec428bb061056eeefd8,
@@ -69,7 +69,7 @@ MonoBehaviour:
       <Price>k__BackingField:
         Dollars: 55
         Cents: 0
-      <Ingredients>k__BackingField: 0406
+      ingredients: 0406
       <BakedPizzaPrefab>k__BackingField: {fileID: 9010391871277521966, guid: f9664759c41a6294ca7f079fb9ec2e67,
         type: 3}
       <PizzaIcon>k__BackingField: {fileID: 1728837627, guid: da40eea0fa019ec428bb061056eeefd8,

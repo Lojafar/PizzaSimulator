@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <EyesTransform>k__BackingField: {fileID: 5067289022063138240}
-  <Speed>k__BackingField: 15
+  <Speed>k__BackingField: 8
   <PlayerCharController>k__BackingField: {fileID: 4856084300538700904}
 --- !u!143 &4856084300538700904
 CharacterController:
@@ -69,7 +69,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.32
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08

@@ -8,7 +8,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Config
     {
         [field: SerializeField] public PizzaIngredientType IngredientType { get; private set; }
         [field: SerializeField] public int MaxAmountInHolder { get; private set; }
-        [field: SerializeField] public GameObject InContainerPrefab { get; private set; }  
         [field: SerializeField] public Sprite IngredientIcon { get; private set; }  
         [field: SerializeField] public IngredientOnPizzaObjectBase OnPizzaPrefab { get; private set; }  
     }

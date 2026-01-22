@@ -34,12 +34,12 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual.Baker
         [SerializeField] AudioSource bakerAudioSource;
         [SerializeField] PizzaCutViewBase pizzaCutView;
         [SerializeField] Transform startPizzaMovePoint;
-        [SerializeField] Transform pizzaPreCutPoint;
         [SerializeField] Transform pizzaCutPoint;
         [SerializeField] Vector3 pizzaBakePos;
         [SerializeField] Vector3 endPizzaMovePos;
         [SerializeField] float pizzaMoveSpeed;
         [SerializeField] float pizzaMoveToCutDur;
+        [SerializeField] float pizzaJumpToCutForce;
         [SerializeField] float pizzaLength;
         [SerializeField] float spacingBetweenPizzas;
 
@@ -49,6 +49,22 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual.Baker
         {
             pizzaObject.transform.position = StartPizzaPosition;
             pizzasOnConveyer.Add(new PizzaOnConveyer(pizzaObject, bakedPizzaPrefab, onBaked));
+        }
+        public void ForcePizzaBake(PizzaObject pizzaObject, BakedPizzaObject bakedPizzaPrefab, Action onBaked)
+        {
+            pizzaObject.transform.position = new Vector3(StartPizzaPosition.x, StartPizzaPosition.y, GetPizzaTargetPos(pizzasOnConveyer.Count));
+            PizzaOnConveyer pizzaOnConveyer = new (pizzaObject, bakedPizzaPrefab, onBaked);
+            if (pizzaOnConveyer.PizzaTransform.position.z < pizzaBakePos.z) BakePizza(pizzaOnConveyer, true);
+            if (!pizzaCutView.HasPizzaToCut)
+            {
+                pizzaOnConveyer.PizzaTransform.position = pizzaCutPoint.transform.position;
+                pizzaCutView.SetPizzaToCut(pizzaOnConveyer.BakedPizza);
+                onBaked?.Invoke();
+            }
+            else
+            {
+                pizzasOnConveyer.Add(pizzaOnConveyer);
+            }
         }
         private void Awake()
         {
@@ -65,11 +81,11 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual.Baker
             bool needToTranslatePizza = false; 
             for (int i = 0; i < pizzasOnConveyer.Count; i++)
             {
-                float targetPosZ = endPizzaMovePos.z + ((pizzaLength + spacingBetweenPizzas) * i);
+                float targetPosZ = GetPizzaTargetPos(i);
                 if (pizzasOnConveyer[i].PizzaTransform.position.z > targetPosZ)
                 {
                     pizzasOnConveyer[i].PizzaTransform.position -= new Vector3(0, 0, currentPizzaSpeed);
-                    if (!pizzasOnConveyer[i].IsBaked && pizzasOnConveyer[i].PizzaTransform.position.z < pizzaBakePos.z) BakePizza(i); 
+                    if (!pizzasOnConveyer[i].IsBaked && pizzasOnConveyer[i].PizzaTransform.position.z < pizzaBakePos.z) BakePizza(pizzasOnConveyer[i]); 
                 }
                 else
                 {
@@ -83,23 +99,28 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual.Baker
             }
             if(needToTranslatePizza) TranslatePizzaToCut();
         }
-        void BakePizza(int pizzaIndex)
+        float GetPizzaTargetPos(int number)
         {
-            if (pizzasOnConveyer[pizzaIndex].IsBaked) return;
-            bakerAudioSource.PlayOneShot(pizzaBakedSFX);
-            BakedPizzaObject spawnedBakedPizza = Instantiate(pizzasOnConveyer[pizzaIndex].BakedPizzaPrefab, 
-                pizzasOnConveyer[pizzaIndex].PizzaTransform.position, pizzasOnConveyer[pizzaIndex].BakedPizzaPrefab.transform.rotation);
-            pizzasOnConveyer[pizzaIndex].SetBakedPizza(spawnedBakedPizza);
-            Destroy(pizzasOnConveyer[pizzaIndex].NotBakedPizza.gameObject);
+            return endPizzaMovePos.z + ((pizzaLength + spacingBetweenPizzas) * number);
+        }
+        void BakePizza(PizzaOnConveyer pizzaOnConveyer, bool forced = false)
+        {
+            if (pizzaOnConveyer.IsBaked) return;
+            if (!forced)
+            {
+                bakerAudioSource.PlayOneShot(pizzaBakedSFX);
+            }
+            BakedPizzaObject spawnedBakedPizza = Instantiate(pizzaOnConveyer.BakedPizzaPrefab,
+               pizzaOnConveyer.PizzaTransform.position, pizzaOnConveyer.BakedPizzaPrefab.transform.rotation);
+            pizzaOnConveyer.SetBakedPizza(spawnedBakedPizza);
+            Destroy(pizzaOnConveyer.NotBakedPizza.gameObject);
         }
         void TranslatePizzaToCut()
         {
             if (pizzasOnConveyer.Count < 1 || pizzasOnConveyer[0].BakedPizza == null) return;
             BakedPizzaObject currentBakedPizza = pizzasOnConveyer[0].BakedPizza;
             bakerAudioSource.PlayOneShot(pizzaMoveToCutSFX);
-            DOTween.Sequence()
-                .Append(pizzasOnConveyer[0].PizzaTransform.DOMove(pizzaPreCutPoint.transform.position, pizzaMoveToCutDur).SetEase(Ease.Linear))
-                .Append(pizzasOnConveyer[0].PizzaTransform.DOMove(pizzaCutPoint.transform.position, pizzaMoveToCutDur).SetEase(Ease.Linear))
+            pizzasOnConveyer[0].PizzaTransform.DOJump(pizzaCutPoint.transform.position, pizzaJumpToCutForce, 1, pizzaMoveToCutDur).SetEase(Ease.Linear)
                 .OnComplete(() => pizzaCutView.SetPizzaToCut(currentBakedPizza))
                 .Play();
             pizzasOnConveyer[0].OnCompleteCallback?.Invoke();

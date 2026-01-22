@@ -90,6 +90,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive
         }
         public void StartReceiveInput()
         {
+            if (isReceiving) return;
             if (paymentProccesors.TryGetValue(targetPaymentType, out IPaymentProccesor paymentProccesor))
             {
                 isReceiving = true;

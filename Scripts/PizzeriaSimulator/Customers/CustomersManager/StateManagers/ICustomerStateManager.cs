@@ -3,5 +3,6 @@
     interface ICustomerStateManager
     {
         public void HandleCustomerOfState(Customer customer);
+        public void ForceCustomer(Customer customer);
     }
 }

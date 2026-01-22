@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Game.PizzeriaSimulator.Player.Input
@@ -11,8 +12,12 @@ namespace Game.PizzeriaSimulator.Player.Input
         public event Action OnThrowInput;
         public event Action OnOpenInput;
         [SerializeField] Image crosshairImage;
+        [SerializeField] GameObject openBoxVisual;
+        [SerializeField] GameObject closeBoxVisual;
         [SerializeField] RectTransform rotTouchArea;
         [SerializeField] Button interactButtton;
+        [SerializeField] Button throwButton;
+        [SerializeField] Button openCloseButton;
         [SerializeField] Joystick movementJoystick;
         [SerializeField] Color normalCrosshairColor = Color.white;
         [SerializeField] Color selectedCrosshairColor = Color.white;
@@ -20,29 +25,58 @@ namespace Game.PizzeriaSimulator.Player.Input
         Vector2 currentMoveDir;
         Vector2 currentRotDir;
 
+      
         int currentRotTouchId = -1;
         private void Awake()
         {
             DeselectInteractInput();
             interactButtton.onClick.AddListener(OnInteractBtn);
+            throwButton.onClick.AddListener(OnThrowBtn);
+            openCloseButton.onClick.AddListener(OnOpenCloseBtn);
+            throwButton.gameObject.SetActive(false);
+            openCloseButton.gameObject.SetActive(false);
         }
         private void OnDestroy()
         {
-            interactButtton.onClick.RemoveListener(OnInteractBtn);
+            interactButtton.onClick.RemoveListener(OnInteractBtn); 
+            throwButton.onClick.RemoveListener(OnThrowBtn);
+            openCloseButton.onClick.RemoveListener(OnOpenCloseBtn);
         }
         void OnInteractBtn()
         {
             OnInteractInput?.Invoke();
         }
+        void OnThrowBtn()
+        {
+            OnThrowInput?.Invoke();
+        }
+        void OnOpenCloseBtn()
+        {
+             OnOpenInput?.Invoke();
+        }
         public void SelectInteractInput()
         {
             crosshairImage.color = selectedCrosshairColor;
-            interactButtton.gameObject.SetActive(true);
+            interactButtton.interactable = true;
         }
         public void DeselectInteractInput()
         {
             crosshairImage.color = normalCrosshairColor;
-            interactButtton.gameObject.SetActive(false);
+            interactButtton.interactable = false;
+        }
+        public void ShowThrowInput(bool show)
+        {
+            throwButton.gameObject.SetActive(show);
+        }
+        public void ShowOpenInput(bool show)
+        {
+            if(!closeBoxVisual.activeInHierarchy) openCloseButton.gameObject.SetActive(show);
+            openBoxVisual.SetActive(show);
+        }
+        public void ShowCloseInput(bool show)
+        {
+            if (!openBoxVisual.activeInHierarchy) openCloseButton.gameObject.SetActive(show);
+            closeBoxVisual.SetActive(show);
         }
         public void Activate(bool active)
         {
@@ -72,18 +106,24 @@ namespace Game.PizzeriaSimulator.Player.Input
                 if (currentRotTouch.phase == TouchPhase.Ended || currentRotTouch.phase == TouchPhase.Canceled)
                 {
                     currentRotDir = Vector2.zero;
-                    currentRotTouchId = -1;
+                    currentRotTouchId = -1; 
                 }
-                else
+                else if(currentRotTouch.phase == TouchPhase.Moved)
                 {
-                    currentRotDir = currentRotTouch.deltaPosition / rotDeltaDivisor;
+                    currentRotDir = -currentRotTouch.deltaPosition / (rotDeltaDivisor * Time.deltaTime);
+                }
+                else if(currentRotTouch.phase == TouchPhase.Stationary)
+                {
+                    currentRotDir = Vector2.zero;
                 }
             }
             else
             {
+                currentRotDir = Vector2.zero;
+                currentRotTouchId = -1;
                 foreach (Touch touch in Input.touches)
                 {
-                    if (touch.phase == TouchPhase.Began && RectTransformUtility.RectangleContainsScreenPoint(rotTouchArea, touch.position))
+                    if (touch.phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(touch.fingerId) && RectTransformUtility.RectangleContainsScreenPoint(rotTouchArea, touch.position))
                     {
                         currentRotTouchId = touch.fingerId;
                     }

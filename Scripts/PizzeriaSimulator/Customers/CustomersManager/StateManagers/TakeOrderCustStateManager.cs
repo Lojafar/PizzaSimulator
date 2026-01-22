@@ -10,13 +10,20 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
         readonly CustomersManager customersManager;
         readonly PizzeriaOrdersHandler ordersHandler;
         readonly PizzeriaSceneReferences sceneReferences;
-        List<Customer> customers;
+        readonly List<Customer> customers;
         public TakeOrderCustStateManager(CustomersManager _customersManager, PizzeriaOrdersHandler _ordersHandler, PizzeriaSceneReferences _sceneReferences)
         {
             customersManager = _customersManager;
             ordersHandler = _ordersHandler;
             sceneReferences = _sceneReferences;
             customers = new List<Customer>();
+        }
+        public void ForceCustomer(Customer customer)
+        {
+            customer.CustomerAI.SetState(CustomerState.TakesOrder);
+            ordersHandler.TakeOrder(customer.OrderId);
+            OnCustomerTakedOrder?.Invoke(customer, customer.OrderId);
+            customersManager.SwitchCustomerStateManager(customer, CustomerState.Leaves);
         }
         public void HandleCustomerOfState(Customer customer)
         {

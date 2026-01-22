@@ -2,6 +2,6 @@
 {
     public enum ComputerAppType : byte
     {
-        Market = 0
+        Market = 0, Game = 1
     }
 }

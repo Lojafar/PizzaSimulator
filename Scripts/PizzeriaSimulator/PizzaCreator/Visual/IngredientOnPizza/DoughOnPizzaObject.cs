@@ -10,10 +10,20 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual.IngredientOnPizza
         [SerializeField] Vector3 secondDoughFlatScale;
         [SerializeField] GameObject firstDough;
         [SerializeField] GameObject secondDough;
-        public override void DoPlaceAnim(Vector3 placePosition)
+        public override void Place(Vector3 placePosition, bool withAnim = true)
         {
+            if (withAnim)
+            {
             DOTween.Sequence().Join(transform.DOMove(placePosition, firstDoughAnimDuration)).Join(firstDough.transform.DOScale(firstDoughFlatScale, firstDoughAnimDuration))
                 .OnComplete(OnFirstDoughFalled).Play();
+            }
+            else
+            {
+                transform.position = placePosition;
+                Destroy(firstDough);
+                secondDough.SetActive(true);
+                secondDough.transform.localScale = secondDoughFlatScale;
+            }
         }
         void OnFirstDoughFalled()
         {

@@ -1,6 +1,7 @@
 ﻿using Game.PizzeriaSimulator.Customers.OrdersProcces;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
 {
     using Random = UnityEngine.Random;
@@ -18,6 +19,16 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
             customersOrdersProccesor = _customersOrdersProccesor;
             sceneReferences = _sceneReferences;
             customersInLine = new List<Customer>();
+        }
+        public void ForceCustomer(Customer customer)
+        {
+            Transform pointInLine = sceneReferences.CustomersPointsInLine.Length > customersInLine.Count ?
+                sceneReferences.CustomersPointsInLine[customersInLine.Count] : sceneReferences.CustomersPointsInLine[0];
+            customer.transform.SetPositionAndRotation(pointInLine.position, pointInLine.rotation);
+            customer.CustomerAI.SetTargetPoint(pointInLine);
+            customer.CustomerAI.SetState(CustomerState.InLine);
+            customersInLine.Add(customer);
+            OnCustomerReachedTarget(customer.Id);
         }
         public void HandleCustomerOfState(Customer customer)
         {
@@ -39,6 +50,10 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
                 OnCustomerStartOrder?.Invoke(firstCustomerInLine, orderId);
             }
         }
+        int GetPizzaIDForOrder()
+        {
+            return Random.Range(0, 6);
+        }
         void OnCustomerDidOrder()
         {
             Customer customer = customersInLine[0];
@@ -50,9 +65,6 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
                 customersInLine[i].CustomerAI.SetTargetPoint(sceneReferences.CustomersPointsInLine[i]);
             }
         }
-        int GetPizzaIDForOrder()
-        {
-            return Random.Range(0, 6);
-        }
+        
     }
 }

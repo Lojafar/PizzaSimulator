@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Game.Root.ServicesInterfaces;
+using System;
 using System.Collections.Generic;
-using Game.Root.ServicesInterfaces;
 using R3;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
 {
+    using DeviceType = Game.Root.User.Environment.DeviceType;
     public class CashPaymentProccesorVM : ISceneDisposable
     {
         public event Action OnStartProcces;
@@ -25,13 +26,15 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         public Subject<Unit> ClearInput;
         public Subject<int> ChangeInput;
 
-        readonly Stack<int> givedChangeStack;
         readonly CashPaymentProccesor cashPaymentProccesor;
+        public readonly DeviceType DeviceType;
+        readonly Stack<int> givedChangeStack;
         const string moneyValuePattern = "{0}.{1:D2}";
         const int centsInDollar = 100;
-        public CashPaymentProccesorVM(CashPaymentProccesor _cashPaymentProccesor)
+        public CashPaymentProccesorVM(CashPaymentProccesor _cashPaymentProccesor, DeviceType _deviceType)
         {
             cashPaymentProccesor = _cashPaymentProccesor;
+            DeviceType = _deviceType;
             ConfirmInput = new Subject<Unit>();
             BackInput = new Subject<Unit>();
             ClearInput = new Subject<Unit>();
@@ -40,7 +43,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         }
         public void Init()
         {
-            ChangeInput.ThrottleFirst(TimeSpan.FromSeconds(0.05f)).Subscribe(HandleChangeInput);
+            ChangeInput.Subscribe(HandleChangeInput);
             BackInput.ThrottleFirst(TimeSpan.FromSeconds(0.05f)).Subscribe(_ => HandleBackInput());
             ClearInput.ThrottleFirst(TimeSpan.FromSeconds(0.05f)).Subscribe(_ => HandleClearInput());
             ConfirmInput.ThrottleFirst(TimeSpan.FromSeconds(0.1f)).Subscribe(_ => cashPaymentProccesor.OnConfirmInput());

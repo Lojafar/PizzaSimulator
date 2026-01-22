@@ -1,28 +1,53 @@
-﻿using System;
+﻿using Game.Root.ServicesInterfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Game.PizzeriaSimulator.PizzaHold
 {
-    public class PizzaHolder
+    public class PizzaHolder : IInittable
     {
         public event Action<int> OnPizzaAdded;
+        public event Action<int> OnPizzaReserved;
         public event Action<int> OnPizzaRemoved;
-        readonly Dictionary<int, int> pizzas;
-        readonly Dictionary<int, int> reservedPizzas;
-        public PizzaHolder()
+        readonly PizzaHolderData pizzaHolderData;
+        public PizzaHolderData PizzaHolderData => pizzaHolderData.Clone();
+        public PizzaHolder(PizzaHolderData _pizzaHolderData)
         {
-            pizzas = new Dictionary<int, int>();
-            reservedPizzas = new Dictionary<int, int>();
+            pizzaHolderData = _pizzaHolderData ?? new PizzaHolderData();
+        }
+        public void Init()
+        {
+            foreach (KeyValuePair<int, int> pizza in pizzaHolderData.ReservedPizzas)
+            {
+                if (pizzaHolderData.Pizzas.ContainsKey(pizza.Key))
+                {
+                    pizzaHolderData.Pizzas[pizza.Key] += pizza.Value;
+                }
+                else
+                {
+                    pizzaHolderData.Pizzas.Add(pizza.Key, pizza.Value);
+                }
+            }
+            pizzaHolderData.ReservedPizzas.Clear();
+            int pizzaInd;
+            foreach (KeyValuePair<int, int> pizza in pizzaHolderData.Pizzas)
+            {
+                for (pizzaInd = 0; pizzaInd < pizza.Value; pizzaInd++)
+                {
+                    OnPizzaAdded?.Invoke(pizza.Key);
+                }
+            }
+           
         }
         public void AddPizza(int pizzaID)
         {
-            if (pizzas.ContainsKey(pizzaID)) 
+            if (pizzaHolderData.Pizzas.ContainsKey(pizzaID)) 
             {
-                pizzas[pizzaID]++;
+                pizzaHolderData.Pizzas[pizzaID]++;
             }
             else
             {
-                pizzas.Add(pizzaID, 1);
+                pizzaHolderData.Pizzas.Add(pizzaID, 1);
             }
             OnPizzaAdded?.Invoke(pizzaID);
         }
@@ -30,7 +55,7 @@ namespace Game.PizzeriaSimulator.PizzaHold
         {
             if (HasPizza(pizzaID))
             {
-                pizzas[pizzaID]--;
+                pizzaHolderData.Pizzas[pizzaID]--;
                 OnPizzaRemoved?.Invoke(pizzaID);
                 return true;
             }
@@ -40,30 +65,31 @@ namespace Game.PizzeriaSimulator.PizzaHold
         {
             if (HasPizza(pizzaID))
             {
-                pizzas[pizzaID]--;
-                if (!reservedPizzas.ContainsKey(pizzaID))
+                pizzaHolderData.Pizzas[pizzaID]--;
+                if (!pizzaHolderData.ReservedPizzas.ContainsKey(pizzaID))
                 {
-                    reservedPizzas[pizzaID] = 1;
+                    pizzaHolderData.ReservedPizzas[pizzaID] = 1;
                 }
                 else
                 {
-                    reservedPizzas[pizzaID]++;
+                    pizzaHolderData.ReservedPizzas[pizzaID]++;
                 }
+                OnPizzaReserved?.Invoke(pizzaID);
                 return true;
             }
             return false;
         }
         public void RemoveReservedPizza(int pizzaID)
         {
-            if (reservedPizzas.TryGetValue(pizzaID, out int amount) && amount > 0)
+            if (pizzaHolderData.ReservedPizzas.TryGetValue(pizzaID, out int amount) && amount > 0)
             {
-                reservedPizzas[pizzaID]--;
+                pizzaHolderData.ReservedPizzas[pizzaID]--;
                 OnPizzaRemoved?.Invoke(pizzaID);
             }
         }
         public bool HasPizza(int pizzaID)
         {
-            return pizzas.TryGetValue(pizzaID, out int amount) && amount > 0;
+            return pizzaHolderData.Pizzas.TryGetValue(pizzaID, out int amount) && amount > 0;
         }
     }
 }

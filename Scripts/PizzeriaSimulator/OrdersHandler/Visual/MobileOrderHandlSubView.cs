@@ -31,6 +31,10 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         {
             expanded = false;
         }
+        public override void UpdateCompress(bool compressed)
+        {
+            expanded = !compressed;
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.G))

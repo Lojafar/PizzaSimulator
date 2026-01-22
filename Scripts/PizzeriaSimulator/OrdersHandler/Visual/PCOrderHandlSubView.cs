@@ -24,6 +24,11 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             expandHint.SetActive(true);
             compressHint.SetActive(false);
         }
+        public override void UpdateCompress(bool compressed) 
+        {
+            expandHint.SetActive(!compressed);
+            compressHint.SetActive(compressed);
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.G))

@@ -635,8 +635,8 @@ MonoBehaviour:
   orderBarsContainer: {fileID: 7951316935203418281}
   pcSubView: {fileID: 1819486070699120955}
   mobileSubView: {fileID: 346987218401704921}
-  expIndicatNormalRotZ: -90
-  expIndicatExpandedRotZ: 90
+  expIndicatNormalRotZ: -65
+  expIndicatExpandedRotZ: 80
 --- !u!1 &4224015210912599320
 GameObject:
   m_ObjectHideFlags: 0

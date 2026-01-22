@@ -10,54 +10,51 @@ namespace Game.PizzeriaSimulator.PizzaCreation.IngredientsHold
         public event Action<PizzaIngredientType, bool> OnIngredientAdded;
         public event Action<PizzaIngredientType> OnIngredientRemoved;
         readonly PizzaCreatorConfig pizzaCreatorConfig;
-        readonly Dictionary<PizzaIngredientType, int> ingredientsDict;
-
-        public PizzaIngredientsHolder(PizzaCreatorConfig _pizzaCreatorConfig) 
+        readonly IngredientsHolderData ingredientsHolderData;
+        public IngredientsHolderData IngredientsHolderData => ingredientsHolderData.Clone();
+        public PizzaIngredientsHolder(PizzaCreatorConfig _pizzaCreatorConfig, IngredientsHolderData _ingredientsHolderData)
         {
             pizzaCreatorConfig = _pizzaCreatorConfig;
-            ingredientsDict = new Dictionary<PizzaIngredientType, int>();
-            ingredientsDict.Add(PizzaIngredientType.Salami, 12);
-            ingredientsDict.Add(PizzaIngredientType.Tomato, 12);
-            ingredientsDict.Add(PizzaIngredientType.Shrimp, 12);
-            ingredientsDict.Add(PizzaIngredientType.Pepper, 12);
+            ingredientsHolderData = _ingredientsHolderData ?? new IngredientsHolderData();
         }
         public void Init()
-        { 
-            for(int i = 0; i < 12; i++)
+        {
+            int i;
+            foreach(KeyValuePair<PizzaIngredientType, int> ingredient in ingredientsHolderData.IngredientsDict)
             {
-                 OnIngredientAdded?.Invoke(PizzaIngredientType.Salami, true);
-                 OnIngredientAdded?.Invoke(PizzaIngredientType.Tomato, true);
-                 OnIngredientAdded?.Invoke(PizzaIngredientType.Shrimp, true);
-                 OnIngredientAdded?.Invoke(PizzaIngredientType.Pepper, true);
+                for (i = 0; i < ingredient.Value; i++)
+                {
+                    OnIngredientAdded?.Invoke(ingredient.Key, true);
+                }
             }
         }
         public bool TryRemoveIngredient(PizzaIngredientType type)
         {
             if(HasIngredient(type))
             {
-                OnIngredientRemoved?.Invoke(type);
-                ingredientsDict[type]--;
+                OnIngredientRemoved?.Invoke(type); 
+                ingredientsHolderData.IngredientsDict[type]--;
                 return true;
             }
             return false;
         }
         public bool HasIngredient(PizzaIngredientType type)
         {
-            return ingredientsDict.TryGetValue(type, out int amount) && amount > 0 ;
+            return ingredientsHolderData.IngredientsDict.TryGetValue(type, out int amount) && amount > 0 ;
         }
         public bool TryAddIngredient(PizzaIngredientType type, bool selfAdd = true)
         {
-            if (ingredientsDict.TryGetValue(type, out int amount)) 
+            if (ingredientsHolderData.IngredientsDict.TryGetValue(type, out int amount)) 
             {
                 if(amount + 1 > pizzaCreatorConfig.GetIngredientConfigByType(type).MaxAmountInHolder)
                 {
                     return false;
                 }
-                ingredientsDict[type]++;
+                ingredientsHolderData.IngredientsDict[type]++;
             }
             else
             {
-                ingredientsDict.Add(type, 1);
+                ingredientsHolderData.IngredientsDict.Add(type, 1);
             }
             OnIngredientAdded?.Invoke(type, selfAdd);
             return true;

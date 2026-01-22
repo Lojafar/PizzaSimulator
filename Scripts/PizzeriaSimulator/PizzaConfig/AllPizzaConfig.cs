@@ -6,7 +6,8 @@ namespace Game.PizzeriaSimulator.PizzasConfig
     [Serializable]
     public class AllPizzaConfig
     {
-        [field: SerializeField] public PizzaConfig[] Pizzas { get; private set; }
+        [SerializeField] PizzaConfig[] Pizzas;
+        public int PizzasCount => Pizzas.Length;
         public PizzaConfig GetPizzaByID(int id)
         {
             if(id < 0 || id >= Pizzas.Length) return null;

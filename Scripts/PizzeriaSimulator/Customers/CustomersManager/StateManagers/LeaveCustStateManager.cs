@@ -5,11 +5,15 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
     class LeaveCustStateManager: ICustomerStateManager
     {
         readonly PizzeriaSceneReferences sceneReferences;
-        List<Customer> customers;
+        readonly List<Customer> customers;
         public LeaveCustStateManager(PizzeriaSceneReferences _sceneReferences)
         {
             sceneReferences = _sceneReferences;
             customers = new List<Customer>();
+        }
+        public void ForceCustomer(Customer customer)
+        {
+            Object.Destroy(customer.gameObject);
         }
         public void HandleCustomerOfState(Customer customer)
         {

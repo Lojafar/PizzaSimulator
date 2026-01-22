@@ -16,31 +16,72 @@ MonoBehaviour:
     itemsConfigs:
     - <Name>k__BackingField: Dough
       <ID>k__BackingField: 0
-      <QuantityByOrder>k__BackingField: 4
+      <QuantityByOrder>k__BackingField: 8
       <Price>k__BackingField:
         Dollars: 0
         Cents: 45
       <ItemIcon>k__BackingField: {fileID: 1817793653, guid: 643c10bcb5326434f84992d30cf62027,
         type: 3}
-      <ItemPrefab>k__BackingField: {fileID: 6689176643304373509, guid: fcab60f188b7dff4397ce35651b9834d,
+      <BoxPrefab>k__BackingField: {fileID: 7977785956203910978, guid: fcab60f188b7dff4397ce35651b9834d,
         type: 3}
     - <Name>k__BackingField: Ketchup
       <ID>k__BackingField: 1
-      <QuantityByOrder>k__BackingField: 4
+      <QuantityByOrder>k__BackingField: 8
       <Price>k__BackingField:
         Dollars: 1
         Cents: 32
       <ItemIcon>k__BackingField: {fileID: -1670427107, guid: 643c10bcb5326434f84992d30cf62027,
         type: 3}
-      <ItemPrefab>k__BackingField: {fileID: 4259022128903085726, guid: b290f1482e718f643b8891a55f3ee83c,
+      <BoxPrefab>k__BackingField: {fileID: 488548928972095555, guid: b290f1482e718f643b8891a55f3ee83c,
         type: 3}
     - <Name>k__BackingField: Cheese
       <ID>k__BackingField: 2
-      <QuantityByOrder>k__BackingField: 9
+      <QuantityByOrder>k__BackingField: 8
       <Price>k__BackingField:
-        Dollars: 12
-        Cents: 32
+        Dollars: 1
+        Cents: 1
       <ItemIcon>k__BackingField: {fileID: 2007241015, guid: 643c10bcb5326434f84992d30cf62027,
         type: 3}
-      <ItemPrefab>k__BackingField: {fileID: 0}
-    <DeliveryDuration>k__BackingField: 10
+      <BoxPrefab>k__BackingField: {fileID: 6300335123164842320, guid: 9dbf22c3443e64643bdc3eb9c172cc4d,
+        type: 3}
+    - <Name>k__BackingField: Salami
+      <ID>k__BackingField: 3
+      <QuantityByOrder>k__BackingField: 6
+      <Price>k__BackingField:
+        Dollars: 0
+        Cents: 1
+      <ItemIcon>k__BackingField: {fileID: -1647784369, guid: 643c10bcb5326434f84992d30cf62027,
+        type: 3}
+      <BoxPrefab>k__BackingField: {fileID: 8520535441327434813, guid: 935cbeae3615a77409386597197fc928,
+        type: 3}
+    - <Name>k__BackingField: Tomato
+      <ID>k__BackingField: 4
+      <QuantityByOrder>k__BackingField: 6
+      <Price>k__BackingField:
+        Dollars: 0
+        Cents: 1
+      <ItemIcon>k__BackingField: {fileID: -1654790586, guid: 643c10bcb5326434f84992d30cf62027,
+        type: 3}
+      <BoxPrefab>k__BackingField: {fileID: 4556073788309146813, guid: d032f799201b07e448c1f11fc55e2847,
+        type: 3}
+    - <Name>k__BackingField: Shrimps
+      <ID>k__BackingField: 5
+      <QuantityByOrder>k__BackingField: 4
+      <Price>k__BackingField:
+        Dollars: 0
+        Cents: 1
+      <ItemIcon>k__BackingField: {fileID: 1240887021, guid: 643c10bcb5326434f84992d30cf62027,
+        type: 3}
+      <BoxPrefab>k__BackingField: {fileID: 7383167231203284532, guid: 2e83f3bf1f08b9b41b46a8e2e4b4c553,
+        type: 3}
+    - <Name>k__BackingField: Peppers
+      <ID>k__BackingField: 6
+      <QuantityByOrder>k__BackingField: 6
+      <Price>k__BackingField:
+        Dollars: 0
+        Cents: 1
+      <ItemIcon>k__BackingField: {fileID: 1171126146, guid: 643c10bcb5326434f84992d30cf62027,
+        type: 3}
+      <BoxPrefab>k__BackingField: {fileID: 7808472071191710082, guid: 4bb4b3585848bec4c9bc68b573ebf321,
+        type: 3}
+    <DeliveryDuration>k__BackingField: 1

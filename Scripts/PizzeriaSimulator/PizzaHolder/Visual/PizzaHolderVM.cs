@@ -1,18 +1,22 @@
-﻿using Game.Root.ServicesInterfaces;
+﻿using Game.PizzeriaSimulator.PizzasConfig;
+using Game.Root.ServicesInterfaces;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.PizzeriaSimulator.PizzaHold.Visual
 {
     public class PizzaHolderVM : ISceneDisposable
     {
-        public event Action AddPizza;
+        public event Action<Sprite> AddPizza;
         public event Action<int> RemovePizza;
         readonly PizzaHolder pizzaHolder;
+        readonly AllPizzaConfig allPizzaConfig;
         readonly List<int> pizzas;
-        public PizzaHolderVM(PizzaHolder _pizzaHolder)
+        public PizzaHolderVM(PizzaHolder _pizzaHolder, AllPizzaConfig _allPizzaConfig)
         {
             pizzaHolder = _pizzaHolder;
+            allPizzaConfig = _allPizzaConfig;
             pizzas = new List<int>();
         }
         public void Init()
@@ -28,7 +32,10 @@ namespace Game.PizzeriaSimulator.PizzaHold.Visual
         void HandleNewPizza(int pizzaID)
         {
             pizzas.Add(pizzaID);
-            AddPizza?.Invoke();
+            if (allPizzaConfig.GetPizzaByID(pizzaID) is PizzaConfig pizzaConfig)
+            {
+                AddPizza?.Invoke(pizzaConfig.PizzaIcon);
+            }
         }
         void HandlePizzaRemove(int pizzaID)
         {

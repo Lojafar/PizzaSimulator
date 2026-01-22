@@ -21,11 +21,7 @@ namespace Game.PizzeriaSimulator.Player
         }
         private void Update()
         {
-            currentMovement?.Move(input.GetMoveDir());
-        }
-        private void LateUpdate()
-        {
-            if (camController != null)
+            currentMovement?.Move(input.GetMoveDir()); if (camController != null)
             {
                 camController.Rotate(input.GetRotationDir());
             }

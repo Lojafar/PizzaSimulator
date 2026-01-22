@@ -29,8 +29,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         [SerializeField] Transform playerCamLookTransform;
         [SerializeField] Transform pizzaCutterTransform;
         [SerializeField] Transform pizzaBoxTopTransform;
-        [SerializeField] Vector3 preBoxPizzaPos;
-        [SerializeField] Vector3 boxPizzaPos;
+        [SerializeField] Transform boxPizzaPoint;
         [SerializeField] Vector3 pizzaBoxTopClosedLocRot;
         [SerializeField] Button leaveButton;
         [SerializeField] Collider cutterCollider;
@@ -41,6 +40,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         [SerializeField] float cutDuration;
         [SerializeField] float preBoxDelay;
         [SerializeField] float moveToBoxDuration;
+        [SerializeField] float jumpToBoxForce;
         [SerializeField] float pizzaBoxTopRotDuration;
         [SerializeField] float pizzaBoxCloseDelay;
         DiContainer diContainer;
@@ -190,9 +190,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         {
             await UniTask.WaitForSeconds(preBoxDelay);
             AudioPlayer.PlaySFX(pizzaMoveToBoxSFX);
-            DOTween.Sequence()
-                .Append(currentPizzaToCut.transform.DOMove(preBoxPizzaPos, moveToBoxDuration).SetEase(Ease.Linear))
-                .Append(currentPizzaToCut.transform.DOMove(boxPizzaPos, moveToBoxDuration).SetEase(Ease.Linear))
+            currentPizzaToCut.transform.DOJump(boxPizzaPoint.position, jumpToBoxForce, 1, moveToBoxDuration).SetEase(Ease.Linear)
                 .Play().OnComplete(PizzaFinishedBox);
         }
         void PizzaFinishedBox()

@@ -11,7 +11,7 @@ namespace Game.Boot.LoadingSM.States
         }
         public void Enter()
         {
-            Application.targetFrameRate = 0;
+            Application.targetFrameRate = 90;
            
             loadingStateMachine.EnterState<ServicesPrepareLoadState>();
         }

@@ -26,7 +26,12 @@ namespace Game.Boot.LoadingSM.States
         }
         async UniTask PrepareServices()
         {
-            IEnvironmentHandler environmentHandler = new EditorEnvironmentHandler(diContainer.Resolve<IAssetsProvider>());
+            IEnvironmentHandler environmentHandler = null;
+#if UNITY_EDITOR
+           environmentHandler = new EditorEnvironmentHandler(diContainer.Resolve<IAssetsProvider>());
+#else
+            environmentHandler = new BuildEnvironmentHandler();
+#endif
             await environmentHandler.Init();
             diContainer.Bind<IEnvironmentHandler>().FromInstance(environmentHandler).AsSingle().NonLazy();
 

@@ -71,7 +71,7 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
             pizzaCreator = _pizzaCreator;
             DeviceType = _deviceType;
             pizzaCreatorConfig = pizzaCreator.GetPizzaCreatorConfig();
-            pizzaBaseIngredientAmount = pizzaCreatorConfig.IngredientsForBase.Length;
+            pizzaBaseIngredientAmount = pizzaCreatorConfig.IngredientsForBase.Count;
         }
         public void Init()
         {
