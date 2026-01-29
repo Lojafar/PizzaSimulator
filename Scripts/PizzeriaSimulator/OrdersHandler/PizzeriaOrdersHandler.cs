@@ -19,6 +19,7 @@ namespace Game.PizzeriaSimulator.OrdersHandle
     }
     public class PizzeriaOrdersHandler : IInittable, ISceneDisposable
     {
+        public int InitPriority => 9;
         readonly PizzaHolder pizzaHolder;
         readonly Interactor interactor;
         public event Action<int> OnNewPizzaOrder;

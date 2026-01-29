@@ -2,18 +2,19 @@
 using Game.PizzeriaSimulator.Interactions;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold.Visual;
-using Game.Root.Utils;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
 {
     class PizzaIngredientBoxHandler : IBoxesHandler
     {
+        readonly BoxesCarrier boxesCarrier;
         readonly PizzaIngredientsHolder ingredientsHolder;
         readonly PizzaIngredientsHolderViewBase ingredientsHolderView;
         PizzaIngredientBoxBase activeBox;
-        public PizzaIngredientBoxHandler(PizzaIngredientsHolder _ingredientsHolder, PizzaIngredientsHolderViewBase _ingredientsHolderView)
+        public PizzaIngredientBoxHandler(BoxesCarrier _boxesCarrier ,PizzaIngredientsHolder _ingredientsHolder, PizzaIngredientsHolderViewBase _ingredientsHolderView)
         {
+            boxesCarrier = _boxesCarrier;
             ingredientsHolder = _ingredientsHolder;
             ingredientsHolderView = _ingredientsHolderView;
         }
@@ -38,12 +39,12 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
         {
             if (activeBox.ItemsAmount < 1)
             {
-                Toasts.ShowToast("Empty box");
+                boxesCarrier.OnDenyAction("Empty box");
                 return;
             }
             if (!activeBox.IsOpened)
             {
-                Toasts.ShowToast("Before unpack the box");
+                boxesCarrier.OnDenyAction("Before unpack the box");
                 return;
             }
             if (ingredientsHolder.TryAddIngredient(activeBox.IngredientType, false))
@@ -54,7 +55,7 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
             }
             else
             {
-                Toasts.ShowToast("Full ingredient container");
+                boxesCarrier.OnDenyAction("Full ingredient container");
             }
         }
     }

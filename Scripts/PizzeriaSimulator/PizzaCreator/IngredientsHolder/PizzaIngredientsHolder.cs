@@ -7,6 +7,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.IngredientsHold
 {
     public class PizzaIngredientsHolder : IInittable
     {
+        public int InitPriority => 11;
         public event Action<PizzaIngredientType, bool> OnIngredientAdded;
         public event Action<PizzaIngredientType> OnIngredientRemoved;
         readonly PizzaCreatorConfig pizzaCreatorConfig;

@@ -7,6 +7,7 @@ namespace Game.PizzeriaSimulator.Delivery.Visual
     {
         public event Action ShowDeliveryVisuals;
         public event Action HideDeliveryVisuals;
+        public event Action OnDeliveryEnded;
         public event Action<string> UpdateDeliveryTime;
         readonly PizzeriaDelivery pizzeriaDelivery;
         int lastDeliverySeconds = -1;
@@ -36,6 +37,7 @@ namespace Game.PizzeriaSimulator.Delivery.Visual
         public void HandleDeliveryEnd()
         {
             HideDeliveryVisuals?.Invoke();
+            OnDeliveryEnded?.Invoke();
         }
         public void HandleDeliveryTime(float remainedTime)
         {

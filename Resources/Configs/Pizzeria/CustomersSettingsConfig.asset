@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CustomersSettingsConfig>k__BackingField:
     <MinSpawnDelay>k__BackingField: 1
-    <MaxSpawnDelay>k__BackingField: 3
+    <MaxSpawnDelay>k__BackingField: 2
     <MaxActiveCustomers>k__BackingField: 5
-    <CardPaymentPercent>k__BackingField: 35
+    <CardPaymentPercent>k__BackingField: 100

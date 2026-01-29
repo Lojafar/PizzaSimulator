@@ -1,4 +1,5 @@
 ﻿using Game.PizzeriaSimulator.Player.CameraController;
+using Game.Root.Utils.Audio;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace Game.PizzeriaSimulator.Computer.Visual
 {
     class PizzeriaComputerView : PizzeriaComputerViewBase
     {
+        [SerializeField] AudioClip appClickSFX;
         [SerializeField] Transform playerCamLookTransform;
         [SerializeField] Button exitButton;
         [SerializeField] Button marketButton;
@@ -43,6 +45,7 @@ namespace Game.PizzeriaSimulator.Computer.Visual
         }
         void OnMarketBtn()
         {
+            AudioPlayer.PlaySFX(appClickSFX);
             viewModel.MarketAppInput.OnNext(Unit.Default);
         }
         void OnEnter()

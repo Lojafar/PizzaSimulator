@@ -10,6 +10,7 @@ namespace Game.PizzeriaSimulator.Interactions.Interactor
 {
     public class Interactor : IInittable, ISceneDisposable
     {
+        public int InitPriority => 9;
         public event Action<InteractableType> OnInteract;
         public event Action<InteractableType, GameObject> OnInteractWithObject;
         readonly IPlayerInput playerInput;
@@ -27,7 +28,7 @@ namespace Game.PizzeriaSimulator.Interactions.Interactor
             playerInput = _playerInput;
             cameraController = _cameraController;
             midOfScreen = new Vector3(0.5f, 0.5f, 0);
-            interactLayerMask = LayerMask.GetMask(Layers.InteractableLayerName, Layers.DefaultLayerName);
+            interactLayerMask = LayerMask.GetMask(Layers.InteractableLayerName, Layers.ObstaclesLayerName);
         }
         public void Init()
         {

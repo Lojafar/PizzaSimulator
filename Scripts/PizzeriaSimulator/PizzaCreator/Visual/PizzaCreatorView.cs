@@ -18,8 +18,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
     class PizzaCreatorView : PizzaCreatorViewBase
     {
         [SerializeField] AudioClip placeIngredientSFX;
-        [SerializeField] AudioClip cancelSFX;
-        [SerializeField] AudioClip confirmPizzaSFX;
         [SerializeField] AudioClip clearPizzaSFX;
         [SerializeField] Transform playerCamLookTransform;
         [SerializeField] Transform pizzaPreBakePoint;
@@ -201,7 +199,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         void CancellPlaceDragged(string message)
         {
             ShowMessage(message);
-            AudioPlayer.PlaySFX(cancelSFX);
+            AudioPlayer.PlaySFX("Wrong");
         }
         void ShowMessage(string message)
         {
@@ -229,14 +227,14 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         }
         void BakePizza(BakedPizzaObject bakedPizzaPrefab, Action onBaked)
         {
-            AudioPlayer.PlaySFX(confirmPizzaSFX); 
+            AudioPlayer.PlaySFX("Swoosh"); 
             currentPizza.transform.DOJump(pizzaBaker.StartPizzaPosition, pizzaPrebakeJumpForce, 1, pizzaMovePrebakeDur).SetEase(Ease.Linear)
                 .OnComplete(() => pizzaBaker.StartBaking(currentPizza, bakedPizzaPrefab, onBaked)).Play();
         }
         void CancellPizzaBake(string message)
         {
             ShowMessage(message);
-            AudioPlayer.PlaySFX(cancelSFX);
+            AudioPlayer.PlaySFX("Wrong");
         }
         void OnPizzaAssembled(string pizzaName)
         {

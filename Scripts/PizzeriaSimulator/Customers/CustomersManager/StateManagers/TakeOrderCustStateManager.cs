@@ -48,5 +48,16 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
                 }
             }
         }
+        public void RemoveCustomer(Customer customer)
+        {
+            for (int i = 0; i < customers.Count; i++)
+            {
+                if (customers[i].Id == customer.Id)
+                {
+                    customers.RemoveAt(i);
+                    customer.CustomerAI.OnTargetPointReached -= OnCustomerReachedTakePoint;
+                }
+            }
+        }
     }
 }

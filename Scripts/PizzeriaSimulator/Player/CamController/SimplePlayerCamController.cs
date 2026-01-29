@@ -31,12 +31,19 @@ namespace Game.PizzeriaSimulator.Player.CameraController
         const float minScreenRatio = 1f;
         private void Start()
         {
-            currentRotX = transform.eulerAngles.x;
-            targetRotX = transform.eulerAngles.x;
-            savedLocalPos = transform.localPosition;
             mainCam = Camera.main;
+            ResetRot();
             UpdateLookFOV();
             ResetLook();
+        }
+        public override void ResetRot()
+        {
+            transform.localEulerAngles = Vector3.zero;
+            currentRotX = 0;
+            targetRotX = 0; 
+            targetRotY = 0;
+            currentRotY = 0;
+            savedLocalPos = transform.localPosition;
         }
         public override void Rotate(Vector2 direction)
         {
@@ -83,5 +90,6 @@ namespace Game.PizzeriaSimulator.Player.CameraController
             isLocked = false;
             RaiseLockEvent(false);
         }
+     
     }
 }

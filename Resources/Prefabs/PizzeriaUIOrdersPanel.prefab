@@ -548,7 +548,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 181.83624, y: 281}
+  m_AnchoredPosition: {x: 181.83624, y: 312.7}
   m_SizeDelta: {x: 365.6725, y: 142.9859}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8622907037291275205
@@ -627,7 +627,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bellClip: {fileID: 8300000, guid: 74807ab3e51adb846bf318d7137af43d, type: 3}
-  bellCancellClip: {fileID: 8300000, guid: cf6c0e7fbef9449c98a0cdb5ea0c4d9f, type: 3}
   orderBarPrefab: {fileID: 7877426007660167273, guid: c8e826802dd88b3489af54c64280f5aa,
     type: 3}
   expandIndicator: {fileID: 2740008368676208481}

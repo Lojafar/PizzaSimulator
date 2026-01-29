@@ -7,6 +7,8 @@ using Game.PizzeriaSimulator.PaymentReceive.Visual;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold.Visual;
 using Game.PizzeriaSimulator.PizzaCreation.Visual;
 using Game.PizzeriaSimulator.PizzaHold.Visual;
+using Game.PizzeriaSimulator.PizzaHold.Visual.PizzaContainer;
+using Game.PizzeriaSimulator.Pizzeria.Manager.Visual;
 using System;
 using UnityEngine;
 
@@ -14,13 +16,14 @@ namespace Game.PizzeriaSimulator
 {
     public class PizzeriaSceneReferences : MonoBehaviour
     {
+        [field: SerializeField] public Light DirectionalLight { get; private set; }
         [field: SerializeField] public Transform DeliveryPoint { get; private set; }
         [field: SerializeField] public Transform PlayerSpawnPoint { get; private set; }
-        [field: SerializeField] public Transform RemovedPizzasContainer { get; private set; }
         [field: SerializeField] public Transform CustomersSpawnPoint { get; private set; }
         [field: SerializeField] public CustomersWaypointFieldBase CustomerWaitOrderField { get; private set; }
         [field: SerializeField] public Transform CustomersTakeOrderPoint { get; private set; }
         [field: SerializeField] public Transform[] CustomersPointsInLine { get; private set; }
+        [field: SerializeField] public PizzaObjsContainer RemovedPizzasContainer { get; private set; }
         [field: SerializeField] public Canvas SceneCanvas { get; private set; }
         [field: SerializeField] public PaymentReceiveViewBase PaymentReceiverViewBase { get; private set; }
         [field: SerializeField] public CashPaymentProccesorViewBase CashPaymentViewBase { get; private set; }
@@ -31,6 +34,7 @@ namespace Game.PizzeriaSimulator
         [field: SerializeField] public PizzaIngredientsHolderViewBase PizzaIngredientsHoldView { get; private set; }
         [field: SerializeField] public PizzeriaComputerViewBase PizzeriaComputerView { get; private set; }
         [field: SerializeField] public MarketCompAppViewBase MarketCompAppView { get; private set; }
+        [field: SerializeField] public PizzeriaManagerViewBase PizzeriaManagerView { get; private set; }
         public event Action OnLeaveScene;
         private void OnDestroy()
         {

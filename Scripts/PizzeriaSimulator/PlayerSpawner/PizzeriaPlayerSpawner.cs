@@ -32,7 +32,6 @@ namespace Game.PizzeriaSimulator.PlayerSpawner
             spawnedPlayer.Construct(playerInput, spawnedPlayerCam);
             diContainer.Bind<PlayerCameraControllerBase>().FromInstance(spawnedPlayerCam).AsSingle();
             diContainer.Bind<PizzaPlayer>().FromInstance(spawnedPlayer).AsSingle();
-            playerInput.Activate(true);
             return spawnedPlayer;
         }
     }

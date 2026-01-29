@@ -17,3 +17,15 @@ MonoBehaviour:
     - <Key>k__BackingField: ItemSwoosh
       <Clip>k__BackingField: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95,
         type: 3}
+    - <Key>k__BackingField: Wrong
+      <Clip>k__BackingField: {fileID: 8300000, guid: cf6c0e7fbef9449c98a0cdb5ea0c4d9f,
+        type: 3}
+    - <Key>k__BackingField: Swoosh
+      <Clip>k__BackingField: {fileID: 8300000, guid: 3b6eef180e160bf47b54fff7deebb089,
+        type: 3}
+    - <Key>k__BackingField: UIApear
+      <Clip>k__BackingField: {fileID: 8300000, guid: 8fdb4a7b65b4d564f99ce542cc90b82a,
+        type: 3}
+    - <Key>k__BackingField: UIDisapear
+      <Clip>k__BackingField: {fileID: 8300000, guid: 791d1b319af3ffc42a6dcd48e4c5f516,
+        type: 3}

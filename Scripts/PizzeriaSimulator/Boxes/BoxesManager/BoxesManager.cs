@@ -9,8 +9,9 @@ using UnityEngine;
 namespace Game.PizzeriaSimulator.Boxes.Manager
 {
     using Object = UnityEngine.Object;
-    public class BoxesManager : ITaskInittable, IDisposable
+    public class BoxesManager : IPrewarmable, IInittable, IDisposable
     {
+        public int InitPriority => 9;
         readonly PizzeriaSaveLoadHelper saveLoadHelper;
         readonly BoxesCarrier boxesCarrier;
         readonly PizzeriaDeliveryConfig deliveryConfig;
@@ -25,7 +26,7 @@ namespace Game.PizzeriaSimulator.Boxes.Manager
             deliveryConfig = _deliveryConfig;
             boxesObjectsDict = new Dictionary<uint, CarriableBoxBase>();
         }
-        public async UniTask Init()
+        public async UniTask Prewarm()
         {
             boxesManagerData = await saveLoadHelper.LoadData<BoxesManagerData>();
             boxesManagerData ??= new BoxesManagerData();
@@ -34,7 +35,7 @@ namespace Game.PizzeriaSimulator.Boxes.Manager
             for (int i = 0; i < boxesManagerData.ActiveIDs.Count; i++)
             {
                 boxData = await saveLoadHelper.LoadData<CarriableBoxData>(boxesManagerData.ActiveIDs[i].ToString());
-                if(boxData == null)
+                if (boxData == null)
                 {
                     Debug.LogError($"Saved in manager boxID({boxesManagerData.ActiveIDs[i]}) isn't exist!!!!");
                     continue;
@@ -54,6 +55,9 @@ namespace Game.PizzeriaSimulator.Boxes.Manager
                     Debug.LogError($"Saved box has incorrect id: {boxData.DeliveryItemID} !!!!");
                 }
             }
+        }
+        public void Init()
+        {
             boxesCarrier.OnBoxThrowed += HandleBoxThrow;
             boxesCarrier.OnBoxRemoved += HandleBoxDestroy;
         }

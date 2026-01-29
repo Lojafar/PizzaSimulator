@@ -13,6 +13,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
 {
     public class PizzaCreator : IInittable, ISceneDisposable
     {
+        public int InitPriority => 11;
         public event Action OnEnterCreate;
         public event Action OnLeaveCreate;
         public event Action OnEnterCut;
@@ -61,9 +62,9 @@ namespace Game.PizzeriaSimulator.PizzaCreation
         }
         public void Init()
         {
-            if (pizzaCreatorData.PizzasInBake.Count > 0)
+            if (pizzaCreatorData.PizzasInBake.Count > 0 || pizzaCreatorData.PizzaInCut != -1)
             {
-                List<PizzaIngredientType> pizzaIngredients = new (averageIngredientsCount);
+                List<PizzaIngredientType> pizzaIngredients = new(averageIngredientsCount);
                 int ingredientIndex;
                 int pizzaId;
                 PizzaConfig pizzaConfig;
@@ -71,13 +72,13 @@ namespace Game.PizzeriaSimulator.PizzaCreation
                 {
                     pizzaId = (i != -1) ? pizzaCreatorData.PizzasInBake[i] : pizzaCreatorData.PizzaInCut;
                     pizzaConfig = allPizzaConfig.GetPizzaByID(pizzaId);
-                   
+
                     if (pizzaConfig == null) continue;
-                    for(ingredientIndex = 0; ingredientIndex < pizzaCreatorConfig.IngredientsForBase.Count; ingredientIndex++)
+                    for (ingredientIndex = 0; ingredientIndex < pizzaCreatorConfig.IngredientsForBase.Count; ingredientIndex++)
                     {
                         pizzaIngredients.Add(pizzaCreatorConfig.IngredientsForBase[ingredientIndex]);
                     }
-                    for(ingredientIndex = 0; ingredientIndex < pizzaConfig.Ingredients.Count; ingredientIndex++)
+                    for (ingredientIndex = 0; ingredientIndex < pizzaConfig.Ingredients.Count; ingredientIndex++)
                     {
                         pizzaIngredients.Add(pizzaConfig.Ingredients[ingredientIndex]);
                     }

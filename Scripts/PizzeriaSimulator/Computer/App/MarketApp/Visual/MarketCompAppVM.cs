@@ -28,6 +28,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         public event Action Open;
         public event Action Close;
         public event Action RemoveAllCartItems;
+        public event Action ShowPurchaseSucces;
         public event Action<MarketItemViewData> OnNewItem;
         public event Action<int, string> OnNewCartItem;
         public event Action<int, string> UpdateCartItemAmount;
@@ -53,6 +54,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
             marketCompApp.OnItemRemovedFromCart += HandleCartItemRemove;
             marketCompApp.OnCartCleared += HandleCartClear;
             marketCompApp.OnTotalPriceChanged += HandleNewTotalPrice;
+            marketCompApp.OnPurchaseProccesed += HandlePurchaseSucces;
             marketCompApp.OnPurchaseFailed += HandlePurchaseFail;
         }
         public void Dispose()
@@ -66,6 +68,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
             marketCompApp.OnItemRemovedFromCart -= HandleCartItemRemove;
             marketCompApp.OnCartCleared -= HandleCartClear;
             marketCompApp.OnTotalPriceChanged -= HandleNewTotalPrice;
+            marketCompApp.OnPurchaseProccesed -= HandlePurchaseSucces;
             marketCompApp.OnPurchaseFailed -= HandlePurchaseFail;
         }
         public void CloseInput()
@@ -138,6 +141,10 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         void HandleNewTotalPrice(MoneyQuantity newTotal)
         {
             UpdateTotalPriceText?.Invoke(GetPriceText(newTotal));
+        }
+        void HandlePurchaseSucces()
+        {
+            ShowPurchaseSucces?.Invoke();
         }
         void HandlePurchaseFail()
         {

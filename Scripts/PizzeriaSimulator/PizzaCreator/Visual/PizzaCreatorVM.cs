@@ -99,7 +99,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
                 if (ingredientConfig == null) continue;
                 ForceIngredientPlace?.Invoke(ingredientConfig.OnPizzaPrefab);
             }
-            ForceCurrentPizzaToBake?.Invoke(pizzaCreator.GetPizzaConfigById(pizzaId).BakedPizzaPrefab, () => pizzaCreator.PizzaBakedInput(pizzaId));
+            ForceCurrentPizzaToBake?.Invoke(pizzaCreator.GetPizzaConfigById(pizzaId).BakedPizzaPrefab, pizzaInCut? null : () => pizzaCreator.PizzaBakedInput(pizzaId));
         }
         void OnPizzaReadyForBake(int pizzaId)
         {

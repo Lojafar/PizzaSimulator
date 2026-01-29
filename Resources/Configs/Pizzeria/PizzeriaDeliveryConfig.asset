@@ -84,4 +84,4 @@ MonoBehaviour:
         type: 3}
       <BoxPrefab>k__BackingField: {fileID: 7808472071191710082, guid: 4bb4b3585848bec4c9bc68b573ebf321,
         type: 3}
-    <DeliveryDuration>k__BackingField: 1
+    <DeliveryDuration>k__BackingField: 5

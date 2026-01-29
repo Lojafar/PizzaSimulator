@@ -6,6 +6,7 @@ namespace Game.PizzeriaSimulator.PizzaHold
 {
     public class PizzaHolder : IInittable
     {
+        public int InitPriority => 8;
         public event Action<int> OnPizzaAdded;
         public event Action<int> OnPizzaReserved;
         public event Action<int> OnPizzaRemoved;

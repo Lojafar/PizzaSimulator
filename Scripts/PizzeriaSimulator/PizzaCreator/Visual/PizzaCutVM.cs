@@ -1,6 +1,7 @@
 ﻿using Game.Root.ServicesInterfaces;
 using System;
 using R3;
+using System.Collections.Generic;
 
 namespace Game.PizzeriaSimulator.PizzaCreation.Visual
 {
@@ -25,6 +26,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             pizzaCreator.OnEnterCut += OnEnterPizzaCut;
             pizzaCreator.OnLeaveCut += OnLeavePizzaCut;
             pizzaCreator.OnPizzaBaked += HandleNewPizzaToCut;
+            pizzaCreator.ForcePizzaCreate += HandlePizzaForce;
         }
         public void Dispose()
         {
@@ -33,6 +35,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
             pizzaCreator.OnEnterCut -= OnEnterPizzaCut;
             pizzaCreator.OnLeaveCut -= OnLeavePizzaCut;
             pizzaCreator.OnPizzaBaked -= HandleNewPizzaToCut;
+            pizzaCreator.ForcePizzaCreate -= HandlePizzaForce;
         }
         void OnEnterPizzaCut()
         {
@@ -45,6 +48,10 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         void HandleNewPizzaToCut(int pizzaID)
         {
             currentPizza = pizzaID;
+        }
+        void HandlePizzaForce(int pizzaId, IEnumerable<PizzaIngredientType> ingredients, bool inCut)
+        {
+            if (inCut) currentPizza = pizzaId;
         }
     }
 }

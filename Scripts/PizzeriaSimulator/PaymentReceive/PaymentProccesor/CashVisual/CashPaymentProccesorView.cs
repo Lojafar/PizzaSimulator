@@ -22,6 +22,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         [SerializeField] AudioClip banknoteSFX;
         [SerializeField] AudioClip coinSFX;
         [SerializeField] AudioClip errorSFX;
+        [SerializeField] AudioClip buttonClickSFX;
         [SerializeField] Transform shelveTransform;
         [SerializeField] Transform playerCamLookTransform;
         [SerializeField] GameObject onOpenVisuals;
@@ -124,10 +125,12 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         }
         void OnBackBtn()
         {
+            AudioPlayer.PlaySFX(buttonClickSFX);
             viewModel.BackInput.OnNext(Unit.Default);
         }
         void OnClearBtn()
         {
+            AudioPlayer.PlaySFX(buttonClickSFX);
             viewModel.ClearInput.OnNext(Unit.Default);
         }
         void StartProcces()
@@ -189,6 +192,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual
         }
         async void OnCompleteProcces(Action onAnimShowed)
         {
+            AudioPlayer.PlaySFX(buttonClickSFX);
             isOpened = false;
             DestroyAllCashObjs();
             cashPaymentPanel.SetActive(false);

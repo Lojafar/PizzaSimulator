@@ -1,6 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using DG.Tweening;
-using Game.PizzeriaSimulator.Currency;
+﻿using Game.PizzeriaSimulator.Currency;
 using Game.PizzeriaSimulator.Customers.OrdersProcces;
 using Game.PizzeriaSimulator.Customers.Visual;
 using Game.PizzeriaSimulator.PaymentReceive;
@@ -8,18 +6,23 @@ using Game.PizzeriaSimulator.PaymentReceive.Visual;
 using Game.PizzeriaSimulator.PaymentReceive.Visual.Config;
 using Game.Root.AssetsManagment;
 using Game.Root.ServicesInterfaces;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.Customers.Manager
 {
-    class CustomerVisualManager : ITaskInittable, ISceneDisposable
+ 
+    class CustomerVisualManager : IPrewarmable, IInittable, ISceneDisposable
     {
+        public int InitPriority => 9;
         readonly IAssetsProvider assetsProvider;
         readonly CustomersManager customersManager;
         readonly CustomersOrdersProccesor customersOrdersProccesor;
         readonly PizzeriaSceneReferences sceneReferences;
         readonly PaymentVisualConfig paymentVisualConfig;
 
+        CustomerDreamBubble dreamBubblePrefab;
         CustomerDreamBubble dreamBubble;
         PaymentObject currentPaymentObj;
         const float orderTakeDelay = 0.4f;
@@ -34,12 +37,16 @@ namespace Game.PizzeriaSimulator.Customers.Manager
             sceneReferences = _sceneReferences;
             paymentVisualConfig = _paymentVisualConfig;
         } 
-        public async UniTask Init()
+        public async UniTask Prewarm()
         {
-            CustomerDreamBubble dreamBubblePrefab = await assetsProvider.LoadAsset<CustomerDreamBubble>(AssetsKeys.CustomerDreamBubble);
+            dreamBubblePrefab = await assetsProvider.LoadAsset<CustomerDreamBubble>(AssetsKeys.CustomerDreamBubble);
+        }
+        public void Init()
+        {
             dreamBubble = Object.Instantiate(dreamBubblePrefab);
             dreamBubble.gameObject.SetActive(false);
 
+            customersManager.OnAllCustomersDestroyed += OnAllCustomersDestroyed;
             customersManager.OnCustomerStartOrder += OnCustomerStartOrder;
             customersManager.OnCustomerMadeOrder += OnCustomerMadeOrder;
             customersManager.OnCustomerTakedOrder += OnCustomerStartTakingOrder;
@@ -47,10 +54,18 @@ namespace Game.PizzeriaSimulator.Customers.Manager
         }
         public void Dispose()
         {
+            customersManager.OnAllCustomersDestroyed -= OnAllCustomersDestroyed;
             customersManager.OnCustomerStartOrder -= OnCustomerStartOrder;
             customersManager.OnCustomerMadeOrder -= OnCustomerMadeOrder;
             customersManager.OnCustomerTakedOrder -= OnCustomerStartTakingOrder;
             customersOrdersProccesor.OnCustomerStartPaying -= OnCustomerStartPaying;
+        }
+        void OnAllCustomersDestroyed()
+        {
+            for (int i = sceneReferences.RemovedPizzasContainer.PizzaCount - 1; i >= 0; i--)
+            {
+                Object.Destroy(sceneReferences.RemovedPizzasContainer.GetPizza());
+            }
         }
         void OnCustomerStartOrder(Customer customer, int orderID)
         {
@@ -68,14 +83,22 @@ namespace Game.PizzeriaSimulator.Customers.Manager
         }
         async void OnCustomerStartTakingOrder(Customer customer, int orderID) 
         {
-            if (sceneReferences.RemovedPizzasContainer.childCount < 1) return;
+            if (sceneReferences.RemovedPizzasContainer.PizzaCount < 1) return;
             await UniTask.WaitForSeconds(orderTakeDelay);
-            Transform pizza = sceneReferences.RemovedPizzasContainer.GetChild(0);
-            DOTween.Sequence()
-                .Append(pizza.DOMove(new Vector3(pizza.position.x, pizza.position.y + orderMoveYMaxOffset, pizza.position.z) + 
-                (customer.Skin.OrderPoint.position - pizza.position) / 2, orderMoveHalfDur).SetEase(Ease.Linear))
-                .Append(pizza.DOMove(customer.Skin.OrderPoint.position, orderMoveHalfDur).SetEase(Ease.Linear))
-                .OnComplete(() => pizza.SetParent(customer.Skin.HandBone, true)).Play();
+            if( sceneReferences.RemovedPizzasContainer.TryGetPizza(out GameObject pizzaObj))
+            {
+                if (customer == null)
+                {
+                    Object.Destroy(pizzaObj);
+                    return;
+                }
+                DOTween.Sequence()
+                    .Append(pizzaObj.transform.DOMove(new Vector3(pizzaObj.transform.position.x, pizzaObj.transform.position.y + orderMoveYMaxOffset, pizzaObj.transform.position.z) +
+                    (customer.Skin.OrderPoint.position - pizzaObj.transform.position) / 2, orderMoveHalfDur).SetEase(Ease.Linear))
+                    .Append(pizzaObj.transform.DOMove(customer.Skin.OrderPoint.position, orderMoveHalfDur).SetEase(Ease.Linear))
+                    .OnComplete(() => pizzaObj.transform.SetParent(customer.Skin.HandBone, true)).Play();
+            }
+            
         }
         void OnCustomerStartPaying(Customer customer, PaymentType paymentType, MoneyQuantity price)
         {

@@ -7,6 +7,8 @@ using Game.PizzeriaSimulator.PizzaCreation;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold;
 using Game.PizzeriaSimulator.PizzaHold;
 using Game.PizzeriaSimulator.Wallet;
+using Game.PizzeriaSimulator.Pizzeria.Manager;
+using Game.PizzeriaSimulator.DayCycle.Manager;
 using R3;
 using System;
 using System.Collections.Generic;
@@ -39,7 +41,7 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
             Ticks.Instance.OnTick -= OnUpdate;
         }
     }
-     public class PizzeriaSaveLoadHelper : ISceneDisposable
+    public class PizzeriaSaveLoadHelper : ISceneDisposable
     {
         readonly ISaverLoader saverLoader;
         readonly DiContainer diContainer;
@@ -50,10 +52,13 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
         PizzaCreator pizzaCreator;
         PizzaHolder pizzaHolder;
         CustomersManager customersManager;
+        PizzeriaManager pizzeriaManager;
+        DayCycleManager dayCycleManager;
         bool isFollowingSaves;
-        const byte PizzaHoldCode = 0;
-        const byte CustomersManagerCode = 1;
-        const byte IngredientsContCode = 2;
+        const byte pizzaHoldCode = 0;
+        const byte customersManagerCode = 1;
+        const byte ingredientsContCode = 2;
+        const byte pizzeriaManagerCode = 3;
         public PizzeriaSaveLoadHelper(ISaverLoader _saverLoader, DiContainer _diContainer)
         {
             saverLoader = _saverLoader;
@@ -70,6 +75,18 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
         {
             PlayerWalletData playerWalletData = await saverLoader.LoadData<PlayerWalletData>() ?? new PlayerWalletData();
             PlayerWallet = new PlayerWallet(playerWalletData);
+        }
+        public async UniTask<T> LoadData<T>(string key = null)
+        {
+            return await saverLoader.LoadData<T>(key);
+        }
+        public async UniTask SaveData<T>(T data, string key = null)
+        {
+            await saverLoader.SaveData(data, key);
+        }
+        public async UniTask ClearData<T>(string key = null)
+        {
+            await saverLoader.ClearData<T>(key);
         }
         public void StartFollowSaves()
         {
@@ -88,25 +105,40 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
                 pizzaCreator.OnPizzaBaked += SavePizzaCreator;
             }
             pizzaHolder = diContainer.TryResolve<PizzaHolder>();
-            if (pizzaHolder != null) 
+            if (pizzaHolder != null)
             {
                 pizzaHolder.OnPizzaAdded += OnPizzaAddedInHold;
                 pizzaHolder.OnPizzaReserved += OnPizzaHoldChanged;
                 pizzaHolder.OnPizzaRemoved += OnPizzaHoldChanged;
             }
             customersManager = diContainer.TryResolve<CustomersManager>();
-            if (customersManager != null) 
+            if (customersManager != null)
             {
                 customersManager.OnNewCustomer += OnSaveCustomersManager;
                 customersManager.OnCustomerMadeOrder += OnCustomerChanged;
                 customersManager.OnCustomerTakedOrder += OnCustomerChanged;
+            }
+            pizzeriaManager = diContainer.TryResolve<PizzeriaManager>();
+            if (pizzeriaManager != null)
+            {
+                pizzeriaManager.CurrentLevel.Skip(1).Subscribe(_ => SavePizzeriaManger()).AddTo(disposables);
+                pizzeriaManager.CurrentLevelProgress.Skip(1).Subscribe(_ => SavePizzeriaManger()).AddTo(disposables);
+                pizzeriaManager.Opened.Skip(1).Subscribe(OnPizzeriaOpenOrClose).AddTo(disposables);
+            }
+            dayCycleManager = diContainer.TryResolve<DayCycleManager>();
+            if (dayCycleManager != null)
+            {
+                dayCycleManager.Minutes.Subscribe(OnDayMinutesChanged).AddTo(disposables);
+                dayCycleManager.OnDayStarted += OnDayStarted;
+                dayCycleManager.OnDayEnded += SaveDayCycleManager;
+                dayCycleManager.IsDayPaused.Skip(1).Subscribe(OnDayPaused).AddTo(disposables);
             }
         }
         public void Dispose()
         {
             if (!isFollowingSaves) return;
             isFollowingSaves = false;
-            disposables.Dispose(); 
+            disposables.Dispose();
             if (ingredientsHolder != null)
             {
                 ingredientsHolder.OnIngredientAdded -= OnIngredientAdded;
@@ -128,6 +160,11 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
                 customersManager.OnCustomerMadeOrder -= OnCustomerChanged;
                 customersManager.OnCustomerTakedOrder -= OnCustomerChanged;
             }
+            if (dayCycleManager != null)
+            {
+                dayCycleManager.OnDayStarted -= OnDayStarted;
+                dayCycleManager.OnDayEnded -= SaveDayCycleManager;
+            }
             foreach (DebounceSaving debounceSaving in debounceSavings.Values)
             {
                 debounceSaving.Dispose();
@@ -135,52 +172,52 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
         }
         void OnWalletMoneyChanged()
         {
-            saverLoader.SaveData(PlayerWallet.GetOriginData());
+            saverLoader.SaveData(PlayerWallet.GetOriginData()).Forget();
         }
         void OnIngredientAdded(PizzaIngredientType type, bool seldAdd)
         {
-            if (debounceSavings.TryGetValue(IngredientsContCode, out DebounceSaving debounceSaving))
+            if (debounceSavings.TryGetValue(ingredientsContCode, out DebounceSaving debounceSaving))
             {
                 debounceSaving.Dispose();
             }
-            debounceSavings[IngredientsContCode] = new DebounceSaving(SaveIngredients, 1f);
+            debounceSavings[ingredientsContCode] = new DebounceSaving(SaveIngredients, 1f);
         }
         void SaveIngredients()
         {
-            debounceSavings[IngredientsContCode].Dispose();
-            debounceSavings.Remove(IngredientsContCode);
-            saverLoader.SaveData(ingredientsHolder.IngredientsHolderData);
+            debounceSavings[ingredientsContCode].Dispose();
+            debounceSavings.Remove(ingredientsContCode);
+            saverLoader.SaveData(ingredientsHolder.IngredientsHolderData).Forget();
         }
         void OnPizzaBake(int pizzaId)
         {
-            saverLoader.SaveData(ingredientsHolder.IngredientsHolderData);
+            saverLoader.SaveData(ingredientsHolder.IngredientsHolderData).Forget();
             SavePizzaCreator(pizzaId);
         }
         void SavePizzaCreator(int pizzaID)
         {
-            saverLoader.SaveData(pizzaCreator.PizzaCreatorData);
+            saverLoader.SaveData(pizzaCreator.PizzaCreatorData).Forget();
         }
         void OnPizzaAddedInHold(int pizzaID)
         {
-           if (pizzaCreator.PizzasInBakeCount < 1)
-           {
-               saverLoader.SaveData(pizzaCreator.PizzaCreatorData);
-           }
+            if (pizzaCreator.PizzasInBakeCount < 1)
+            {
+                saverLoader.SaveData(pizzaCreator.PizzaCreatorData).Forget();
+            }
             OnPizzaHoldChanged(pizzaID);
         }
         void OnPizzaHoldChanged(int pizzaId)
         {
-            if (debounceSavings.TryGetValue(PizzaHoldCode, out DebounceSaving debounceSaving))
+            if (debounceSavings.TryGetValue(pizzaHoldCode, out DebounceSaving debounceSaving))
             {
                 debounceSaving.Dispose();
             }
-            debounceSavings[PizzaHoldCode] = new DebounceSaving(SavePizzaHold, 0.5f);
+            debounceSavings[pizzaHoldCode] = new DebounceSaving(SavePizzaHold, 0.5f);
         }
         void SavePizzaHold()
         {
-            debounceSavings[PizzaHoldCode].Dispose();
-            debounceSavings.Remove(PizzaHoldCode);
-            saverLoader.SaveData(pizzaHolder.PizzaHolderData);
+            debounceSavings[pizzaHoldCode].Dispose();
+            debounceSavings.Remove(pizzaHoldCode);
+            saverLoader.SaveData(pizzaHolder.PizzaHolderData).Forget();
         }
         void OnCustomerChanged(Customer customer, int order)
         {
@@ -188,29 +225,62 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
         }
         void OnSaveCustomersManager(Customer customers)
         {
-            if (debounceSavings.TryGetValue(CustomersManagerCode, out DebounceSaving debounceSaving))
+            if (debounceSavings.TryGetValue(customersManagerCode, out DebounceSaving debounceSaving))
             {
                 debounceSaving.Dispose();
             }
-            debounceSavings[CustomersManagerCode] = new DebounceSaving(SaveCustomersManager, 1f);
+            debounceSavings[customersManagerCode] = new DebounceSaving(SaveCustomersManager, 1f);
         }
         void SaveCustomersManager()
         {
-            debounceSavings[CustomersManagerCode].Dispose();
-            debounceSavings.Remove(CustomersManagerCode);
-            saverLoader.SaveData(customersManager.ManagerData);
+            debounceSavings[customersManagerCode].Dispose();
+            debounceSavings.Remove(customersManagerCode);
+            saverLoader.SaveData(customersManager.ManagerData).Forget();
         }
-        public async UniTask<T> LoadData<T>(string key = null)
+        
+        void OnPizzeriaOpenOrClose(bool open)
         {
-            return await saverLoader.LoadData<T>(key);
+            if (debounceSavings.TryGetValue(pizzeriaManagerCode, out DebounceSaving debounceSaving))
+            {
+                debounceSaving.Dispose();
+            }
+            debounceSavings[pizzeriaManagerCode] = new DebounceSaving(OnPizzeriaMangerDebounced, 0.4f);
         }
-        public async UniTask SaveData<T>(T data, string key = null)
+        void OnPizzeriaMangerDebounced()
         {
-            await saverLoader.SaveData(data, key);
+            if (debounceSavings.TryGetValue(pizzeriaManagerCode, out DebounceSaving debounceSaving))
+            {
+                debounceSaving.Dispose();
+                debounceSavings.Remove(pizzeriaManagerCode);
+            }
+            SavePizzeriaManger();
         }
-        public async UniTask ClearData<T>(string key = null)
+        void SavePizzeriaManger()
         {
-            await saverLoader.ClearData<T>(key);
+
+            saverLoader.SaveData(pizzeriaManager.GetManagerData()).Forget();
+        }
+        const int saveDayCycleDelay = 15;
+        const int minutesInHour = 60;
+        int lastSaveDayCycleMinutes;
+        void OnDayMinutesChanged(int newMinutes)
+        {
+            if (dayCycleManager.Hours.CurrentValue * minutesInHour + newMinutes - lastSaveDayCycleMinutes < saveDayCycleDelay) return;
+            lastSaveDayCycleMinutes = dayCycleManager.Hours.CurrentValue * minutesInHour + newMinutes;
+            SaveDayCycleManager();
+        }
+        void OnDayStarted()
+        {
+            lastSaveDayCycleMinutes = 0;
+            SaveDayCycleManager();
+        }
+        void OnDayPaused(bool pause)
+        {
+            SaveDayCycleManager();
+        }
+        void SaveDayCycleManager()
+        {
+            saverLoader.SaveData(dayCycleManager.GetManagerData()).Forget();
         }
     }
 }

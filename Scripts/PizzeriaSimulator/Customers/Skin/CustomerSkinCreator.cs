@@ -13,7 +13,7 @@ namespace Game.PizzeriaSimulator.Customers.Skin
         {
             assetsProvider = _assetsProvider;
         }
-        public async UniTask Init()
+        public async UniTask Prewarm()
         {
             skinsConfig = (await assetsProvider.LoadAsset<CustomerSkinsConfigSO>(AssetsKeys.CustomerSkinsConfig)).CustomerSkinsConfig;
         }

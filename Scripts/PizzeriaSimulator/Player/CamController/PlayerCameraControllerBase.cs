@@ -19,5 +19,6 @@ namespace Game.PizzeriaSimulator.Player.CameraController
         public abstract void Rotate(Vector2 direction);
         public abstract void SetLook(Vector3 position, Vector3 eulerRotation);
         public abstract void ResetLook();
+        public abstract void ResetRot();
     }
 }

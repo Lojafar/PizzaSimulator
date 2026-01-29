@@ -17,10 +17,12 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
     using Object = UnityEngine.Object;
     public class BoxesCarrier : IInittable, ISceneDisposable
     {
+        public int InitPriority => 8;
         public bool IsCarryingBox { get; private set; }
         public event Action<uint> OnBoxPicked;
         public event Action<uint> OnBoxThrowed;
         public event Action<uint> OnBoxRemoved;
+        public event Action<string> OnActionDenied;
         readonly Interactor interactor;
         readonly IPlayerInput playerInput;
         readonly Transform playerItemContainer;
@@ -45,7 +47,7 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
         }
         public void Init()
         {
-            boxHandlerByType.Add(CarriableBoxType.PizzaIngredientsBox, new PizzaIngredientBoxHandler(diContainer.Resolve<PizzaIngredientsHolder>(),
+            boxHandlerByType.Add(CarriableBoxType.PizzaIngredientsBox, new PizzaIngredientBoxHandler(this, diContainer.Resolve<PizzaIngredientsHolder>(),
                 sceneReferences.PizzaIngredientsHoldView));
             interactor.OnInteractWithObject += HandleInteractor;
             playerInput.OnThrowInput += HandleThrowInput;
@@ -100,14 +102,16 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
                 }
             }
         }
+      
         void HandleTrashCanInteract(GameObject trashCanObject)
         {
             if (!IsCarryingBox) return;
             if (activeBox.ItemsAmount > 0)
             {
-                Toasts.ShowToast("Active box has items inside. Can't throw to the can");
+                OnDenyAction("Active box has items inside. Can't throw to the can");
                 return;
             }
+            HideBoxesInput();
             GameObject boxObject = activeBoxObject;
             OnBoxRemoved?.Invoke(activeBox.BoxObjectID);
             activeBoxObject.transform.DOJump(trashCanObject.transform.position, boxToTrashPower, 1, boxToTrashDuration)
@@ -118,12 +122,16 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
         {
             if (activeBox == null || activeBoxObject == null) return;
             activeBox.Throw(activeBoxObject.transform.forward * throwForce);
-            playerInput.ShowThrowInput(false);
-            playerInput.ShowOpenInput(false);
-            playerInput.ShowCloseInput(false);
+            HideBoxesInput();
             OnBoxThrowed?.Invoke(activeBox.BoxObjectID);
             ClearBoxValues();
 
+        }
+        void HideBoxesInput()
+        {
+            playerInput.ShowThrowInput(false);
+            playerInput.ShowOpenInput(false);
+            playerInput.ShowCloseInput(false);
         }
         void ClearBoxValues()
         {
@@ -151,6 +159,10 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
                 playerInput.ShowOpenInput(false);
                 playerInput.ShowCloseInput(true);
             }
+        }
+        public void OnDenyAction(string message)
+        {
+            OnActionDenied?.Invoke(message);
         }
     }
 }

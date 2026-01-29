@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
 {
-    class LeaveCustStateManager: ICustomerStateManager
+    class LeaveCustStateManager : ICustomerStateManager
     {
+        public event Action<Customer> OnCustomerLeaved;
         readonly PizzeriaSceneReferences sceneReferences;
         readonly List<Customer> customers;
         public LeaveCustStateManager(PizzeriaSceneReferences _sceneReferences)
@@ -13,27 +14,37 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
         }
         public void ForceCustomer(Customer customer)
         {
-            Object.Destroy(customer.gameObject);
+            OnCustomerLeaved?.Invoke(customer);
         }
         public void HandleCustomerOfState(Customer customer)
         {
-            customer.CustomerAI.OnTargetPointReached += OnCustomerLeaved;
+            customer.CustomerAI.OnTargetPointReached += CustomerReachedLeave;
             customer.CustomerAI.SetState(CustomerState.Leaves);
             customer.CustomerAI.SetTargetPoint(sceneReferences.PlayerSpawnPoint);
             customers.Add(customer);
         }
-        void OnCustomerLeaved(int customerID)
+        void CustomerReachedLeave(int customerID)
         {
             for (int i = 0; i < customers.Count; i++)
             {
-                if (customers[i].Id == customerID) 
+                if (customers[i].Id == customerID)
                 {
                     Customer customer = customers[i];
                     customers.RemoveAt(i);
-                    customer.CustomerAI.OnTargetPointReached -= OnCustomerLeaved;
-                    customers.Remove(customer);
-                    Object.Destroy(customer.gameObject);
+                    customer.CustomerAI.OnTargetPointReached -= CustomerReachedLeave;
+                    OnCustomerLeaved?.Invoke(customer);
                     return;
+                }
+            }
+        }
+        public void RemoveCustomer(Customer customer)
+        {
+            for (int i = 0; i < customers.Count; i++)
+            {
+                if (customers[i].Id == customer.Id)
+                {
+                    customers.RemoveAt(i);
+                    customer.CustomerAI.OnTargetPointReached -= CustomerReachedLeave;
                 }
             }
         }

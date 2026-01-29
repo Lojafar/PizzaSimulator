@@ -9,7 +9,7 @@ namespace Game.Root.SaveLoad
         {
             return await UniTask.Create(async () =>
             {
-                string saveKey = (key ?? "") + typeof(T).ToString();
+                string saveKey = (key ?? "") + typeof(T).Name;
                 if (PlayerPrefs.HasKey(saveKey))
                 {
                     string loadedJSON = PlayerPrefs.GetString(saveKey);
@@ -24,7 +24,7 @@ namespace Game.Root.SaveLoad
         {
             await UniTask.Create(async () =>
             {
-                string saveKey = (key ?? "") + typeof(T).ToString();
+                string saveKey = (key ?? "") + typeof(T).Name;
                 string dataJSON = JsonConvert.SerializeObject(data);
                 await UniTask.Yield();
                 PlayerPrefs.SetString(saveKey, dataJSON);
@@ -35,7 +35,7 @@ namespace Game.Root.SaveLoad
         {
             await UniTask.Create(async () =>
             {
-                string saveKey = (key ?? "") + typeof(T).ToString();
+                string saveKey = (key ?? "") + typeof(T).Name;
                 if (PlayerPrefs.HasKey(saveKey))
                 {
                     await UniTask.Yield();

@@ -19,6 +19,13 @@ namespace Game.PizzeriaSimulator.Player
             camController = _camController;
             currentMovement = new DefaultPlayerMovement(this);
         }
+        public void Teleport(Transform point)
+        {
+            PlayerCharController.enabled = false;
+            transform.SetPositionAndRotation(point.position, point.rotation);
+            PlayerCharController.enabled = true;
+            camController.ResetRot();
+        }
         private void Update()
         {
             currentMovement?.Move(input.GetMoveDir()); if (camController != null)

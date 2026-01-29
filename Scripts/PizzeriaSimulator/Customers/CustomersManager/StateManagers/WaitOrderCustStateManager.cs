@@ -50,5 +50,15 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
             customer.CustomerAI.SetTargetPoint(wayPoint);
             customersWaitesOrder.Add(customer);
         }
+        public void RemoveCustomer(Customer customer)
+        {
+            for (int i = 0; i < customersWaitesOrder.Count; i++)
+            {
+                if (customersWaitesOrder[i].Id == customer.Id)
+                {
+                    customersWaitesOrder.RemoveAt(i);
+                }
+            }
+        }
     }
 }

@@ -24,7 +24,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
     class PizzaCutView : PizzaCutViewBase
     {
         [SerializeField] AudioClip pizzaCutSFX;
-        [SerializeField] AudioClip pizzaMoveToBoxSFX;
         [SerializeField] PizzaCutSetting[] pizzaCutSettings;
         [SerializeField] Transform playerCamLookTransform;
         [SerializeField] Transform pizzaCutterTransform;
@@ -189,7 +188,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Visual
         async void TranslatePizzaToBox()
         {
             await UniTask.WaitForSeconds(preBoxDelay);
-            AudioPlayer.PlaySFX(pizzaMoveToBoxSFX);
+            AudioPlayer.PlaySFX("Swoosh");
             currentPizzaToCut.transform.DOJump(boxPizzaPoint.position, jumpToBoxForce, 1, moveToBoxDuration).SetEase(Ease.Linear)
                 .Play().OnComplete(PizzaFinishedBox);
         }

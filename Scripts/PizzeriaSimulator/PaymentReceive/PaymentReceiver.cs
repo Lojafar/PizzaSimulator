@@ -12,6 +12,7 @@ namespace Game.PizzeriaSimulator.PaymentReceive
 {
     public class PaymentReceiver : IInittable, ISceneDisposable
     {
+        public int InitPriority => 9;
         public event Action OnPaymentReceiveEntered;
         public event Action OnPaymentReceiveLeaved;
         public event Action OnStartReceiving;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Game.PizzeriaSimulator.PizzaHold.Visual.PizzaContainer;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +10,7 @@ namespace Game.PizzeriaSimulator.PizzaHold.Visual
         [SerializeField] PizzaBox pizzaBoxPrefab;
         [SerializeField] float pizzaHeight;
         [SerializeField] Transform pizzaStartSpawnPos;
-        Transform removedPizzasContainer;
+        [SerializeField] PizzaObjsContainer removedPizzasContainer;
         List<PizzaBox> spawnedPizzas;
         [Inject]
         void Construct(PizzeriaSceneReferences sceneReferences)
@@ -40,7 +41,7 @@ namespace Game.PizzeriaSimulator.PizzaHold.Visual
         void RemovePizza(int index)
         {
             if (spawnedPizzas.Count <= index || index < 0) return;
-            spawnedPizzas[index].transform.parent = removedPizzasContainer;
+            removedPizzasContainer.AddPizza(spawnedPizzas[index].gameObject);
             spawnedPizzas.RemoveAt(index);
             UpdatePizzasPos();
         }

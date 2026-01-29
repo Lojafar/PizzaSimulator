@@ -17,6 +17,7 @@ namespace Game.PizzeriaSimulator.Player.Input
         [SerializeField] Image crosshairImage;
         [SerializeField] Color normalCrosshairColor = Color.white;
         [SerializeField] Color selectedCrosshairColor = Color.white;
+        int activations;
         Vector2 movementDir;
         Vector2 rotDir; 
         private void Awake()
@@ -50,6 +51,13 @@ namespace Game.PizzeriaSimulator.Player.Input
         }
         public void Activate(bool active)
         {
+            int newActivations = activations + (active ? 1 : -1);
+            if (activations != 0 && newActivations != 0)
+            {
+                activations = newActivations;
+                return;
+            }
+            activations = newActivations;
             Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !active;
             gameObject.SetActive(active);

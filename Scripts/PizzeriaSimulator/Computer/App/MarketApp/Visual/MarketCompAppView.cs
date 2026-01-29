@@ -3,11 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Game.Root.Utils;
+using Game.Root.Utils.Audio;
 
 namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
 {
     class MarketCompAppView : MarketCompAppViewBase
     {
+        [SerializeField] AudioClip clickSFX;
         [SerializeField] GameObject appPanel;
         [SerializeField] Button closeBtn;
         [SerializeField] Button cartBuyBtn;
@@ -34,6 +36,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
             viewModel.RemoveAllCartItems += DestroyAllBars;
             viewModel.UpdateTotalPriceText += UpdateTotalPriceText;
             viewModel.ShowPurchaseFail += ShowPurchaseFail;
+            viewModel.ShowPurchaseSucces += ShowPurchaseSucces;
         }
         private void OnDestroy()
         {
@@ -52,10 +55,12 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
                 viewModel.RemoveAllCartItems -= DestroyAllBars;
                 viewModel.UpdateTotalPriceText -= UpdateTotalPriceText;
                 viewModel.ShowPurchaseFail -= ShowPurchaseFail;
+                viewModel.ShowPurchaseSucces -= ShowPurchaseSucces;
             }
         }
         void OnCloseBtn()
         {
+            AudioPlayer.PlaySFX(clickSFX);
             viewModel.CloseInput();
         }
         void OnCartBuyBtn()
@@ -64,6 +69,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         }
         void OnCartClearBtn()
         {
+            AudioPlayer.PlaySFX(clickSFX);
             viewModel.CartClearInput();
         }
         void OnOpen()
@@ -85,6 +91,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         }
         void OnCardInput(int itemId)
         {
+            AudioPlayer.PlaySFX(clickSFX);
             viewModel.PlusItemInCart(itemId);
         }
         void SpawnNewCartBar(int itemId, string name)
@@ -97,10 +104,12 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         }
         void OnMinusBarInput(int itemId)
         {
+            AudioPlayer.PlaySFX(clickSFX);
             viewModel.MinusItemInCart(itemId);
         }
         void OnPlusBarInput(int itemId)
         {
+            AudioPlayer.PlaySFX(clickSFX);
             viewModel.PlusItemInCart(itemId);
         }
         void UpdateCartBarAmount(int barId, string amountText)
@@ -137,9 +146,14 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             totalPriceTMP.text = priceText;
         }
-        void ShowPurchaseFail(string message) 
+        void ShowPurchaseFail(string message)
         {
+            AudioPlayer.PlaySFX("Wrong");
             Toasts.ShowToast(message);
+        }
+        void ShowPurchaseSucces()
+        {
+            AudioPlayer.PlaySFX(clickSFX);
         }
     }
 }

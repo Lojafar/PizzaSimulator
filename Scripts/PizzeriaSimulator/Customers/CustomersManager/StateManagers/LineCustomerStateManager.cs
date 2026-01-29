@@ -27,6 +27,7 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
             customer.transform.SetPositionAndRotation(pointInLine.position, pointInLine.rotation);
             customer.CustomerAI.SetTargetPoint(pointInLine);
             customer.CustomerAI.SetState(CustomerState.InLine);
+            if(customersInLine.Count > 0) customer.CustomerAI.OnTargetPointReached += OnCustomerReachedTarget;
             customersInLine.Add(customer);
             OnCustomerReachedTarget(customer.Id);
         }
@@ -39,9 +40,9 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
         }
         void OnCustomerReachedTarget(int customerID)
         {
-            Customer firstCustomerInLine = customersInLine[0];
-            if (customerID == firstCustomerInLine.Id)
+            if (customerID == customersInLine[0].Id)
             {
+                Customer firstCustomerInLine = customersInLine[0];
                 int orderId = GetPizzaIDForOrder();
                 customersOrdersProccesor.ProccesOrderForCustomer(orderId, firstCustomerInLine, OnCustomerDidOrder);
                 firstCustomerInLine.SetOrder(orderId);
@@ -65,6 +66,16 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
                 customersInLine[i].CustomerAI.SetTargetPoint(sceneReferences.CustomersPointsInLine[i]);
             }
         }
-        
+        public void RemoveCustomer(Customer customer)
+        {
+            for (int i = 0; i < customersInLine.Count; i++)
+            {
+                if (customersInLine[i].Id == customer.Id)
+                {
+                    customersInLine.RemoveAt(i);
+                    customer.CustomerAI.OnTargetPointReached -= OnCustomerReachedTarget;
+                }
+            }
+        }
     }
 }

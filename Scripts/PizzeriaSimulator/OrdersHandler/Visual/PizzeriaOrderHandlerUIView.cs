@@ -9,7 +9,6 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
     class PizzeriaOrderHandlerUIView : PizzeriaOrderHandlViewBase
     {
         [SerializeField] AudioClip bellClip;
-        [SerializeField] AudioClip bellCancellClip;
         [SerializeField] OrderBar orderBarPrefab;
         [SerializeField] GameObject expandIndicator;
         [SerializeField] Transform expandIndicatorVisual;
@@ -152,7 +151,7 @@ namespace Game.PizzeriaSimulator.OrdersHandle.Visual
         void OnBellCancelled(string message)
         {
             Toasts.ShowToast(message);
-            AudioPlayer.PlaySFX(bellCancellClip);
+            AudioPlayer.PlaySFX("Wrong");
         }
     }
 }

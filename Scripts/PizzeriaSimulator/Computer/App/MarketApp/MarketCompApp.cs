@@ -10,6 +10,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
 {
     public class MarketCompApp : ComputerAppBase, IInittable
     {
+        public int InitPriority => 10;
         public event Action<int> OnNewItemInAssortment;
         public event Action<int> OnNewItemInCart;
         public event Action<int> OnItemRemovedFromCart;
@@ -17,6 +18,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
         public event Action<int, MoneyQuantity> OnPriceInCartUpdated;
         public event Action<MoneyQuantity> OnTotalPriceChanged;
         public event Action OnCartCleared;
+        public event Action OnPurchaseProccesed;
         public event Action OnPurchaseFailed;
         readonly PlayerWallet playerWallet;
         readonly PizzeriaDelivery pizzeriaDelivery;
@@ -107,6 +109,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
                     pizzeriaDelivery.Order(itemInCart.Key, itemInCart.Value);
                 }
                 ClearCart();
+                OnPurchaseProccesed?.Invoke();
             }
             else
             {

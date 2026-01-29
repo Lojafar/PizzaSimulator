@@ -76,13 +76,13 @@
             "m_Id": "3004a3c4375d40edbccf9b58a3771f5e"
         },
         {
-            "m_Id": "e9eca68e72fb4ecfa07304ff8191303c"
-        },
-        {
             "m_Id": "d3e59aab1e6e428380243ec38c773d43"
         },
         {
             "m_Id": "1c4ed939149841178cf8c59edba7e457"
+        },
+        {
+            "m_Id": "ea32fd6a61c1415fbc9bcbf4810090f0"
         }
     ],
     "m_GroupDatas": [],
@@ -310,7 +310,7 @@
                 "m_Id": "3004a3c4375d40edbccf9b58a3771f5e"
             },
             {
-                "m_Id": "e9eca68e72fb4ecfa07304ff8191303c"
+                "m_Id": "ea32fd6a61c1415fbc9bcbf4810090f0"
             }
         ]
     },
@@ -1625,7 +1625,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Smoothness",
     "m_StageCapability": 2,
-    "m_Value": 0.5,
+    "m_Value": 0.0,
     "m_DefaultValue": 0.5,
     "m_Labels": []
 }
@@ -1673,6 +1673,21 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "9f369ff9b61849fdb373cff3efeffe6b",
+    "m_Id": 0,
+    "m_DisplayName": "Metallic",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Metallic",
+    "m_StageCapability": 2,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -1795,21 +1810,6 @@
     },
     "m_Labels": [],
     "m_Space": 3
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "b78e36c1469f4bd0bc4aeefbe1f8a5f3",
-    "m_Id": 0,
-    "m_DisplayName": "Metallic",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Metallic",
-    "m_StageCapability": 2,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
 }
 
 {
@@ -2078,7 +2078,7 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
-    "m_ObjectId": "e9eca68e72fb4ecfa07304ff8191303c",
+    "m_ObjectId": "ea32fd6a61c1415fbc9bcbf4810090f0",
     "m_Group": {
         "m_Id": ""
     },
@@ -2095,7 +2095,7 @@
     },
     "m_Slots": [
         {
-            "m_Id": "b78e36c1469f4bd0bc4aeefbe1f8a5f3"
+            "m_Id": "9f369ff9b61849fdb373cff3efeffe6b"
         }
     ],
     "synonyms": [],

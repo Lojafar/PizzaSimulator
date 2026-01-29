@@ -25,7 +25,6 @@ namespace Game.PizzeriaSimulator.Player.Input
         Vector2 currentMoveDir;
         Vector2 currentRotDir;
 
-      
         int currentRotTouchId = -1;
         private void Awake()
         {

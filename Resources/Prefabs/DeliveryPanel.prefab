@@ -184,4 +184,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c411c37d176a4674eada3518f274c78c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deliveryEndSFX: {fileID: 8300000, guid: 79b9e7a2796847248825a94c8aa66159, type: 3}
   timeTMP: {fileID: 5202898615188871850}

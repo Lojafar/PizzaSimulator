@@ -14,6 +14,7 @@ namespace Game.PizzeriaSimulator.Computer
 {
     public class PizzeriaComputer : IInittable, ISceneDisposable
     {
+        public int InitPriority => 8;
         public event Action OnEnterComputer;
         public event Action OnExitComputer;
         readonly Interactor interactor;
