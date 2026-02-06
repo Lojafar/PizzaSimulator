@@ -1,8 +1,8 @@
-﻿using Game.Root.Utils;
-using Game.Root.ServicesInterfaces;
-using Game.Helps;
+﻿using Game.Helps;
 using Game.PizzeriaSimulator.Player.CameraController;
 using Game.PizzeriaSimulator.Player.Input;
+using Game.Root.ServicesInterfaces;
+using Game.Root.Utils;
 using System;
 using UnityEngine;
 
@@ -19,16 +19,26 @@ namespace Game.PizzeriaSimulator.Interactions.Interactor
         readonly int interactLayerMask;
         RaycastHit interactHit;
         Camera mainCam;
-
+        int interactionMask;
         bool camLocked;
         Interactable lastInteractable;
         const float maxInteractDist = 4f;
+        const int defaultInteractionMask = int.MaxValue;
         public Interactor(IPlayerInput _playerInput, PlayerCameraControllerBase _cameraController)
         {
             playerInput = _playerInput;
             cameraController = _cameraController;
             midOfScreen = new Vector3(0.5f, 0.5f, 0);
             interactLayerMask = LayerMask.GetMask(Layers.InteractableLayerName, Layers.ObstaclesLayerName);
+            ResetInteractionMask();
+        }
+        public void SetInteractionMask(int mask)
+        {
+            interactionMask = mask;
+        }
+        public void ResetInteractionMask()
+        {
+            interactionMask = defaultInteractionMask;
         }
         public void Init()
         {
@@ -47,7 +57,7 @@ namespace Game.PizzeriaSimulator.Interactions.Interactor
         {
             if (camLocked) return;
             if (Physics.Raycast(mainCam.ViewportPointToRay(midOfScreen), out interactHit, maxInteractDist, interactLayerMask) &&
-                interactHit.collider.TryGetComponent<Interactable>(out Interactable interactable))
+                interactHit.collider.TryGetComponent<Interactable>(out Interactable interactable) && (interactionMask & (1 << (int)interactable.InteractableType)) != 0)
             {
                 if (interactable != lastInteractable)
                 {

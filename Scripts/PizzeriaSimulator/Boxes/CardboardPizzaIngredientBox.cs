@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using Cysharp.Threading.Tasks;
 namespace Game.PizzeriaSimulator.Boxes
 {
-    class CardboardPizzaIngredientBox : PizzaIngredientBoxBase
+    sealed class CardboardPizzaIngredientBox : PizzaIngredientBoxBase
     {
-        [SerializeField] List<BoxItemBase> items;
+        [SerializeField] List<PizzaIngredientBoxItemBase> items;
         [SerializeField] Rigidbody boxRB;
         [SerializeField] Collider colliderOfBox;
+        [SerializeField] GameObject openVisuals;
         [SerializeField] float halfOpenDuration;
         [SerializeField] Vector3[] openedLidsRotsInOrder = new Vector3[4];
         [SerializeField] Transform firstTopLid;
@@ -22,18 +22,25 @@ namespace Game.PizzeriaSimulator.Boxes
         {
             boxData.ItemsAmount = items.Count;
             boxData.IsOpened = false;
+            if (openVisuals != null) openVisuals.SetActive(false);
             openAnim = DOTween.Sequence()
+                .AppendCallback(OnCloseAnimEnded)
                 .Append(firstTopLid.DOLocalRotate(openedLidsRotsInOrder[0], halfOpenDuration, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                 .Join(secondTopLid.DOLocalRotate(openedLidsRotsInOrder[1], halfOpenDuration, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                 .Append(firstBottomLid.DOLocalRotate(openedLidsRotsInOrder[2], halfOpenDuration, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                 .Join(secondBottomLid.DOLocalRotate(openedLidsRotsInOrder[3], halfOpenDuration, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                 .SetAutoKill(false);
         }
+        void OnCloseAnimEnded()
+        {
+            if(!IsOpened && openVisuals != null) openVisuals.SetActive(false);
+        }
         public override void SetBoxData(CarriableBoxData _boxData)
         {
             base.SetBoxData(_boxData);
             if (boxData.IsOpened)
             {
+                if (openVisuals != null) openVisuals.SetActive(true);
                 openAnim.PlayForward();
                 openAnim.Complete();
                 firstTopLid.localEulerAngles = openedLidsRotsInOrder[0];
@@ -50,6 +57,7 @@ namespace Game.PizzeriaSimulator.Boxes
         public override void Open()
         {
             boxData.IsOpened = true;
+            if (openVisuals != null) openVisuals.SetActive(true);
             if (openAnim.IsPlaying()) openAnim.Pause();
             openAnim.PlayForward();
         }
@@ -70,10 +78,10 @@ namespace Game.PizzeriaSimulator.Boxes
             colliderOfBox.enabled = true;
             boxRB.AddForce(forceVector, ForceMode.Impulse);
         }
-        public override BoxItemBase RemoveAndGetItem()
+        public override PizzaIngredientBoxItemBase RemoveAndGetItem()
         {
             if (items.Count < 1) return null;
-            BoxItemBase boxItem = items[^1];
+            PizzaIngredientBoxItemBase boxItem = items[^1];
             items.RemoveAt(items.Count - 1);
             boxData.ItemsAmount = items.Count;
             return boxItem;

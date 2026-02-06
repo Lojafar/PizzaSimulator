@@ -13,6 +13,7 @@ namespace Game.PizzeriaSimulator.Computer.Visual
         [SerializeField] Transform playerCamLookTransform;
         [SerializeField] Button exitButton;
         [SerializeField] Button marketButton;
+        [SerializeField] Button managmentButton;
         DiContainer diContainer;
         PlayerCameraControllerBase playerCamController;
         [Inject]
@@ -26,6 +27,7 @@ namespace Game.PizzeriaSimulator.Computer.Visual
             base.Bind(_viewModel);
             exitButton.onClick.AddListener(OnExitBtn);
             marketButton.onClick.AddListener(OnMarketBtn);
+            managmentButton.onClick.AddListener(OnManagmentBtn);
             viewModel.EnterComputer += OnEnter;
             viewModel.ExitComputer += OnExit;
         }
@@ -33,6 +35,7 @@ namespace Game.PizzeriaSimulator.Computer.Visual
         {
             exitButton.onClick.RemoveListener(OnExit);
             marketButton.onClick.RemoveListener(OnMarketBtn);
+            managmentButton.onClick.RemoveListener(OnManagmentBtn);
             if (viewModel != null)
             {
                 viewModel.EnterComputer -= OnEnter;
@@ -47,6 +50,11 @@ namespace Game.PizzeriaSimulator.Computer.Visual
         {
             AudioPlayer.PlaySFX(appClickSFX);
             viewModel.MarketAppInput.OnNext(Unit.Default);
+        }
+        void OnManagmentBtn()
+        {
+            AudioPlayer.PlaySFX(appClickSFX);
+            viewModel.ManagmentAppInput.OnNext(Unit.Default);
         }
         void OnEnter()
         {

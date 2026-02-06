@@ -1,6 +1,6 @@
 ﻿using Game.PizzeriaSimulator.Leevl.Reward;
 using Game.PizzeriaSimulator.Levels.Config;
-using Game.PizzeriaSimulator.Pizzeria.Manager;
+using Game.PizzeriaSimulator.Pizzeria.Managment;
 using Game.PizzeriaSimulator.Player.Input;
 using Game.Root.ServicesInterfaces;
 using R3;

@@ -1,22 +1,30 @@
 ﻿using Game.PizzeriaSimulator.Boxes.Item;
 using Game.PizzeriaSimulator.Interactions;
+using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold.Visual;
 using UnityEngine;
 
 namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
 {
-    class PizzaIngredientBoxHandler : IBoxesHandler
+    sealed class PizzaIngredientBoxHandler : IBoxesHandler
     {
         readonly BoxesCarrier boxesCarrier;
+        readonly Interactor interactor;
         readonly PizzaIngredientsHolder ingredientsHolder;
         readonly PizzaIngredientsHolderViewBase ingredientsHolderView;
+        readonly int interactMaskWhenCarry;
         PizzaIngredientBoxBase activeBox;
-        public PizzaIngredientBoxHandler(BoxesCarrier _boxesCarrier ,PizzaIngredientsHolder _ingredientsHolder, PizzaIngredientsHolderViewBase _ingredientsHolderView)
+        public PizzaIngredientBoxHandler(BoxesCarrier _boxesCarrier, Interactor _interactor, PizzaIngredientsHolder _ingredientsHolder, PizzaIngredientsHolderViewBase _ingredientsHolderView)
         {
             boxesCarrier = _boxesCarrier;
+            interactor = _interactor;
             ingredientsHolder = _ingredientsHolder;
-            ingredientsHolderView = _ingredientsHolderView;
+            ingredientsHolderView = _ingredientsHolderView; 
+            interactMaskWhenCarry = 1 << (int)InteractableType.PizzaCreateTable
+                | 1 << (int)InteractableType.TrashCan
+                | 1 << (int)InteractableType.PizzaCreateTable
+                | 1 << (int)InteractableType.BoxWithItems;
         }
 
         public void SetBox(CarriableBoxBase box)
@@ -24,6 +32,7 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
             if(box is PizzaIngredientBoxBase pizzaIngredientBox)
             {
                 activeBox = pizzaIngredientBox;
+                interactor.SetInteractionMask(interactMaskWhenCarry);
                 return;
             }
             activeBox = null;
@@ -49,7 +58,7 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
             }
             if (ingredientsHolder.TryAddIngredient(activeBox.IngredientType, false))
             {
-                BoxItemBase item = activeBox.RemoveAndGetItem();
+                PizzaIngredientBoxItemBase item = activeBox.RemoveAndGetItem();
                 item.SetTo(ingredientsHolderView.GetNextIngredientPos(activeBox.IngredientType),
                    () => ingredientsHolderView.SetIngredientToContainer(activeBox.IngredientType, item.gameObject));
             }

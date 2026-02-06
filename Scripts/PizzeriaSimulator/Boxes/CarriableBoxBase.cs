@@ -1,5 +1,4 @@
-﻿using Game.PizzeriaSimulator.Boxes.Item;
-using UnityEngine;
+﻿using UnityEngine;
 namespace Game.PizzeriaSimulator.Boxes
 {
     public abstract class CarriableBoxBase : MonoBehaviour
@@ -31,6 +30,5 @@ namespace Game.PizzeriaSimulator.Boxes
         public abstract void Close();
         public abstract void OnPicked();
         public abstract void Throw(Vector3 forceVector);
-        public abstract BoxItemBase RemoveAndGetItem();
     }
 }

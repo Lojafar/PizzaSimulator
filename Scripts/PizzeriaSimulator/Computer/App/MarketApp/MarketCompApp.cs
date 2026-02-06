@@ -11,7 +11,9 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
     public class MarketCompApp : ComputerAppBase, IInittable
     {
         public int InitPriority => 10;
-        public event Action<int> OnNewItemInAssortment;
+        public event Action<MarketAppPageType> OnPageOpened;
+        public event Action<MarketAppPageType> OnPageClosed;
+        public event Action<int, MarketAppPageType> OnNewItemInAssortment;
         public event Action<int> OnNewItemInCart;
         public event Action<int> OnItemRemovedFromCart;
         public event Action<int, int> OnAmountInCartUpdated;
@@ -25,6 +27,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
         readonly PizzeriaDeliveryConfig deliveryConfig;
         readonly Dictionary<int, int> itemsInCart;
         MoneyQuantity totalPrice;
+        MarketAppPageType currentPage;
         public MarketCompApp(PlayerWallet _playerWallet, PizzeriaDelivery _pizzeriaDelivery, PizzeriaDeliveryConfig _deliveryConfig)
         {
             playerWallet = _playerWallet;
@@ -37,9 +40,22 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
             int itemsAmount = deliveryConfig.ItemsAmount;
             for (int i = 0; i < itemsAmount; i++)
             {
-                OnNewItemInAssortment?.Invoke(i);
+                OnNewItemInAssortment?.Invoke(i, GetPageTypeByItemType(deliveryConfig.GetDeliveryItemConfig(i).ItemType));
             }
             OnTotalPriceChanged?.Invoke(totalPrice);
+
+            currentPage = MarketAppPageType.IngredientsPage;
+            OnPageClosed?.Invoke(MarketAppPageType.FurniturePage);
+            OnPageOpened?.Invoke(currentPage);
+        }
+        MarketAppPageType GetPageTypeByItemType(DeliveryItemType itemType)
+        {
+            return itemType switch
+            {
+                DeliveryItemType.IngredientsBox => MarketAppPageType.IngredientsPage,
+                DeliveryItemType.Furniture => MarketAppPageType.FurniturePage,
+                _ => MarketAppPageType.IngredientsPage,
+            };
         }
         public DeliveryItemConfig GetItemConfig(int id)
         {
@@ -104,10 +120,7 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
         {
             if (playerWallet.TryTakeMoney(totalPrice))
             {
-                foreach (KeyValuePair<int, int> itemInCart in itemsInCart)
-                {
-                    pizzeriaDelivery.Order(itemInCart.Key, itemInCart.Value);
-                }
+                pizzeriaDelivery.Order(itemsInCart);
                 ClearCart();
                 OnPurchaseProccesed?.Invoke();
             }
@@ -126,6 +139,13 @@ namespace Game.PizzeriaSimulator.Computer.App.Market
             OnTotalPriceChanged?.Invoke(totalPrice);
             itemsInCart.Clear();
             OnCartCleared?.Invoke();
+        }
+        public void OpenPageInput(MarketAppPageType pageType)
+        {
+            if (pageType == currentPage) return;
+            OnPageClosed?.Invoke(currentPage);
+            currentPage = pageType;
+            OnPageOpened?.Invoke(currentPage);
         }
     }
 }

@@ -421,6 +421,45 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &3236067834543975998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7942544556997741136}
+  m_Layer: 6
+  m_Name: Salamis
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7942544556997741136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3236067834543975998}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6549321844425341356}
+  - {fileID: 7113245019466943022}
+  - {fileID: 3368450269178239814}
+  - {fileID: 5455697081097981101}
+  - {fileID: 5925059078525126121}
+  - {fileID: 5928887358445266160}
+  - {fileID: 6079993638033807238}
+  - {fileID: 586921895847927548}
+  m_Father: {fileID: 2274463602773846208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5122026647398408765
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,14 +525,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.3196, z: 0.94953}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6549321844425341356}
-  - {fileID: 7113245019466943022}
-  - {fileID: 3368450269178239814}
-  - {fileID: 5455697081097981101}
-  - {fileID: 5925059078525126121}
-  - {fileID: 5928887358445266160}
-  - {fileID: 6079993638033807238}
-  - {fileID: 586921895847927548}
+  - {fileID: 7942544556997741136}
   - {fileID: 2721467992069334444}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -592,6 +624,7 @@ MonoBehaviour:
   - {fileID: 6168745606662009751}
   - {fileID: 2086589981897906133}
   - {fileID: 986937183101423497}
+  openVisuals: {fileID: 3236067834543975998}
   boxRB: {fileID: 4364985473559290015}
   colliderOfBox: {fileID: 4796926672713637406}
   halfOpenDuration: 0.3
@@ -840,7 +873,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -855,7 +888,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.151
+      value: -0.15100098
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -865,7 +898,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0868
+      value: 0.08680121
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -947,14 +980,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!1001 &4516552948437841410
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -969,7 +1001,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.047995538
+      value: -0.04799652
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -979,7 +1011,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21579958
+      value: 0.2157978
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1061,14 +1093,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!1001 &4767955760705497261
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1083,7 +1114,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.1549975
+      value: 0.15499878
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1093,7 +1124,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.086799555
+      value: 0.08680121
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1169,7 +1200,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!4 &5925059078525126121 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
@@ -1182,7 +1212,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1197,7 +1227,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.054999024
+      value: 0.055000305
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1207,7 +1237,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.086799555
+      value: 0.08680121
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1283,7 +1313,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!4 &5928887358445266160 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
@@ -1296,7 +1325,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1311,7 +1340,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.047997802
+      value: -0.04799652
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1321,7 +1350,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.086799555
+      value: 0.08680121
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1397,7 +1426,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!4 &6079993638033807238 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
@@ -1410,7 +1438,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1425,7 +1453,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.15500219
+      value: 0.15499878
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1435,7 +1463,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21579958
+      value: 0.2157978
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1511,7 +1539,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!4 &6549321844425341356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
@@ -1524,7 +1551,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1539,7 +1566,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.151
+      value: -0.15100098
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1549,7 +1576,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21579958
+      value: 0.2157978
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1625,7 +1652,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!4 &5455697081097981101 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
@@ -1638,7 +1664,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2274463602773846208}
+    m_TransformParent: {fileID: 7942544556997741136}
     m_Modifications:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1653,7 +1679,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.055002198
+      value: 0.055000305
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1663,7 +1689,7 @@ PrefabInstance:
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21579958
+      value: 0.2157978
       objectReference: {fileID: 0}
     - target: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,
         type: 3}
@@ -1739,7 +1765,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
   itemMoveYPeakAdd: 0.4
-  sfxClipKey: ItemSwoosh
 --- !u!4 &7113245019466943022 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1157749831093022020, guid: b8c3298fdf33df34a9c8be558bfd8365,

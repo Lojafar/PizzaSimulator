@@ -17,6 +17,7 @@ MonoBehaviour:
     - <Name>k__BackingField: Dough
       <ID>k__BackingField: 0
       <QuantityByOrder>k__BackingField: 8
+      <ItemType>k__BackingField: 0
       <Price>k__BackingField:
         Dollars: 0
         Cents: 45
@@ -27,6 +28,7 @@ MonoBehaviour:
     - <Name>k__BackingField: Ketchup
       <ID>k__BackingField: 1
       <QuantityByOrder>k__BackingField: 8
+      <ItemType>k__BackingField: 0
       <Price>k__BackingField:
         Dollars: 1
         Cents: 32
@@ -37,6 +39,7 @@ MonoBehaviour:
     - <Name>k__BackingField: Cheese
       <ID>k__BackingField: 2
       <QuantityByOrder>k__BackingField: 8
+      <ItemType>k__BackingField: 0
       <Price>k__BackingField:
         Dollars: 1
         Cents: 1
@@ -47,6 +50,7 @@ MonoBehaviour:
     - <Name>k__BackingField: Salami
       <ID>k__BackingField: 3
       <QuantityByOrder>k__BackingField: 6
+      <ItemType>k__BackingField: 0
       <Price>k__BackingField:
         Dollars: 0
         Cents: 1
@@ -57,6 +61,7 @@ MonoBehaviour:
     - <Name>k__BackingField: Tomato
       <ID>k__BackingField: 4
       <QuantityByOrder>k__BackingField: 6
+      <ItemType>k__BackingField: 0
       <Price>k__BackingField:
         Dollars: 0
         Cents: 1
@@ -67,6 +72,7 @@ MonoBehaviour:
     - <Name>k__BackingField: Shrimps
       <ID>k__BackingField: 5
       <QuantityByOrder>k__BackingField: 4
+      <ItemType>k__BackingField: 0
       <Price>k__BackingField:
         Dollars: 0
         Cents: 1
@@ -77,6 +83,7 @@ MonoBehaviour:
     - <Name>k__BackingField: Peppers
       <ID>k__BackingField: 6
       <QuantityByOrder>k__BackingField: 6
+      <ItemType>k__BackingField: 0
       <Price>k__BackingField:
         Dollars: 0
         Cents: 1
@@ -84,4 +91,51 @@ MonoBehaviour:
         type: 3}
       <BoxPrefab>k__BackingField: {fileID: 7808472071191710082, guid: 4bb4b3585848bec4c9bc68b573ebf321,
         type: 3}
-    <DeliveryDuration>k__BackingField: 5
+    - <Name>k__BackingField: Table
+      <ID>k__BackingField: 7
+      <QuantityByOrder>k__BackingField: 1
+      <ItemType>k__BackingField: 1
+      <Price>k__BackingField:
+        Dollars: 0
+        Cents: 1
+      <ItemIcon>k__BackingField: {fileID: -2092974359, guid: 9073fbb3c206b8d4cb9661bf44286722,
+        type: 3}
+      <BoxPrefab>k__BackingField: {fileID: 7447940285983178543, guid: 22e695fea85670d4db9c8855f9aa788d,
+        type: 3}
+    "<DeliveryTime\u0421oeffCurve>k__BackingField":
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.071582794
+        value: 0.109680176
+        inSlope: 0.7654143
+        outSlope: 0.7654143
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.2257538
+        value: 0.99309915
+        inSlope: 0.0014421111
+        outSlope: 0.0014421111
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33815742
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 30.24408
+        value: 0.9958191
+        inSlope: 0.00009373176
+        outSlope: 0.00009373176
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <MinDeliveryTime>k__BackingField: 5
+    <MaxDeliveryTime>k__BackingField: 60
+    <SkipStepDuration>k__BackingField: 10
+    <SkipStepGemsChange>k__BackingField: 1

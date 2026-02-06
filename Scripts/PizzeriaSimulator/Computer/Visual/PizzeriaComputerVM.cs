@@ -12,25 +12,32 @@ namespace Game.PizzeriaSimulator.Computer.Visual
         public event Action ExitComputer;
         public readonly Subject<Unit> ExitPCInput;
         public readonly Subject<Unit> MarketAppInput;
+        public readonly Subject<Unit> ManagmentAppInput;
+        readonly CompositeDisposable inputSubscriptions;
         public PizzeriaComputerVM(PizzeriaComputer _pizzeriaComputer)
         {
             pizzeriaComputer = _pizzeriaComputer;
             ExitPCInput = new Subject<Unit>();
             MarketAppInput = new Subject<Unit>();
+            ManagmentAppInput = new Subject<Unit>();
+            inputSubscriptions = new CompositeDisposable();
         }
         public void Init()
         {
             pizzeriaComputer.OnEnterComputer += HandlePCEnter;
             pizzeriaComputer.OnExitComputer += HandlePCExit;
-            ExitPCInput.ThrottleFirst(TimeSpan.FromSeconds(0.3f)).Subscribe(_ => pizzeriaComputer.ExitComputer());
-            MarketAppInput.ThrottleFirst(TimeSpan.FromSeconds(0.3f)).Subscribe(_ => pizzeriaComputer.OpenApp(ComputerAppType.Market));
+            ExitPCInput.ThrottleFirst(TimeSpan.FromSeconds(0.3f)).Subscribe(_ => pizzeriaComputer.ExitComputer()).AddTo(inputSubscriptions);
+            MarketAppInput.ThrottleFirst(TimeSpan.FromSeconds(0.3f)).Subscribe(_ => pizzeriaComputer.OpenApp(ComputerAppType.Market)).AddTo(inputSubscriptions);
+            ManagmentAppInput.ThrottleFirst(TimeSpan.FromSeconds(0.3f)).Subscribe(_ => pizzeriaComputer.OpenApp(ComputerAppType.ManagmentApp)).AddTo(inputSubscriptions);
         }
         public void Dispose() 
         {
             pizzeriaComputer.OnEnterComputer -= HandlePCEnter;
             pizzeriaComputer.OnExitComputer -= HandlePCExit;
+            inputSubscriptions.Dispose();
             ExitPCInput.Dispose();
             MarketAppInput.Dispose();
+            ManagmentAppInput.Dispose();
         }
         void HandlePCEnter()
         {

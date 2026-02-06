@@ -1,9 +1,12 @@
 ﻿using Game.PizzeriaSimulator.Computer.App;
+using Game.PizzeriaSimulator.Computer.App.ManagmentApp;
 using Game.PizzeriaSimulator.Computer.App.Market;
 using Game.PizzeriaSimulator.Delivery;
 using Game.PizzeriaSimulator.Delivery.Config;
 using Game.PizzeriaSimulator.Interactions;
 using Game.PizzeriaSimulator.Interactions.Interactor;
+using Game.PizzeriaSimulator.Pizzeria.Managment;
+using Game.PizzeriaSimulator.Pizzeria.Managment.Config;
 using Game.PizzeriaSimulator.Wallet;
 using Game.Root.ServicesInterfaces;
 using System;
@@ -14,7 +17,7 @@ namespace Game.PizzeriaSimulator.Computer
 {
     public class PizzeriaComputer : IInittable, ISceneDisposable
     {
-        public int InitPriority => 8;
+        public int InitPriority => 11;
         public event Action OnEnterComputer;
         public event Action OnExitComputer;
         readonly Interactor interactor;
@@ -28,7 +31,9 @@ namespace Game.PizzeriaSimulator.Computer
             appsByTypes = new Dictionary<ComputerAppType, ComputerAppBase>()
             {
                 { ComputerAppType.Market, new MarketCompApp(diContainer.Resolve<PlayerWallet>(),
-                diContainer.Resolve<PizzeriaDelivery>(), diContainer.Resolve<PizzeriaDeliveryConfig>()) }
+                diContainer.Resolve<PizzeriaDelivery>(), diContainer.Resolve<PizzeriaDeliveryConfig>()) },
+                {ComputerAppType.ManagmentApp, new ManagmentCompApp(diContainer.Resolve<PlayerWallet>(),
+                diContainer.Resolve<PizzeriaManager>(), diContainer.Resolve<PizzeriaManagmentConfig>()) }
             };
         }
         public ComputerAppBase GetAppByType(ComputerAppType type)

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+﻿using Game.Helps.UI;
 using Game.Root.Utils;
 using Game.Root.Utils.Audio;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
 {
@@ -11,10 +12,17 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
     {
         [SerializeField] AudioClip clickSFX;
         [SerializeField] GameObject appPanel;
+        [SerializeField] GameObject ingredientPage;
+        [SerializeField] GameObject furniturePage;
         [SerializeField] Button closeBtn;
+        [SerializeField] Button ingredientsPageBtn;
+        [SerializeField] Button furniturePageBtn;
         [SerializeField] Button cartBuyBtn;
         [SerializeField] Button cartClearBtn;
+        [SerializeField] UISelectTransitionBase ingredsSelectTransit;
+        [SerializeField] UISelectTransitionBase furnitSelectTransit;
         [SerializeField] Transform ingredientsContainer;
+        [SerializeField] Transform furnitureContainer;
         [SerializeField] Transform cartBarsContainer;
         [SerializeField] MarketItemCard itemCardPrefab;
         [SerializeField] MarketCartItemBar cartItemBarPrefab;
@@ -24,11 +32,16 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             base.Bind(_viewModel);
             closeBtn.onClick.AddListener(OnCloseBtn);
+            ingredientsPageBtn.onClick.AddListener(OnIngredientPageInput);
+            furniturePageBtn.onClick.AddListener(OnFurniturePageBtn);
             cartBuyBtn.onClick.AddListener(OnCartBuyBtn);
             cartClearBtn.onClick.AddListener(OnCartClearBtn);
             viewModel.Open += OnOpen;
             viewModel.Close += OnClose;
-            viewModel.OnNewItem += SpawnNewItemCard;
+            viewModel.ActivateIngredientPage += ActivateIngredientsPage;
+            viewModel.ActivateFurniturePage += ActivateFurniturePage;
+            viewModel.OnNewItemInIngredient += SpawnNewIngredientItem;
+            viewModel.OnNewItemInFurniture += SpawnNewFurnitureItem;
             viewModel.OnNewCartItem += SpawnNewCartBar;
             viewModel.UpdateCartItemAmount += UpdateCartBarAmount;
             viewModel.UpdateCartItemPrice += UpdateCartBarPrice;
@@ -41,13 +54,18 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         private void OnDestroy()
         {
             closeBtn.onClick.RemoveListener(OnCloseBtn);
+            ingredientsPageBtn.onClick.RemoveListener(OnIngredientPageInput);
+            furniturePageBtn.onClick.RemoveListener(OnFurniturePageBtn);
             cartBuyBtn.onClick.RemoveListener(OnCartBuyBtn);
             cartClearBtn.onClick.RemoveListener(OnCartClearBtn);
             if (viewModel != null)
             {
                 viewModel.Open -= OnOpen;
                 viewModel.Close -= OnClose;
-                viewModel.OnNewItem -= SpawnNewItemCard;
+                viewModel.ActivateIngredientPage -= ActivateIngredientsPage;
+                viewModel.ActivateFurniturePage -= ActivateFurniturePage;
+                viewModel.OnNewItemInIngredient -= SpawnNewIngredientItem;
+                viewModel.OnNewItemInFurniture -= SpawnNewFurnitureItem;
                 viewModel.OnNewCartItem -= SpawnNewCartBar;
                 viewModel.UpdateCartItemAmount -= UpdateCartBarAmount;
                 viewModel.UpdateCartItemPrice -= UpdateCartBarPrice;
@@ -62,6 +80,16 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             AudioPlayer.PlaySFX(clickSFX);
             viewModel.CloseInput();
+        }
+        void OnIngredientPageInput()
+        {
+            AudioPlayer.PlaySFX(clickSFX);
+            viewModel.IngredientPageInput();
+        }
+        void OnFurniturePageBtn()
+        {
+            AudioPlayer.PlaySFX(clickSFX);
+            viewModel.FurniturePageInput();
         }
         void OnCartBuyBtn()
         {
@@ -80,9 +108,29 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             appPanel.SetActive(false);
         }
-        void SpawnNewItemCard(MarketItemViewData itemData)
+        void ActivateIngredientsPage(bool activate)
         {
-            MarketItemCard spawnedCard = Instantiate(itemCardPrefab, ingredientsContainer);
+            ingredientPage.SetActive(activate);
+            if (activate) ingredsSelectTransit.Select();
+            else ingredsSelectTransit.Deselect();
+        }
+        void ActivateFurniturePage(bool activate)
+        {
+            furniturePage.SetActive(activate);
+            if (activate) furnitSelectTransit.Select();
+            else furnitSelectTransit.Deselect();
+        }
+        void SpawnNewIngredientItem(MarketItemViewData itemData)
+        {
+            SpawnNewItemCard(itemData, ingredientsContainer);
+        }
+        void SpawnNewFurnitureItem(MarketItemViewData itemData)
+        {
+            SpawnNewItemCard(itemData, furnitureContainer);
+        }
+        void SpawnNewItemCard(MarketItemViewData itemData, Transform parent)
+        {
+            MarketItemCard spawnedCard = Instantiate(itemCardPrefab, parent);
             spawnedCard.SetItemName(itemData.Name);
             spawnedCard.SetAmountText(itemData.AmountText);
             spawnedCard.SetPriceText(itemData.PriceText);

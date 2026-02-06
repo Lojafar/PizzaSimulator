@@ -9,6 +9,7 @@ namespace Game.PizzeriaSimulator.Levels.Config
     {
         [field: SerializeField] public int FirstLevel { get; private set; }
         [field: SerializeField] public int MaxLevel { get; private set; }
+        [field: SerializeField] public int XPForCustomerOrder { get; private set; }
         [field: SerializeField] public AnimationCurve XPForLevelCurve { get; private set; }
         [SerializeReference] List<LevelRewardBase> rewards;
         [SerializeField] LevelDataConfig[] levelsData;

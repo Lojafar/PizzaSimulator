@@ -65,10 +65,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.3196, z: 0.94953}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7319734347555063400}
-  - {fileID: 5551059579495149491}
-  - {fileID: 7274688700428861785}
-  - {fileID: 8908345439275039543}
+  - {fileID: 750806942748375025}
   - {fileID: 8413382712710040646}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -163,6 +160,7 @@ MonoBehaviour:
   - {fileID: 5741795098062287225}
   - {fileID: 3464263614766408549}
   - {fileID: 463477283749767965}
+  openVisuals: {fileID: 6416551710679537707}
   boxRB: {fileID: 694551477691016330}
   colliderOfBox: {fileID: 6098427148961454290}
   halfOpenDuration: 0.3
@@ -521,6 +519,41 @@ Transform:
   - {fileID: 2046340653696350004}
   m_Father: {fileID: 8413382712710040646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6416551710679537707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 750806942748375025}
+  m_Layer: 6
+  m_Name: Shrimps
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &750806942748375025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416551710679537707}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7319734347555063400}
+  - {fileID: 5551059579495149491}
+  - {fileID: 7274688700428861785}
+  - {fileID: 8908345439275039543}
+  m_Father: {fileID: 6576058141698137172}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6689474162467503102
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,7 +865,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6576058141698137172}
+    m_TransformParent: {fileID: 750806942748375025}
     m_Modifications:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -847,7 +880,7 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0468185
+      value: 1.0468184
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -857,12 +890,12 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.055800002
+      value: -0.0558
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21200123
+      value: 0.2120013
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -938,7 +971,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.3
   itemMoveYPeakAdd: 0.6
-  sfxClipKey: ItemSwoosh
 --- !u!4 &5551059579495149491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
@@ -951,7 +983,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6576058141698137172}
+    m_TransformParent: {fileID: 750806942748375025}
     m_Modifications:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -971,7 +1003,7 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.082
+      value: -0.08200073
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -981,7 +1013,7 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.08
+      value: 0.079999655
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -1057,7 +1089,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.3
   itemMoveYPeakAdd: 0.6
-  sfxClipKey: ItemSwoosh
 --- !u!4 &8908345439275039543 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
@@ -1070,7 +1101,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6576058141698137172}
+    m_TransformParent: {fileID: 750806942748375025}
     m_Modifications:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -1085,7 +1116,7 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0468185
+      value: 1.0468184
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -1100,7 +1131,7 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21200123
+      value: 0.2120013
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -1182,14 +1213,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.3
   itemMoveYPeakAdd: 0.6
-  sfxClipKey: ItemSwoosh
 --- !u!1001 &8446650188565362999
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6576058141698137172}
+    m_TransformParent: {fileID: 750806942748375025}
     m_Modifications:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -1209,7 +1239,7 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.094
+      value: 0.09400177
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -1219,7 +1249,7 @@ PrefabInstance:
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.08000124
+      value: 0.079999655
       objectReference: {fileID: 0}
     - target: {fileID: 1282511373669038190, guid: d923fe979ac94794c9abeb172abaec7f,
         type: 3}
@@ -1301,4 +1331,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.3
   itemMoveYPeakAdd: 0.6
-  sfxClipKey: ItemSwoosh

@@ -1,11 +1,11 @@
 ﻿using Game.Root.ServicesInterfaces;
-using Game.Root.Utils;
 using Game.PizzeriaSimulator.Boxes.Carry.Handler;
 using Game.PizzeriaSimulator.Interactions;
 using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold;
 using Game.PizzeriaSimulator.Player.CameraController;
 using Game.PizzeriaSimulator.Player.Input;
+using Game.PizzeriaSimulator.Pizzeria.Furniture.Placement.Manager;
 using System.Collections.Generic;
 using System;
 using DG.Tweening;
@@ -47,14 +47,16 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
         }
         public void Init()
         {
-            boxHandlerByType.Add(CarriableBoxType.PizzaIngredientsBox, new PizzaIngredientBoxHandler(this, diContainer.Resolve<PizzaIngredientsHolder>(),
+            boxHandlerByType.Add(CarriableBoxType.PizzaIngredientsBox, new PizzaIngredientBoxHandler(this, interactor, diContainer.Resolve<PizzaIngredientsHolder>(),
                 sceneReferences.PizzaIngredientsHoldView));
+            boxHandlerByType.Add(CarriableBoxType.FurnitureBox, new FurnitureBoxHandler(interactor, playerInput, diContainer.Resolve<PizzeriaFurnitureManager>()));
             interactor.OnInteractWithObject += HandleInteractor;
             playerInput.OnThrowInput += HandleThrowInput;
             playerInput.OnOpenInput += HandleOpenBoxInput;
         }
         public void Dispose()
         {
+            activeBoxHandler?.EndUsing();
             interactor.OnInteractWithObject -= HandleInteractor;
             playerInput.OnThrowInput -= HandleThrowInput;
             playerInput.OnOpenInput -= HandleOpenBoxInput;
@@ -77,10 +79,11 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
         {
             if (gameObject.TryGetComponent(out CarriableBoxBase box))
             {
-                if(boxHandlerByType.TryGetValue(box.BoxType, out IBoxesHandler boxesHandler))
+                if (boxHandlerByType.TryGetValue(box.BoxType, out IBoxesHandler boxesHandler))
                 {
                     boxesHandler.SetBox(box);
                     activeBoxHandler = boxesHandler;
+                    activeBoxHandler.StartUsing();
                 }
                 activeBox = box;
                 IsCarryingBox = true;
@@ -111,7 +114,7 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
                 OnDenyAction("Active box has items inside. Can't throw to the can");
                 return;
             }
-            HideBoxesInput();
+            OnEndCarry();
             GameObject boxObject = activeBoxObject;
             OnBoxRemoved?.Invoke(activeBox.BoxObjectID);
             activeBoxObject.transform.DOJump(trashCanObject.transform.position, boxToTrashPower, 1, boxToTrashDuration)
@@ -122,13 +125,14 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
         {
             if (activeBox == null || activeBoxObject == null) return;
             activeBox.Throw(activeBoxObject.transform.forward * throwForce);
-            HideBoxesInput();
-            OnBoxThrowed?.Invoke(activeBox.BoxObjectID);
+            OnEndCarry();
+             OnBoxThrowed?.Invoke(activeBox.BoxObjectID);
             ClearBoxValues();
 
         }
-        void HideBoxesInput()
+        void OnEndCarry()
         {
+            interactor.ResetInteractionMask();
             playerInput.ShowThrowInput(false);
             playerInput.ShowOpenInput(false);
             playerInput.ShowCloseInput(false);
@@ -142,7 +146,11 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
             IsCarryingBox = false;
             activeBox = null;
             activeBoxObject = null;
-            activeBoxHandler = null;
+            if (activeBoxHandler != null)
+            {
+                activeBoxHandler.EndUsing();
+                activeBoxHandler = null;
+            }
         }
         void HandleOpenBoxInput()
         {
@@ -159,6 +167,7 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
                 playerInput.ShowOpenInput(false);
                 playerInput.ShowCloseInput(true);
             }
+             activeBoxHandler?.OnBoxOpened(activeBox.IsOpened);
         }
         public void OnDenyAction(string message)
         {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.PizzeriaSimulator.Boxes.Item
 {
-    class JumpBoxItem : BoxItemBase
+    class JumpBoxItem : PizzaIngredientBoxItemBase
     {
         [SerializeField] float itemJumpDuration;
         [SerializeField] float itemMoveYPeakAdd;

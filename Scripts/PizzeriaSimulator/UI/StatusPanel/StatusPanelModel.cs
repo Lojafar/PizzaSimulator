@@ -1,6 +1,6 @@
 ﻿using Game.PizzeriaSimulator.Currency;
 using Game.PizzeriaSimulator.DayCycle.Manager;
-using Game.PizzeriaSimulator.Pizzeria.Manager;
+using Game.PizzeriaSimulator.Pizzeria.Managment;
 using Game.PizzeriaSimulator.Wallet;
 using Game.Root.ServicesInterfaces;
 using R3;
@@ -11,6 +11,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel
     {
         public int InitPriority => 10;
         public Action<MoneyQuantity> OnMoneyChanged;
+        public Action<int> OnGemsChanged;
         public Action<int> OnHoursTimeChanged;
         public Action<int> OnMinutesTimeChanged;
         public Action<int> OnNewPizzeriaLevel;
@@ -29,6 +30,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel
         public void Init()
         {
             playerWallet.Money.Subscribe(HandleMoneyInWallet).AddTo(disposables);
+            playerWallet.Gems.Subscribe(HandleGemsInWallet).AddTo(disposables);
             dayCycleManager.Hours.Subscribe(HandleNewHour).AddTo(disposables);
             dayCycleManager.Minutes.Subscribe(HandleNewMinutes).AddTo(disposables);
             pizzeriaManager.CurrentLevel.Subscribe(HandlePizzeriaLevel).AddTo(disposables);
@@ -41,6 +43,10 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel
         void HandleMoneyInWallet(MoneyQuantity moneyQuantity)
         {
             OnMoneyChanged?.Invoke(moneyQuantity);
+        }
+        void HandleGemsInWallet(int gems)
+        {
+            OnGemsChanged?.Invoke(gems);
         }
         void HandleNewHour(int hour)
         {

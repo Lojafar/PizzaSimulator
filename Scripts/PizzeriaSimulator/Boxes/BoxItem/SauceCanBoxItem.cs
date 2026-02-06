@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.PizzeriaSimulator.Boxes.Item
 {
-    class SauceCanBoxItem : BoxItemBase
+    class SauceCanBoxItem : PizzaIngredientBoxItemBase
     {
         [SerializeField] float moveDuration;
         [SerializeField] float rotationDuration;

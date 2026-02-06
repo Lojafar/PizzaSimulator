@@ -15,6 +15,7 @@ MonoBehaviour:
   <LevelsConfig>k__BackingField:
     <FirstLevel>k__BackingField: 1
     <MaxLevel>k__BackingField: 50
+    <XPForCustomerOrder>k__BackingField: 1
     <XPForLevelCurve>k__BackingField:
       serializedVersion: 2
       m_Curve:

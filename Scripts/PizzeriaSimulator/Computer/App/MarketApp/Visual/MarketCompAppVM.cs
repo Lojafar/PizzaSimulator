@@ -29,7 +29,10 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         public event Action Close;
         public event Action RemoveAllCartItems;
         public event Action ShowPurchaseSucces;
-        public event Action<MarketItemViewData> OnNewItem;
+        public event Action<bool> ActivateIngredientPage;
+        public event Action<bool> ActivateFurniturePage;
+        public event Action<MarketItemViewData> OnNewItemInIngredient;
+        public event Action<MarketItemViewData> OnNewItemInFurniture;
         public event Action<int, string> OnNewCartItem;
         public event Action<int, string> UpdateCartItemAmount;
         public event Action<int, string> UpdateCartItemPrice;
@@ -47,6 +50,8 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             marketCompApp.OnOpen += HandleOpen;
             marketCompApp.OnClose += HandleClose;
+            marketCompApp.OnPageOpened += HandlePageOpen;
+            marketCompApp.OnPageClosed += HandlePageClose;
             marketCompApp.OnNewItemInAssortment += HandleNewItem;
             marketCompApp.OnNewItemInCart += HandleNewCartItem;
             marketCompApp.OnAmountInCartUpdated += HandleCartItemAmount;
@@ -61,6 +66,8 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             marketCompApp.OnOpen -= HandleOpen;
             marketCompApp.OnClose -= HandleClose;
+            marketCompApp.OnPageOpened -= HandlePageOpen;
+            marketCompApp.OnPageClosed -= HandlePageClose;
             marketCompApp.OnNewItemInAssortment -= HandleNewItem;
             marketCompApp.OnNewItemInCart -= HandleNewCartItem;
             marketCompApp.OnAmountInCartUpdated -= HandleCartItemAmount;
@@ -74,6 +81,14 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         public void CloseInput()
         {
             marketCompApp.Close();
+        }
+        public void IngredientPageInput()
+        {
+            marketCompApp.OpenPageInput(MarketAppPageType.IngredientsPage);
+        }
+        public void FurniturePageInput()
+        {
+            marketCompApp.OpenPageInput(MarketAppPageType.FurniturePage);
         }
         public void CartClearInput()
         {
@@ -99,12 +114,45 @@ namespace Game.PizzeriaSimulator.Computer.App.Market.Visual
         {
             Close?.Invoke();
         }
-        void HandleNewItem(int itemID)
+        void HandlePageOpen(MarketAppPageType pageType)
+        {
+            switch (pageType)
+            {
+                case MarketAppPageType.IngredientsPage:
+                    ActivateIngredientPage?.Invoke(true);
+                    break;
+                case MarketAppPageType.FurniturePage:
+                    ActivateFurniturePage?.Invoke(true);
+                    break;
+            }
+        }
+        void HandlePageClose(MarketAppPageType pageType)
+        {
+            switch (pageType)
+            {
+                case MarketAppPageType.IngredientsPage:
+                    ActivateIngredientPage?.Invoke(false);
+                    break;
+                case MarketAppPageType.FurniturePage:
+                    ActivateFurniturePage?.Invoke(false);
+                    break;
+            }
+        }
+        void HandleNewItem(int itemID, MarketAppPageType pageType)
         {
             if (marketCompApp.GetItemConfig(itemID) is DeliveryItemConfig itemConfig)
             {
-                OnNewItem?.Invoke(new MarketItemViewData(itemConfig.ID, itemConfig.Name,
-                    GetPriceText(itemConfig.Price), GetItemAmountText(itemConfig.QuantityByOrder), itemConfig.ItemIcon));
+                MarketItemViewData marketItemViewData = new(itemConfig.ID, itemConfig.Name,
+                    GetPriceText(itemConfig.Price), GetItemAmountText(itemConfig.QuantityByOrder), itemConfig.ItemIcon);
+                switch (pageType)
+                {
+                    case MarketAppPageType.IngredientsPage:
+                        OnNewItemInIngredient?.Invoke(marketItemViewData);
+                        break;
+                    case MarketAppPageType.FurniturePage:
+                        OnNewItemInFurniture?.Invoke(marketItemViewData);
+                        break;
+                }
             }
         }
         string GetPriceText(MoneyQuantity moneyQuantity)

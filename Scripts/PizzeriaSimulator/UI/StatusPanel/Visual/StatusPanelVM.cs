@@ -7,6 +7,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
     class StatusPanelVM : ISceneDisposable
     {
         public event Action<string> UpdateMoneyText;
+        public event Action<string> UpdateGemsText;
         public event Action<string> UpdateTimeText;
         public event Action<string> UpdateLevelText;
         public event Action<float> UpdateLvlProgress;
@@ -22,6 +23,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
         public void Init()
         {
             statusPanelModel.OnMoneyChanged += HandleNewMoney;
+            statusPanelModel.OnGemsChanged += HandleNewGems;
             statusPanelModel.OnHoursTimeChanged += HandleHours;
             statusPanelModel.OnMinutesTimeChanged += HandleMinutes;
             statusPanelModel.OnNewPizzeriaLevel += HandlePizzeriaLvl;
@@ -30,6 +32,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
         public void Dispose()
         {
             statusPanelModel.OnMoneyChanged -= HandleNewMoney;
+            statusPanelModel.OnGemsChanged -= HandleNewGems;
             statusPanelModel.OnHoursTimeChanged -= HandleHours;
             statusPanelModel.OnMinutesTimeChanged -= HandleMinutes;
             statusPanelModel.OnNewPizzeriaLevel -= HandlePizzeriaLvl;
@@ -39,7 +42,10 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
         {
             UpdateMoneyText?.Invoke(string.Format(moneyTextPattern, moneyQuantity.Dollars, moneyQuantity.Cents));
         }
-      
+        void HandleNewGems(int gemsAmount)
+        {
+            UpdateGemsText?.Invoke(gemsAmount.ToString());
+        }
         void HandleHours(int hours)
         {
             currentHour = hours;

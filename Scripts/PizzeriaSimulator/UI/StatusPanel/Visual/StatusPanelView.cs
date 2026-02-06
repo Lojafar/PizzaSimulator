@@ -7,6 +7,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
     class StatusPanelView : StatusPanelViewBase
     {
         [SerializeField] TMP_Text moneyAmountTMP;
+        [SerializeField] TMP_Text gemsAmountTMP;
         [SerializeField] TMP_Text timeTMP;
         [SerializeField] TMP_Text levelTMP;
         [SerializeField] Slider lvlProgressSlider;
@@ -23,6 +24,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
         {
             base.Bind(_viewModel);
             viewModel.UpdateMoneyText += UpdateMoneyText;
+            viewModel.UpdateGemsText += UpdateGemsText;
             viewModel.UpdateTimeText += UpdateTimeText;
             viewModel.UpdateLevelText += UpdateLvlText;
             viewModel.UpdateLvlProgress += UpdateLvlFill;
@@ -35,6 +37,7 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
         private void OnDestroy()
         {
             viewModel.UpdateMoneyText -= UpdateMoneyText;
+            viewModel.UpdateGemsText -= UpdateGemsText;
             viewModel.UpdateTimeText -= UpdateTimeText;
             viewModel.UpdateLevelText -= UpdateLvlText;
             viewModel.UpdateLvlProgress -= UpdateLvlFill;
@@ -42,6 +45,10 @@ namespace Game.PizzeriaSimulator.UI.StatusPanel.Visual
         void UpdateMoneyText(string moneyText)
         {
             moneyAmountTMP.text = moneyText;
+        }
+        void UpdateGemsText(string gemsText) 
+        {
+            gemsAmountTMP.text = gemsText;
         }
         void UpdateTimeText(string timeText) 
         {

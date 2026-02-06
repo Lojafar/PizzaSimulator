@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Game.PizzeriaSimulator.DayCycle.Manager;
-using Game.PizzeriaSimulator.Pizzeria.Manager;
+using Game.PizzeriaSimulator.Pizzeria.Managment;
 
 namespace Game.PizzeriaSimulator.Customers.Manager
 {

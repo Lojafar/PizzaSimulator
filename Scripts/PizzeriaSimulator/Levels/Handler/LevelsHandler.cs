@@ -1,7 +1,7 @@
 ﻿using Game.PizzeriaSimulator.Customers.Manager;
 using Game.PizzeriaSimulator.Leevl.Reward;
 using Game.PizzeriaSimulator.Levels.Config;
-using Game.PizzeriaSimulator.Pizzeria.Manager;
+using Game.PizzeriaSimulator.Pizzeria.Managment;
 using Game.PizzeriaSimulator.Wallet;
 using Game.Root.ServicesInterfaces;
 using R3;
