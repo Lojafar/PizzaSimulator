@@ -8,7 +8,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Config
     public class PizzaCreatorConfig
     {
         [SerializeField] IngredientConfig[] ingredients;
-        [SerializeField]  PizzaIngredientType[] ingredientsForBase;
+        [SerializeField] PizzaIngredientType[] ingredientsForBase;
         public IReadOnlyList<IngredientConfig> Ingredients => ingredients;
         public IReadOnlyList<PizzaIngredientType> IngredientsForBase => ingredientsForBase;
         Dictionary<PizzaIngredientType, int> indexByIngredientType;
@@ -25,11 +25,6 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Config
                 indexByIngredientType[Ingredients[i].IngredientType] = i;
             }
         }
-        public int GetBaseIngredientIndex(PizzaIngredientType ingredientType)
-        {
-            for(int i = 0;i < ingredientsForBase.Length; i++) if(ingredientsForBase[i] == ingredientType) return i;
-            return -1;
-        }
         public bool IsIngredientOfBaseAndGetIndex(PizzaIngredientType ingredientType, out int index)
         {
             for (int i = 0; i < ingredientsForBase.Length; i++)
@@ -43,10 +38,10 @@ namespace Game.PizzeriaSimulator.PizzaCreation.Config
             index = -1;
             return false;
         }
-        public IngredientConfig GetIngredientConfigByType(PizzaIngredientType ingredientTypes)
+        public IngredientConfig GetIngredientConfigByType(PizzaIngredientType ingredientType)
         {
             if (indexByIngredientType == null) Init();
-            if(indexByIngredientType.TryGetValue(ingredientTypes, out int index))
+            if(indexByIngredientType.TryGetValue(ingredientType, out int index))
             { 
                 return Ingredients[index];
             }

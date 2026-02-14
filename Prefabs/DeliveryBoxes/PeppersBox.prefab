@@ -472,17 +472,9 @@ MonoBehaviour:
     RotationX: 0
     RotationY: 0
     RotationZ: 0
-  <IngredientType>k__BackingField: 6
-  items:
-  - {fileID: 4036884886690669898}
-  - {fileID: 1536204734058226416}
-  - {fileID: 6890330143385505344}
-  - {fileID: 285131282787631875}
-  - {fileID: 62271022565272915}
-  - {fileID: 4888777268876300906}
-  openVisuals: {fileID: 0}
   boxRB: {fileID: 4332559758321650873}
   colliderOfBox: {fileID: 8363982936259372829}
+  openVisuals: {fileID: 0}
   halfOpenDuration: 0.3
   openedLidsRotsInOrder:
   - {x: 215, y: 180, z: 0}
@@ -493,6 +485,14 @@ MonoBehaviour:
   secondTopLid: {fileID: 3016010589284579109}
   firstBottomLid: {fileID: 3470735958082603180}
   secondBottomLid: {fileID: 4222157048891266835}
+  <IngredientType>k__BackingField: 6
+  items:
+  - {fileID: 4036884886690669898}
+  - {fileID: 1536204734058226416}
+  - {fileID: 6890330143385505344}
+  - {fileID: 285131282787631875}
+  - {fileID: 62271022565272915}
+  - {fileID: 4888777268876300906}
 --- !u!1 &5828646790249687333
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,11 +971,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6257329789336198190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &879072546822936806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1084,11 +1084,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5950266542948199284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &5534795840264512808
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1191,11 +1191,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1328292827640813242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &9007289352746091188 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3589327724626339740, guid: 47a504120eb72c04a8906c39c5bf2981,
@@ -1304,11 +1304,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 737134993050417061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &7301899486977827755 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3589327724626339740, guid: 47a504120eb72c04a8906c39c5bf2981,
@@ -1417,11 +1417,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3602651149947292770}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &6814063443938564204 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3589327724626339740, guid: 47a504120eb72c04a8906c39c5bf2981,
@@ -1530,11 +1530,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2398822169775489607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &5630923085459805769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3589327724626339740, guid: 47a504120eb72c04a8906c39c5bf2981,

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Game.PizzeriaSimulator.PizzaHold
 {
     [Serializable]
-    public class PizzaHolderData
+    public sealed class PizzaHolderData
     {
         public readonly Dictionary<int, int> Pizzas = new();
 

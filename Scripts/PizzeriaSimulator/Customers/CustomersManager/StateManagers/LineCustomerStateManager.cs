@@ -43,12 +43,11 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
             if (customerID == customersInLine[0].Id)
             {
                 Customer firstCustomerInLine = customersInLine[0];
-                int orderId = GetPizzaIDForOrder();
-                customersOrdersProccesor.ProccesOrderForCustomer(orderId, firstCustomerInLine, OnCustomerDidOrder);
-                firstCustomerInLine.SetOrder(orderId);
+                int pizzaId = GetPizzaIDForOrder();
+                customersOrdersProccesor.ProccesOrderForCustomer(pizzaId, firstCustomerInLine, OnCustomerDidOrder);
                 firstCustomerInLine.CustomerAI.SetState(CustomerState.MakesOrder);
                 firstCustomerInLine.CustomerAI.OnTargetPointReached -= OnCustomerReachedTarget;
-                OnCustomerStartOrder?.Invoke(firstCustomerInLine, orderId);
+                OnCustomerStartOrder?.Invoke(firstCustomerInLine, firstCustomerInLine.OrderId);
             }
         }
         int GetPizzaIDForOrder()

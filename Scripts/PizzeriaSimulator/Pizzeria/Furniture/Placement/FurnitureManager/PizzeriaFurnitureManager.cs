@@ -9,7 +9,8 @@ namespace Game.PizzeriaSimulator.Pizzeria.Furniture.Placement.Manager
     using Object = UnityEngine.Object;
     public sealed class PizzeriaFurnitureManager : IInittable, ISceneDisposable
     {
-        public event Action<int> OnFurniturePlaced;
+        public event Action<int> OnNewFurniturePlaced;
+        public event Action<int, GameObject> OnFurnitureSpawned;
         public int InitPriority => 8;
         public PizzeriaFurnitureManagerData ManagerData => managerData.Clone();
         readonly PizzeriaFurnitureManagerData managerData;
@@ -34,8 +35,9 @@ namespace Game.PizzeriaSimulator.Pizzeria.Furniture.Placement.Manager
                 currentData = managerData.PlacedFurniture[i];
                 if (furnitureConfig.GetFurnitureItem(currentData.FurnitureID) is PizzeriaFurnitureItemConfig furnitureItemConfig)
                 {
-                    Object.Instantiate(furnitureItemConfig.FurniturePrefab, new Vector3(currentData.PosX, currentData.PosY,
+                   GameObject spawnedFurniture = Object.Instantiate(furnitureItemConfig.FurniturePrefab, new Vector3(currentData.PosX, currentData.PosY,
                         currentData.PosZ), Quaternion.Euler(new Vector3(currentData.RotX, currentData.RotY, currentData.RotZ)));
+                    OnFurnitureSpawned?.Invoke(currentData.FurnitureID, spawnedFurniture);
                 }
             }
             pizzeriaManager.OnExpansionActivated += HandleExpansion;
@@ -61,14 +63,19 @@ namespace Game.PizzeriaSimulator.Pizzeria.Furniture.Placement.Manager
             if (furnitureConfig.GetFurnitureItem(id) is PizzeriaFurnitureItemConfig furnitureItemConfig)
             {
                 Vector3 eulerRot =  furnitureItemConfig.FurniturePrefab.transform.eulerAngles;
-                Object.Instantiate(furnitureItemConfig.FurniturePrefab, pos, furnitureItemConfig.FurniturePrefab.transform.rotation);
+                GameObject spawnedFurniture = Object.Instantiate(furnitureItemConfig.FurniturePrefab, pos, furnitureItemConfig.FurniturePrefab.transform.rotation);
                 managerData.PlacedFurniture.Add(new PlacedFurnitureData(id, pos.x, pos.y, pos.z, eulerRot.x, eulerRot.y, eulerRot.z));
-                OnFurniturePlaced?.Invoke(id);
+                OnNewFurniturePlaced?.Invoke(id);
+                OnFurnitureSpawned?.Invoke(id, spawnedFurniture);
             }
         }
         public FurniturePlaceArea GetPlaceAreaForItem(int furnitureID)
         {
-            return placeAreaHolder.GetPlaceAreaById(furnitureID);
+            if (furnitureConfig.GetFurnitureItem(furnitureID) is PizzeriaFurnitureItemConfig furnitureItemConfig)
+            {
+                return placeAreaHolder.GetPlaceAreaById(furnitureItemConfig.PlaceAreaID);
+            }
+            return placeAreaHolder.GetPlaceAreaById(-1);
         }
     }
 }

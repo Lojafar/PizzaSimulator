@@ -3,7 +3,7 @@ using Game.PizzeriaSimulator.Customers.Manager.StateManager;
 using Game.PizzeriaSimulator.Customers.OrdersProcces;
 using Game.PizzeriaSimulator.Customers.SettingsConfig;
 using Game.PizzeriaSimulator.Customers.Skin;
-using Game.PizzeriaSimulator.OrdersHandle;
+using Game.PizzeriaSimulator.Orders.Handle;
 using Game.Root.AssetsManagment;
 using Game.Root.ServicesInterfaces;
 using Game.Root.Utils;
@@ -13,6 +13,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Game.PizzeriaSimulator.DayCycle.Manager;
 using Game.PizzeriaSimulator.Pizzeria.Managment;
+using Game.PizzeriaSimulator.Orders.Items;
 
 namespace Game.PizzeriaSimulator.Customers.Manager
 {
@@ -99,12 +100,14 @@ namespace Game.PizzeriaSimulator.Customers.Manager
             {
                 ActiveCustomersCount++;
                 Customer spawnedCustomer = SpawnNewCustomer();
-                spawnedCustomer.SetOrder(managerData.CustomersOrders[i]);
                 customersById.Add(spawnedCustomer.Id, spawnedCustomer);
-                if (managerData.CustomersOrders[i] != -1) customersOrdersProccesor.ForceCustomerOrder(managerData.CustomersOrders[i]);
+                int customerOrderId = -1;
+                if (managerData.CustomersOrders[i].OrderItems != null) 
+                    customerOrderId = customersOrdersProccesor.ForceCustomerOrder(managerData.CustomersOrders[i].OrderItems);
                 else customersInLineCount++;
-
-                if (statesManagers.TryGetValue(managerData.CustomersOrders[i] == -1 ? CustomerState.InLine : CustomerState.WaitesOrder, out ICustomerStateManager customerStateManager))
+                managerData.CustomersOrders[i] = new ManagerOrderData(customerOrderId, managerData.CustomersOrders[i].OrderItems);
+                spawnedCustomer.SetOrder(customerOrderId);
+                if (statesManagers.TryGetValue(spawnedCustomer.OrderId == -1 ? CustomerState.InLine : CustomerState.WaitesOrder, out ICustomerStateManager customerStateManager))
                 {
                     customerStateManager.ForceCustomer(spawnedCustomer);
                 }
@@ -138,11 +141,15 @@ namespace Game.PizzeriaSimulator.Customers.Manager
         {
             customersInLineCount--;
             OnCustomerMadeOrder?.Invoke(customer, orderID);
+
             for (int i = 0; i < managerData.CustomersOrders.Count; i++)
             {
-                if (managerData.CustomersOrders[i] == -1)
+                if (managerData.CustomersOrders[i].OrderId == -1)
                 {
-                    managerData.CustomersOrders[i] = orderID;
+                    if (customersOrdersProccesor.TryGetOrderItems(orderID, out List<PizzeriaOrderItemType> orderItems))
+                    {
+                        managerData.CustomersOrders[i] = new ManagerOrderData(orderID, orderItems);
+                    }
                     break;
                 }
             }
@@ -153,12 +160,13 @@ namespace Game.PizzeriaSimulator.Customers.Manager
             OnCustomerTakedOrder?.Invoke(customer, orderID);
             for (int i = 0; i < managerData.CustomersOrders.Count; i++) 
             {
-                if(orderID == managerData.CustomersOrders[i])
+                if(orderID == managerData.CustomersOrders[i].OrderId)
                 {
                     managerData.CustomersOrders.RemoveAt(i);
                     break;
                 }
             }
+            customersOrdersProccesor.DisposeOrder(orderID);
         }
         void OnCustomerLeaved(Customer customer)
         {
@@ -181,7 +189,7 @@ namespace Game.PizzeriaSimulator.Customers.Manager
                 if (!dayCycleManager.IsDayEnded && pizzeriaManager.Opened.CurrentValue && customersInLineCount < maxCustomersInLine)
                 {
                     ActiveCustomersCount++;
-                    managerData.CustomersOrders.Add(-1);
+                    managerData.CustomersOrders.Add(new ManagerOrderData (-1, null));
                     Customer spawnedCustomer = SpawnNewCustomer();
                     customersInLineCount++;
                     customersById.Add(spawnedCustomer.Id, spawnedCustomer);
@@ -211,10 +219,9 @@ namespace Game.PizzeriaSimulator.Customers.Manager
         }
         public void DestroyAllCustomers()
         {
-            ICustomerStateManager customerStateManager;
             foreach (Customer customer in customersById.Values) 
             {
-                if (statesManagers.TryGetValue(customer.CustomerAI.CurrentState, out customerStateManager))
+                if (statesManagers.TryGetValue(customer.CustomerAI.CurrentState, out ICustomerStateManager customerStateManager))
                 {
                     customerStateManager.RemoveCustomer(customer);
                 }

@@ -153,7 +153,7 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
             furnitureManager = diContainer.TryResolve<PizzeriaFurnitureManager>();
             if(furnitureManager != null)
             {
-                furnitureManager.OnFurniturePlaced += OnFurniturePlaced;
+                furnitureManager.OnNewFurniturePlaced += OnFurniturePlaced;
             }
         }
         public void Dispose()
@@ -193,7 +193,7 @@ namespace Game.PizzeriaSimulator.SaveLoadHelp
             }
             if (furnitureManager != null)
             {
-                furnitureManager.OnFurniturePlaced -= OnFurniturePlaced;
+                furnitureManager.OnNewFurniturePlaced -= OnFurniturePlaced;
             }
             foreach (DebounceSaving debounceSaving in debounceSavings.Values)
             {

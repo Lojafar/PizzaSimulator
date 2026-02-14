@@ -169,9 +169,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 517
-        y: 771
+        y: 772
         width: 251
-        height: 253
+        height: 252
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -255,7 +255,7 @@ TextureImporter:
         x: 516
         y: 516
         width: 204
-        height: 256
+        height: 255
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -273,10 +273,10 @@ TextureImporter:
       name: IngredientsAtlass1024_7
       rect:
         serializedVersion: 2
-        x: 392
+        x: 0
         y: 0
-        width: 256
-        height: 256
+        width: 170
+        height: 325
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -294,10 +294,10 @@ TextureImporter:
       name: IngredientsAtlass1024_8
       rect:
         serializedVersion: 2
-        x: 649
-        y: 0
-        width: 247
-        height: 256
+        x: 176
+        y: 3
+        width: 167
+        height: 244
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -315,10 +315,10 @@ TextureImporter:
       name: IngredientsAtlass1024_9
       rect:
         serializedVersion: 2
-        x: 903
-        y: 3
-        width: 120
-        height: 173
+        x: 392
+        y: 0
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -328,6 +328,48 @@ TextureImporter:
       bones: []
       spriteID: d8f7950092a22744780049957f2dd837
       internalID: 1480410412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IngredientsAtlass1024_10
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 0
+        width: 247
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a12b90305cfd7344a3fc72ee18f1716
+      internalID: 899782289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IngredientsAtlass1024_11
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 3
+        width: 121
+        height: 173
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f97b5a705ef30f42a1ea8cbfd344d33
+      internalID: 1508549882
       vertices: []
       indices: 
       edges: []
@@ -345,6 +387,8 @@ TextureImporter:
     nameFileIdTable:
       IngredientsAtlass1024_0: 1817793653
       IngredientsAtlass1024_1: -1670427107
+      IngredientsAtlass1024_10: 899782289
+      IngredientsAtlass1024_11: 1508549882
       IngredientsAtlass1024_2: 2007241015
       IngredientsAtlass1024_3: -1647784369
       IngredientsAtlass1024_4: -1654790586

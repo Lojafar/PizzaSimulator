@@ -50,6 +50,7 @@ namespace Game.PizzeriaSimulator.Boxes.Carry
             boxHandlerByType.Add(CarriableBoxType.PizzaIngredientsBox, new PizzaIngredientBoxHandler(this, interactor, diContainer.Resolve<PizzaIngredientsHolder>(),
                 sceneReferences.PizzaIngredientsHoldView));
             boxHandlerByType.Add(CarriableBoxType.FurnitureBox, new FurnitureBoxHandler(interactor, playerInput, diContainer.Resolve<PizzeriaFurnitureManager>()));
+            boxHandlerByType.Add(CarriableBoxType.ConsumablesBox, new ConsumablesBoxHandler(this, interactor, diContainer));
             interactor.OnInteractWithObject += HandleInteractor;
             playerInput.OnThrowInput += HandleThrowInput;
             playerInput.OnOpenInput += HandleOpenBoxInput;

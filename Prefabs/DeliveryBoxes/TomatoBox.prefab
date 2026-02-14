@@ -726,17 +726,9 @@ MonoBehaviour:
     RotationX: 0
     RotationY: 0
     RotationZ: 0
-  <IngredientType>k__BackingField: 4
-  items:
-  - {fileID: 5518799512344730745}
-  - {fileID: 3737283687505497851}
-  - {fileID: 286056246058195313}
-  - {fileID: 4390000878829300922}
-  - {fileID: 236851365007501574}
-  - {fileID: 2031461862238600396}
-  openVisuals: {fileID: 1764730644682258665}
   boxRB: {fileID: 172174802854564488}
   colliderOfBox: {fileID: 1046488678657443471}
+  openVisuals: {fileID: 1764730644682258665}
   halfOpenDuration: 0.3
   openedLidsRotsInOrder:
   - {x: 215, y: 180, z: 0}
@@ -747,6 +739,14 @@ MonoBehaviour:
   secondTopLid: {fileID: 5981390419592632403}
   firstBottomLid: {fileID: 3542720080977622989}
   secondBottomLid: {fileID: 2344805796288842872}
+  <IngredientType>k__BackingField: 4
+  items:
+  - {fileID: 1314565581806938224}
+  - {fileID: 244888831258254626}
+  - {fileID: 6122328037620387631}
+  - {fileID: 1998069820798680434}
+  - {fileID: 1310664138617172233}
+  - {fileID: 5576658522274080786}
 --- !u!1 &7476227075202529397
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,7 +943,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4087975056562295824, guid: 07c97f3cccb868648b5ae7b4ad13715b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3737283687505497851}
+      addedObject: {fileID: 244888831258254626}
   m_SourcePrefab: {fileID: 100100000, guid: 07c97f3cccb868648b5ae7b4ad13715b, type: 3}
 --- !u!1 &4537595963283889623 stripped
 GameObject:
@@ -951,7 +951,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 451381251950365127}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3737283687505497851
+--- !u!114 &244888831258254626
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -960,11 +960,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4537595963283889623}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &7032504794439250714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7483813811188513501, guid: 07c97f3cccb868648b5ae7b4ad13715b,
@@ -1051,7 +1051,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4087975056562295824, guid: 07c97f3cccb868648b5ae7b4ad13715b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4390000878829300922}
+      addedObject: {fileID: 1998069820798680434}
   m_SourcePrefab: {fileID: 100100000, guid: 07c97f3cccb868648b5ae7b4ad13715b, type: 3}
 --- !u!1 &481400160437696127 stripped
 GameObject:
@@ -1059,7 +1059,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4473518374843441775}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4390000878829300922
+--- !u!114 &1998069820798680434
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1068,11 +1068,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 481400160437696127}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &6471382669307697330 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7483813811188513501, guid: 07c97f3cccb868648b5ae7b4ad13715b,
@@ -1159,7 +1159,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4087975056562295824, guid: 07c97f3cccb868648b5ae7b4ad13715b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 236851365007501574}
+      addedObject: {fileID: 1310664138617172233}
   m_SourcePrefab: {fileID: 100100000, guid: 07c97f3cccb868648b5ae7b4ad13715b, type: 3}
 --- !u!4 &4461960097007290472 stripped
 Transform:
@@ -1173,7 +1173,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6500884575309001397}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &236851365007501574
+--- !u!114 &1310664138617172233
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1182,11 +1182,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7101243901496157861}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &6874921931381280081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1267,7 +1267,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4087975056562295824, guid: 07c97f3cccb868648b5ae7b4ad13715b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5518799512344730745}
+      addedObject: {fileID: 1314565581806938224}
   m_SourcePrefab: {fileID: 100100000, guid: 07c97f3cccb868648b5ae7b4ad13715b, type: 3}
 --- !u!4 &4085741301357328268 stripped
 Transform:
@@ -1281,7 +1281,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6874921931381280081}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5518799512344730745
+--- !u!114 &1314565581806938224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1290,11 +1290,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7481541890769918273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &7852541731987278962
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1375,7 +1375,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4087975056562295824, guid: 07c97f3cccb868648b5ae7b4ad13715b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 286056246058195313}
+      addedObject: {fileID: 6122328037620387631}
   m_SourcePrefab: {fileID: 100100000, guid: 07c97f3cccb868648b5ae7b4ad13715b, type: 3}
 --- !u!4 &802216995373577903 stripped
 Transform:
@@ -1389,7 +1389,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7852541731987278962}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &286056246058195313
+--- !u!114 &6122328037620387631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1398,11 +1398,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6071611778608257122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &8921043912264832416
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1483,7 +1483,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4087975056562295824, guid: 07c97f3cccb868648b5ae7b4ad13715b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2031461862238600396}
+      addedObject: {fileID: 5576658522274080786}
   m_SourcePrefab: {fileID: 100100000, guid: 07c97f3cccb868648b5ae7b4ad13715b, type: 3}
 --- !u!4 &2023861357580480381 stripped
 Transform:
@@ -1497,7 +1497,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8921043912264832416}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2031461862238600396
+--- !u!114 &5576658522274080786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1506,8 +1506,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4861228478101012912}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dded7487a0af6194b8db92343ba60c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemJumpDuration: 0.2
-  itemMoveYPeakAdd: 0.4
+  itemMoveYPeakAdd: 0.45

@@ -630,12 +630,12 @@ MonoBehaviour:
   orderBarPrefab: {fileID: 7877426007660167273, guid: c8e826802dd88b3489af54c64280f5aa,
     type: 3}
   expandIndicator: {fileID: 2740008368676208481}
-  expandIndicatorVisual: {fileID: 408607619967208315}
+  expandIndicatorTransform: {fileID: 408607619967208315}
   orderBarsContainer: {fileID: 7951316935203418281}
   pcSubView: {fileID: 1819486070699120955}
   mobileSubView: {fileID: 346987218401704921}
-  expIndicatNormalRotZ: -65
-  expIndicatExpandedRotZ: 80
+  expdIndicatNormalRotZ: -65
+  expdIndicatExpandedRotZ: 80
 --- !u!1 &4224015210912599320
 GameObject:
   m_ObjectHideFlags: 0

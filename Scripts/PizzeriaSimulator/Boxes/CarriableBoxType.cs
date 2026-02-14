@@ -2,6 +2,6 @@
 {
     public enum CarriableBoxType : byte
     {
-        PizzaIngredientsBox = 0, FurnitureBox = 1
+        PizzaIngredientsBox = 0, FurnitureBox = 1, ConsumablesBox = 2
     }
 }

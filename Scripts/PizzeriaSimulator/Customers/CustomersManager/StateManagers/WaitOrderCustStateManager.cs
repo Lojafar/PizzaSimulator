@@ -1,4 +1,4 @@
-﻿using Game.PizzeriaSimulator.OrdersHandle;
+﻿using Game.PizzeriaSimulator.Orders.Handle;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,11 +17,11 @@ namespace Game.PizzeriaSimulator.Customers.Manager.StateManager
             ordersHandler = _ordersHandler;
             sceneReferences = _sceneReferences;
             customersWaitesOrder = new List<Customer>();
-            ordersHandler.OnPizzaOrderCompleted += HandleCompletedOrder;
+            ordersHandler.OnOrderCompleted += HandleCompletedOrder;
         }
         public void Dispose()
         {
-            ordersHandler.OnPizzaOrderCompleted -= HandleCompletedOrder;
+            ordersHandler.OnOrderCompleted -= HandleCompletedOrder;
         }
         void HandleCompletedOrder(int orderID)
         {

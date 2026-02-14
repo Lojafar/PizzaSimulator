@@ -24,7 +24,7 @@ namespace Game.PizzeriaSimulator.Customers
             Skin = _skin;
             Id = CustomerAI.Id;
             movement = new DefaultCustomerMovement(this, transform);
-            visualHandler = new CustomerVisualHandler(this, Skin);
+            visualHandler = new CustomerVisualHandler(Skin);
 
             CustomerAI.OnStateChanged += HandleNewState;
         }

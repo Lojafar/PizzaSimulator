@@ -1,21 +1,21 @@
-﻿using Game.PizzeriaSimulator.PizzaHold.Visual.PizzaContainer;
+﻿using Game.PizzeriaSimulator.Orders.ObjsContainer;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 namespace Game.PizzeriaSimulator.PizzaHold.Visual
 {
-    class PizzaHolderView : PizzaHolderViewBase
+    sealed class PizzaHolderView : PizzaHolderViewBase
     {
         [SerializeField] PizzaBox pizzaBoxPrefab;
         [SerializeField] float pizzaHeight;
         [SerializeField] Transform pizzaStartSpawnPos;
-        [SerializeField] PizzaObjsContainer removedPizzasContainer;
+        OrderItemsObjsContainer orderItemsContainer;
         List<PizzaBox> spawnedPizzas;
         [Inject]
         void Construct(PizzeriaSceneReferences sceneReferences)
         {
-            removedPizzasContainer = sceneReferences.RemovedPizzasContainer;
+            orderItemsContainer = sceneReferences.RemovedOrderItemsContainer;
         }
         public override void Bind(PizzaHolderVM _viewModel)
         {
@@ -32,16 +32,17 @@ namespace Game.PizzeriaSimulator.PizzaHold.Visual
                 viewModel.RemovePizza -= RemovePizza;
             }
         }
-        void AddPizza(Sprite pizzaIcon)
+        void AddPizza(int pizzaId, Sprite pizzaIcon)
         {
             PizzaBox spawnedPizzaBox = Instantiate(pizzaBoxPrefab, pizzaStartSpawnPos.position + new Vector3(0, pizzaHeight * spawnedPizzas.Count, 0), pizzaBoxPrefab.transform.rotation);
+            spawnedPizzaBox.SetPizzaId(pizzaId);
             spawnedPizzaBox.SetPizzaIcon(pizzaIcon);
             spawnedPizzas.Add(spawnedPizzaBox);
         }  
         void RemovePizza(int index)
         {
             if (spawnedPizzas.Count <= index || index < 0) return;
-            removedPizzasContainer.AddPizza(spawnedPizzas[index].gameObject);
+            orderItemsContainer.AddPizza(spawnedPizzas[index]);
             spawnedPizzas.RemoveAt(index);
             UpdatePizzasPos();
         }

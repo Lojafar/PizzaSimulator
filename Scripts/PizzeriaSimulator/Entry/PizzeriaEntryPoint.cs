@@ -22,8 +22,9 @@ using Game.PizzeriaSimulator.Delivery.Visual;
 using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.Levels.Config;
 using Game.PizzeriaSimulator.Levels.Handler;
-using Game.PizzeriaSimulator.OrdersHandle;
-using Game.PizzeriaSimulator.OrdersHandle.Visual;
+using Game.PizzeriaSimulator.Orders.Handle;
+using Game.PizzeriaSimulator.Orders.Handle.Visual;
+using Game.PizzeriaSimulator.Orders.Items.Config;
 using Game.PizzeriaSimulator.PaymentReceive;
 using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor;
 using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual;
@@ -38,6 +39,7 @@ using Game.PizzeriaSimulator.PizzaHold;
 using Game.PizzeriaSimulator.PizzaHold.Visual;
 using Game.PizzeriaSimulator.PizzasConfig;
 using Game.PizzeriaSimulator.Pizzeria.Furniture.Config;
+using Game.PizzeriaSimulator.Pizzeria.Furniture.Placement.Handler;
 using Game.PizzeriaSimulator.Pizzeria.Furniture.Placement.Manager;
 using Game.PizzeriaSimulator.Pizzeria.Managment;
 using Game.PizzeriaSimulator.Pizzeria.Managment.Config;
@@ -132,6 +134,7 @@ namespace Game.PizzeriaSimulator.Entry
 
             boxesCarrier = new(interactor, playerInput, cameraController, sceneReferences, diContainer);
             inittableServices.Add(boxesCarrier);
+            diContainer.Bind<BoxesCarrier>().FromInstance(boxesCarrier).AsSingle(); 
 
             PizzeriaManagerData pizzeriaManagerData = await saveLoadHelper.LoadData<PizzeriaManagerData>();
             LevelsConfig levelsConfig = (await assetsProvider.LoadAsset<LevelsConfigSO>(AssetsKeys.LevelsConfig)).LevelsConfig;
@@ -146,11 +149,14 @@ namespace Game.PizzeriaSimulator.Entry
 
             PizzeriaFurnitureConfig pizzeriaFurnitureConfig = (await assetsProvider.LoadAsset<PizzeriaFurnitureConfigSO>(AssetsKeys.PizzeriaFurnitureConfig)).FurnitureConfig;
             PizzeriaFurnitureManagerData furnitureManagerData = await saveLoadHelper.LoadOrTryGetInitData<PizzeriaFurnitureManagerData>();
-            PizzeriaFurnitureManager pizzeriaFurnitureManager = new(furnitureManagerData, pizzeriaManager, sceneReferences.FurniturePlaceAreaHolder, 
+            PizzeriaFurnitureManager furnitureManager = new(furnitureManagerData, pizzeriaManager, sceneReferences.FurniturePlaceAreaHolder, 
                 sceneReferences.PizzeriaExpansionsContainer,  pizzeriaFurnitureConfig);
             diContainer.Bind<PizzeriaFurnitureConfig>().FromInstance(pizzeriaFurnitureConfig).AsSingle();
-            diContainer.Bind<PizzeriaFurnitureManager>().FromInstance(pizzeriaFurnitureManager).AsSingle();
-            inittableServices.Add(pizzeriaFurnitureManager);
+            diContainer.Bind<PizzeriaFurnitureManager>().FromInstance(furnitureManager).AsSingle();
+            inittableServices.Add(furnitureManager);
+
+            PizzeriaFurnitureHandler furnitureHandler = new(furnitureManager, diContainer);
+            inittableServices.Add(furnitureHandler);
 
             AllPizzaConfig allPizzaConfig = (await assetsProvider.LoadAsset<AllPizzaConfigSO>(AssetsKeys.AllPizzaConfig)).AllPizzaConfig;
             PizzaCreatorConfig pizzaCreatorConfig = (await assetsProvider.LoadAsset<PizzaCreatorConfigSO>(AssetsKeys.PizzaCreatorConfig)).PizzaCreatorConfig;
@@ -173,8 +179,12 @@ namespace Game.PizzeriaSimulator.Entry
             inittableServices.Add(pizzaCreator);
             diContainer.Bind<PizzaCreator>().FromInstance(pizzaCreator).AsSingle();
 
+            OrdersConfig ordersConfig = (await assetsProvider.LoadAsset<OrdersConfigSO>(AssetsKeys.PizzeriaOrdersConfig)).OrdersConfig;
+            ordersConfig.Init();
             ordersHandler = new PizzeriaOrdersHandler(pizzaHolder, interactor);
             inittableServices.Add(ordersHandler);
+            diContainer.Bind<OrdersConfig>().FromInstance(ordersConfig).AsSingle();
+            diContainer.Bind<PizzeriaOrdersHandler>().FromInstance(ordersHandler).AsSingle();
 
             PizzeriaDeliveryConfig deliveryConfig = (await assetsProvider.LoadAsset<PizzeriaDeliveryConfigSO>(AssetsKeys.PizzeriaDeliveryConfig)).DeliveryConfig;
 
@@ -197,7 +207,7 @@ namespace Game.PizzeriaSimulator.Entry
 
             CustomersManagerData customersManagerData = await saveLoadHelper.LoadData<CustomersManagerData>();
             CustomersManager customersManager = new(customersManagerData, dayCycleManager, pizzeriaManager, customersOrdersProccesor, ordersHandler, sceneReferences, assetsProvider, customersSettingsConfig);
-            CustomerVisualManager customerVisualManager = new(assetsProvider, customersManager, customersOrdersProccesor, sceneReferences, paymentVisualConfig);
+            CustomerVisualManager customerVisualManager = new(assetsProvider, customersManager, customersOrdersProccesor, sceneReferences, ordersConfig, paymentVisualConfig);
             diContainer.Bind<CustomersManager>().FromInstance(customersManager).AsSingle();
             prewarmableServices.Add(customersManager);
             prewarmableServices.Add(customerVisualManager);
@@ -223,7 +233,7 @@ namespace Game.PizzeriaSimulator.Entry
             new PizzaHolderBinder(pizzaHolder, sceneReferences, diContainer.Resolve<AllPizzaConfig>(), diContainer).Bind();
             new PizzaIngredientsHolderBinder(pizzaIngredientsHolder, sceneReferences, diContainer).Bind();
             new PizzaCreatorBinder(pizzaCreator, sceneReferences, diContainer).Bind();
-            await new PizzeriaOrderHandlBinder(ordersHandler, pizzaCreator, assetsProvider, uiParent, deviceType, diContainer).Bind();
+            await new PizzeriaOrderHandlBinder(ordersHandler, pizzaCreator, diContainer.Resolve<OrdersConfig>(), assetsProvider, uiParent, deviceType, diContainer).Bind();
             new PaymentReceiveBinder(sceneReferences, paymentReceiver, diContainer).Bind();
             if(paymentReceiver.GetPaymentProccesorByType(PaymentType.Cash) is CashPaymentProccesor cashPaymentProccesor)
             {

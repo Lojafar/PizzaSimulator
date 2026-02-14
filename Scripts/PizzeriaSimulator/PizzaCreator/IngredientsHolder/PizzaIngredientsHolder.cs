@@ -16,7 +16,9 @@ namespace Game.PizzeriaSimulator.PizzaCreation.IngredientsHold
         public PizzaIngredientsHolder(PizzaCreatorConfig _pizzaCreatorConfig, IngredientsHolderData _ingredientsHolderData)
         {
             pizzaCreatorConfig = _pizzaCreatorConfig;
-            ingredientsHolderData = _ingredientsHolderData ?? new IngredientsHolderData();
+            ingredientsHolderData = _ingredientsHolderData ?? new IngredientsHolderData() { IngredientsDict = new Dictionary<PizzaIngredientType, int>() { 
+                { PizzaIngredientType.Dough, 8},{ PizzaIngredientType.Ketchup, 8}, { PizzaIngredientType.Cheese, 9},{ PizzaIngredientType.Tomato, 9},
+                { PizzaIngredientType.Salami, 9}, { PizzaIngredientType.Pepper, 9}, { PizzaIngredientType.Shrimp, 9}} };
         }
         public void Init()
         {

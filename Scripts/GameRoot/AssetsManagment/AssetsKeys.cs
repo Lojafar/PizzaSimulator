@@ -28,5 +28,6 @@
         public const string LevelsConfig = "Configs/Pizzeria/LevelsConfig";
         public const string PizzeriaManagmentConfig = "Configs/Pizzeria/PizzeriaManagmentConfig";
         public const string PizzeriaFurnitureConfig = "Configs/Pizzeria/PizzeriaFurnitureConfig";
+        public const string PizzeriaOrdersConfig = "Configs/Pizzeria/PizzeriaOrdersConfig";
     }
 }

@@ -1,4 +1,4 @@
-﻿using Game.PizzeriaSimulator.Boxes.Item;
+﻿using Game.PizzeriaSimulator.Boxes.Item.PizzaIngredient;
 using Game.PizzeriaSimulator.Interactions;
 using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold;
@@ -14,28 +14,30 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
         readonly PizzaIngredientsHolder ingredientsHolder;
         readonly PizzaIngredientsHolderViewBase ingredientsHolderView;
         readonly int interactMaskWhenCarry;
-        PizzaIngredientBoxBase activeBox;
+        CarriableBoxBase activeBox;
+        IPizzaIngredientsBox activeIngredientsBox;
         public PizzaIngredientBoxHandler(BoxesCarrier _boxesCarrier, Interactor _interactor, PizzaIngredientsHolder _ingredientsHolder, PizzaIngredientsHolderViewBase _ingredientsHolderView)
         {
             boxesCarrier = _boxesCarrier;
             interactor = _interactor;
             ingredientsHolder = _ingredientsHolder;
             ingredientsHolderView = _ingredientsHolderView; 
-            interactMaskWhenCarry = 1 << (int)InteractableType.PizzaCreateTable
-                | 1 << (int)InteractableType.TrashCan
+            interactMaskWhenCarry = 1 << (int)InteractableType.TrashCan
                 | 1 << (int)InteractableType.PizzaCreateTable
                 | 1 << (int)InteractableType.BoxWithItems;
         }
 
         public void SetBox(CarriableBoxBase box)
         {
-            if(box is PizzaIngredientBoxBase pizzaIngredientBox)
+            if(box is IPizzaIngredientsBox pizzaIngredientBox)
             {
-                activeBox = pizzaIngredientBox;
+                activeBox = box;
+                activeIngredientsBox = pizzaIngredientBox;
                 interactor.SetInteractionMask(interactMaskWhenCarry);
                 return;
             }
             activeBox = null;
+            activeIngredientsBox = null;
         }
         public void HandleInteraction(InteractableType interactableType, GameObject interactedObject)
         {
@@ -56,11 +58,11 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
                 boxesCarrier.OnDenyAction("Before unpack the box");
                 return;
             }
-            if (ingredientsHolder.TryAddIngredient(activeBox.IngredientType, false))
+            if (ingredientsHolder.TryAddIngredient(activeIngredientsBox.IngredientType, false))
             {
-                PizzaIngredientBoxItemBase item = activeBox.RemoveAndGetItem();
-                item.SetTo(ingredientsHolderView.GetNextIngredientPos(activeBox.IngredientType),
-                   () => ingredientsHolderView.SetIngredientToContainer(activeBox.IngredientType, item.gameObject));
+                PizzaIngredientBoxItemBase item = activeIngredientsBox.RemoveAndGetItem();
+                item.SetTo(ingredientsHolderView.GetNextIngredientPos(activeIngredientsBox.IngredientType),
+                   () => ingredientsHolderView.SetIngredientToContainer(activeIngredientsBox.IngredientType, item.gameObject));
             }
             else
             {

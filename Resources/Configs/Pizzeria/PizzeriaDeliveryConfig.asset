@@ -102,6 +102,17 @@ MonoBehaviour:
         type: 3}
       <BoxPrefab>k__BackingField: {fileID: 7447940285983178543, guid: 22e695fea85670d4db9c8855f9aa788d,
         type: 3}
+    - <Name>k__BackingField: Soda Machine
+      <ID>k__BackingField: 8
+      <QuantityByOrder>k__BackingField: 1
+      <ItemType>k__BackingField: 1
+      <Price>k__BackingField:
+        Dollars: 0
+        Cents: 1
+      <ItemIcon>k__BackingField: {fileID: 21300000, guid: e3e302267a5c6d244abbe2f50dc5eb4b,
+        type: 3}
+      <BoxPrefab>k__BackingField: {fileID: 7447940285983178543, guid: f509c4187587bac45819b0dcf425cdd3,
+        type: 3}
     "<DeliveryTime\u0421oeffCurve>k__BackingField":
       serializedVersion: 2
       m_Curve:

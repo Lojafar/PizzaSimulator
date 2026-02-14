@@ -6,7 +6,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation.IngredientsHold
     [Serializable]
     public class IngredientsHolderData
     {
-        public readonly Dictionary<PizzaIngredientType, int> IngredientsDict = new();
+        public Dictionary<PizzaIngredientType, int> IngredientsDict = new();
         public IngredientsHolderData() { }
         public IngredientsHolderData(Dictionary<PizzaIngredientType, int> ingredients) 
         {

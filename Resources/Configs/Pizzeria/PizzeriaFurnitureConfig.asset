@@ -15,5 +15,10 @@ MonoBehaviour:
   <FurnitureConfig>k__BackingField:
     furnitureItems:
     - <ID>k__BackingField: 0
+      <PlaceAreaID>k__BackingField: 0
       <FurniturePrefab>k__BackingField: {fileID: 7859496501802842272, guid: 7cd3381652eb130468fa67113fd787dd,
+        type: 3}
+    - <ID>k__BackingField: 1
+      <PlaceAreaID>k__BackingField: 1
+      <FurniturePrefab>k__BackingField: {fileID: 4136219910360475442, guid: c272a69537c3b88488cf134937f7bed3,
         type: 3}

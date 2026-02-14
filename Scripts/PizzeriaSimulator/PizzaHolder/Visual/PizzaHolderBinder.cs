@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Game.PizzeriaSimulator.PizzaHold.Visual
 {
-    class PizzaHolderBinder
+    sealed class PizzaHolderBinder
     {
         readonly PizzaHolder pizzaHolder;
         readonly PizzeriaSceneReferences sceneReferences;

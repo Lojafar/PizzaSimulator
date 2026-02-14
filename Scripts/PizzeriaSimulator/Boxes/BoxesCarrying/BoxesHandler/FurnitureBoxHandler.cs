@@ -1,4 +1,4 @@
-﻿using Game.PizzeriaSimulator.Boxes.Item;
+﻿using Game.PizzeriaSimulator.Boxes.Item.Furniture;
 using Game.PizzeriaSimulator.Interactions;
 using Game.PizzeriaSimulator.Interactions.Interactor;
 using Game.PizzeriaSimulator.Pizzeria.Furniture.Placement.Manager;
@@ -19,7 +19,8 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
         readonly int placementRayMask;
         readonly Vector3 screenMid = new(0.5f, 0.5f, 0f);
         Vector3 targetFurniturePos;
-        FurnitureBoxBase currentBox;
+        CarriableBoxBase currentBox;
+        IFurnitureBox currentFurnitureBox;
         FurnitureBoxItemBase currentBoxItem;
         FurniturePlaceArea currentPlaceArea;
         Bounds currentItemBounds;
@@ -37,13 +38,15 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
         }
         public void SetBox(CarriableBoxBase box)
         {
-            if (box is FurnitureBoxBase furnitureBox)
+            if (box is IFurnitureBox furnitureBox)
             {
-                currentBox = furnitureBox;
+                currentBox = box;
+                currentFurnitureBox = furnitureBox;
                 interactor.SetInteractionMask(interactMaskWhenCarry);
                 return;
             }
             currentBox = null;
+            currentFurnitureBox = null;
         }
         public void OnBoxOpened(bool opened)
         {
@@ -58,13 +61,13 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
         public void StartUsing()
         {
             if (currentBox == null) return;
-            currentBoxItem = currentBox.GetFurnitureItem();
+            currentBoxItem = currentFurnitureBox.GetFurnitureItem();
             if (currentBoxItem == null) return;
 
             targetFurniturePos = currentBoxItem.transform.position;
             itemCanBePlaced = false;
             currentBoxItem.SetAsCantBePlaced();
-            currentPlaceArea = furnitureManager.GetPlaceAreaForItem(currentBox.FurnitureID);
+            currentPlaceArea = furnitureManager.GetPlaceAreaForItem(currentFurnitureBox.FurnitureID);
             UpdatePlaceAreaActive();
             bool itemWasActive = currentBoxItem.gameObject.activeInHierarchy;
             currentBoxItem.gameObject.SetActive(true);
@@ -127,9 +130,9 @@ namespace Game.PizzeriaSimulator.Boxes.Carry.Handler
         void HandlePlaceInput()
         {
             if (!itemCanBePlaced || !currentBox.IsOpened || currentBox.ItemsAmount < 0 || currentBoxItem == null) return;
-            furnitureManager.PlaceFurniture(currentBox.FurnitureID, currentBoxItem.transform.position);
+            furnitureManager.PlaceFurniture(currentFurnitureBox.FurnitureID, currentBoxItem.transform.position);
             currentBoxItem.SetAsCantBePlaced();
-            currentBox.RemoveItem();
+            currentFurnitureBox.RemoveItem();
             playerInput.DeselectInteractInput();
             UpdatePlaceAreaActive();
             if (currentBox.ItemsAmount < 1)

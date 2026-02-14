@@ -19,6 +19,8 @@ namespace Game.PizzeriaSimulator.Pizzeria.Furniture.Placement
         }
         public virtual bool IsBoundsInside(Bounds otherBounds)
         {
+            thisBoundsMin = thisBounds.min;
+            thisBoundsMax = thisBounds.max;
             Vector3 otherMin = otherBounds.min;
             Vector3 otherMax = otherBounds.max;
             otherMin.y = thisBounds.center.y;
@@ -27,6 +29,8 @@ namespace Game.PizzeriaSimulator.Pizzeria.Furniture.Placement
         }
         public virtual bool TryGetMagnetizedPos(Bounds otherBounds, out Vector3 magnetizedPos)
         {
+            thisBoundsMin = thisBounds.min;
+            thisBoundsMax = thisBounds.max;
             magnetizedPos = otherBounds.center;
             if (!thisBounds.Intersects(otherBounds)) return false;
 
@@ -54,7 +58,7 @@ namespace Game.PizzeriaSimulator.Pizzeria.Furniture.Placement
             }
             return true;
         }
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(thisBounds.center, thisBounds.size);

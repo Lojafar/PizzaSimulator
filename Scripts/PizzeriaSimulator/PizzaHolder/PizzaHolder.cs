@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Game.PizzeriaSimulator.PizzaHold
 {
-    public class PizzaHolder : IInittable
+    public sealed class PizzaHolder : IInittable
     {
         public int InitPriority => 8;
         public event Action<int> OnPizzaAdded;

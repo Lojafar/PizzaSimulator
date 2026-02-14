@@ -27,3 +27,5 @@ MonoBehaviour:
         RotX: 4
         RotY: 5
         RotZ: 6
+    initSodaMachineData:
+      EmptyCupsAmount: 5

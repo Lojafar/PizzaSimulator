@@ -524,19 +524,9 @@ MonoBehaviour:
     RotationX: 0
     RotationY: 0
     RotationZ: 0
-  <IngredientType>k__BackingField: 1
-  items:
-  - {fileID: 252716980446345032}
-  - {fileID: 11394775350226578}
-  - {fileID: 614663259059241834}
-  - {fileID: 194712127083138153}
-  - {fileID: 7662855961873789215}
-  - {fileID: 6058685995062665511}
-  - {fileID: 529197997886355146}
-  - {fileID: 3449213381829520304}
-  openVisuals: {fileID: 1798341889696834179}
   boxRB: {fileID: 699642576001540529}
   colliderOfBox: {fileID: 2606127364175709098}
+  openVisuals: {fileID: 1798341889696834179}
   halfOpenDuration: 0.3
   openedLidsRotsInOrder:
   - {x: 215, y: 180, z: 0}
@@ -547,6 +537,16 @@ MonoBehaviour:
   secondTopLid: {fileID: 4464844314510543553}
   firstBottomLid: {fileID: 7983836927005151092}
   secondBottomLid: {fileID: 7814974544358773611}
+  <IngredientType>k__BackingField: 1
+  items:
+  - {fileID: 252716980446345032}
+  - {fileID: 11394775350226578}
+  - {fileID: 614663259059241834}
+  - {fileID: 194712127083138153}
+  - {fileID: 7662855961873789215}
+  - {fileID: 6058685995062665511}
+  - {fileID: 529197997886355146}
+  - {fileID: 3449213381829520304}
 --- !u!114 &4770937622948335234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1642,15 +1642,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4688215215264465424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 9047164199199790957}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &5351457553632712874 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4944860390865998041, guid: 365d3bda8b51f384d82986af472fa87d,
@@ -1774,15 +1770,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6514316476917680927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 4628602786776767313}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &1620184220545660441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1900,15 +1892,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6460536853305425018}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 8303061655481988229}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &3310302678941909340
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2020,15 +2008,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7072043673224776511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 542899719934118911}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &7597329497568629125 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4944860390865998041, guid: 365d3bda8b51f384d82986af472fa87d,
@@ -2146,15 +2130,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8139778345824928668}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 5283374360625590562}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45
 --- !u!4 &8916456473932831014 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4944860390865998041, guid: 365d3bda8b51f384d82986af472fa87d,
@@ -2283,15 +2263,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2109708698687673291}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 7827618642805145477}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &7181189451291226056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2409,15 +2385,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3205658299336304043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 6401415891073171063}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45
 --- !u!1001 &8093175269179282438
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2535,12 +2507,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4576995293499727461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6928dd3c70780cc4585cfa35760bfda0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d71e6357467f074ca9d1d7c3fdaa7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
-  rotationDuration: 0.2
-  fluidDuration: 0.3
-  canYOffset: 0.45
-  openedRotation: {x: 0, y: 0, z: 180}
-  fluidObject: {fileID: 2142234317839202949}
+  itemJumpDuration: 0.2
+  itemMoveYPeakAdd: 0.45

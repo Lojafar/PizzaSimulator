@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Game.PizzeriaSimulator.PizzaHold.Visual
 {
-    public class PizzaHolderVM : ISceneDisposable
+    public sealed class PizzaHolderVM : ISceneDisposable
     {
-        public event Action<Sprite> AddPizza;
+        public event Action<int, Sprite> AddPizza;
         public event Action<int> RemovePizza;
         readonly PizzaHolder pizzaHolder;
         readonly AllPizzaConfig allPizzaConfig;
@@ -34,7 +34,7 @@ namespace Game.PizzeriaSimulator.PizzaHold.Visual
             pizzas.Add(pizzaID);
             if (allPizzaConfig.GetPizzaByID(pizzaID) is PizzaConfig pizzaConfig)
             {
-                AddPizza?.Invoke(pizzaConfig.PizzaIcon);
+                AddPizza?.Invoke(pizzaID, pizzaConfig.PizzaIcon);
             }
         }
         void HandlePizzaRemove(int pizzaID)

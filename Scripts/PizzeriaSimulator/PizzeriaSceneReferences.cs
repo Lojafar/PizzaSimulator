@@ -2,6 +2,7 @@
 using Game.PizzeriaSimulator.Computer.App.Market.Visual;
 using Game.PizzeriaSimulator.Computer.Visual;
 using Game.PizzeriaSimulator.Customers.WaypointField;
+using Game.PizzeriaSimulator.Orders.ObjsContainer;
 using Game.PizzeriaSimulator.PaymentReceive.PaymentProccesor.Visual;
 using Game.PizzeriaSimulator.PaymentReceive.Visual;
 using Game.PizzeriaSimulator.PizzaCreation.IngredientsHold.Visual;
@@ -26,7 +27,7 @@ namespace Game.PizzeriaSimulator
         [field: SerializeField] public Transform CustomersTakeOrderPoint { get; private set; }
         [field: SerializeField] public Transform[] CustomersPointsInLine { get; private set; }
         [field: SerializeField] public PizzeriaExpansionsContainer PizzeriaExpansionsContainer { get; private set; }
-        [field: SerializeField] public PizzaObjsContainer RemovedPizzasContainer { get; private set; }
+        [field: SerializeField] public OrderItemsObjsContainer RemovedOrderItemsContainer { get; private set; }
         [field: SerializeField] public FurniturePlaceAreaHolder FurniturePlaceAreaHolder { get; private set; }
         [field: SerializeField] public Canvas SceneCanvas { get; private set; }
         [field: SerializeField] public PaymentReceiveViewBase PaymentReceiverViewBase { get; private set; }

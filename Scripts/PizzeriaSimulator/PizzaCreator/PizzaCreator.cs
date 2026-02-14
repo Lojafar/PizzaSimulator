@@ -239,7 +239,7 @@ namespace Game.PizzeriaSimulator.PizzaCreation
             OnNewPossibleIngredients?.Invoke(possibleIngredients);
         }
 
-        public int GetPizzaInBakeOfID(int pizzaID) 
+        public int GetPizzasInBakeOfID(int pizzaID) 
         {
             int result = 0;
             foreach(int pizzaInBake in pizzaCreatorData.PizzasInBake)
